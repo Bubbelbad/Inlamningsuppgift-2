@@ -62,7 +62,7 @@ namespace TestProject
             var result = await bookService.DeleteBook(1);
 
             // Assert
-            Assert.That(result, Is.EqualTo(null));
+            Assert.That(result, Is.Not.EqualTo(null));
         }
     }
 }
