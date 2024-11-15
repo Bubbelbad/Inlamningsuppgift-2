@@ -54,7 +54,12 @@ namespace Infrastructure.Database
 
         public async Task<Book> DeleteBook(int id)
         {
-            throw new NotImplementedException();
+            Book bookToDelete = Books.FirstOrDefault(b => b.Id == id); 
+            if (bookToDelete != null) 
+            { 
+                Books.Remove(bookToDelete); 
+            }
+            return await Task.FromResult(bookToDelete);
         }
 
 
@@ -85,7 +90,12 @@ namespace Infrastructure.Database
 
         public async Task<Author> DeleteAuthor(int id)
         {
-            throw new NotImplementedException();
+            Author authorToDelete = Authors.FirstOrDefault(a => a.Id == id);
+            if (authorToDelete != null)
+            {
+                Authors.Remove(authorToDelete);
+            }
+            return await Task.FromResult(authorToDelete);
         }
     }
 }
