@@ -6,17 +6,10 @@ using System.Threading.Tasks;
 
 namespace Domain.Model
 {
-    public class Author
+    public class Author (int id, string firstName, string lastName)
     {
-        public int Id { get; set; }
-        public string? FirstName { get; set; }
-        public string? LastName { get; set; }
-
-        public Author(int id, string firstName, string lastName)
-        {
-            Id = id;
-            FirstName = firstName;
-            lastName = lastName;
-        }
+        public int Id { get; set; } = id;
+        public string? FirstName { get; set; } = firstName;
+        public string? LastName { get; set; } = lastName; 
     }
 }
