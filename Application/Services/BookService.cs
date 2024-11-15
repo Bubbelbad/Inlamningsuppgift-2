@@ -1,40 +1,35 @@
 ﻿using Application.Interfaces;
 using Domain;
 using Infrastructure.Database;
-using Infrastructure.Repositories;
 
 namespace Application
 {
-    public class BookService : IBookService
+    public class BookService(FakeDatabase database) : IBookService
     {
-        private readonly IBookRepository _bookRepository;
+        private readonly FakeDatabase _database = database; 
 
-        public BookService(IBookRepository bookRepository)
+        public async Task<Book> GetBookById(int bookId)
         {
-            _bookRepository = bookRepository;
-        }
-        public async Task<Book> GetBookByBookId(int bookId)
-        {
-            Book book = await _bookRepository.GetBookById(bookId);
+            Book book = await _database.GetBookById(bookId);
             return book; 
         }
 
         public async Task<Book> AddBook(Book book)
         {
-            Book addedBook = await _bookRepository.AddNewBook(book);
+            Book addedBook = await _database.AddNewBook(book);
             return addedBook;
         }
 
 
         public async Task<Book> UpdateBook(Book book)
         {
-            Book updatedBook = await _bookRepository.UpdateBook(book);
+            Book updatedBook = await _database.UpdateBook(book);
             return updatedBook; 
         }
 
         public async Task<Book> DeleteBook(int id)
         {
-            var result = await _bookRepository.DeleteBook(id);
+            var result = await _database.DeleteBook(id);
             return result; 
         }
     }
