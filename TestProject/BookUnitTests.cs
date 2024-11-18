@@ -9,11 +9,13 @@ namespace TestProject
         [Test]
         public async Task AddBook_WhenGivenCorrectParams_BookAddedToList()
         {
-            FakeDatabase fakeRepository = new();
+            // Assert
+            FakeDatabase fakeDatabase = new(); 
+            BookService bookService = new(fakeDatabase);
             Book bookToTest = new(1, "Test", "Victor", "BookService for Testing");
 
             // Act
-            var bookCreated = await fakeRepository.AddNewBook(bookToTest);
+            var bookCreated = await bookService.AddBook(bookToTest);
 
             // Assert
             Assert.That(bookCreated, Is.Not.Null);
@@ -23,6 +25,7 @@ namespace TestProject
         [Test]
         public async Task GetBookByBookId_ReturnsBook()
         {
+            // Assert
             FakeDatabase fakeDatabase = new();
             BookService bookService = new(fakeDatabase);
             string expectedtitle = "VictorBook2";
