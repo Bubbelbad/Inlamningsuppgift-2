@@ -10,10 +10,11 @@ namespace TestProject
         public async Task AddAuthor_WhenGivenCorrectParams_AuthorAddedToList()
         {
             FakeDatabase fakeRepository = new();
+            AuthorService authorService = new(fakeRepository); 
             Author authorToTest = new(1, "Victor", "Ivarson");
 
             // Act
-            var authorCreated = await fakeRepository.AddNewAuthor(authorToTest);
+            var authorCreated = await authorService.AddNewAuthor(authorToTest);
 
             // Assert
             Assert.That(authorCreated, Is.Not.Null);
