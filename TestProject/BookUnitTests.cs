@@ -12,7 +12,7 @@ namespace TestProject
             // Assert
             FakeDatabase fakeDatabase = new(); 
             BookService bookService = new(fakeDatabase);
-            Book bookToTest = new(1, "Test", "Victor", "BookService for Testing");
+            Book bookToTest = new("Test", "Victor", "BookService for Testing");
 
             // Act
             var bookCreated = await bookService.AddBook(bookToTest);
@@ -31,7 +31,7 @@ namespace TestProject
             string expectedtitle = "VictorBook2";
 
             // Act 
-            var result = await bookService.GetBookById(2);
+            var result = await bookService.GetBookById(new Guid());
 
             // Assert
             Assert.That(result.Title, Is.EqualTo(expectedtitle));
@@ -43,14 +43,14 @@ namespace TestProject
             // Arrange
             var fakeDatabase = new FakeDatabase();
             var bookService = new BookService(fakeDatabase);
-            var testBook = await bookService.GetBookById(1);
-            var updatedBook = new Book (1, "AnnanBok", "Vulle", "Description");
+            var testBook = await bookService.GetBookById(new Guid());
+            var updatedBook = new Book ("AnnanBok", "Vulle", "Description");
 
             // Act 
             await bookService.UpdateBook(updatedBook);
 
             // Assert
-            var result = await bookService.GetBookById(1);
+            var result = await bookService.GetBookById(new Guid());
             Assert.That(result.Title, Is.EqualTo(updatedBook.Title));
         }
 
@@ -62,7 +62,7 @@ namespace TestProject
             var bookService = new BookService(fakeDatabase);
 
             // Act 
-            var result = await bookService.DeleteBook(1);
+            var result = await bookService.DeleteBook(new Guid());
 
             // Assert
             Assert.That(result, Is.Not.EqualTo(null));

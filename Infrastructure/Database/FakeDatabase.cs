@@ -10,20 +10,20 @@ namespace Infrastructure.Database
 
         private static List<Book> allBooksFromDB = new()
         {
-            new(1, "VictorBook1", "Victor", "Beskrivning"),
-            new(2, "VictorBook2", "Victor", "Beskrivning"),
-            new(3, "VictorBook3", "Victor", "Beskrivning"),
-            new(4, "VictorBook4", "Victor", "Beskrivning"),
-            new(5, "VictorBook5", "Victor", "Beskrivning"),
+            new("VictorBook1", "Victor", "Beskrivning"),
+            new("VictorBook2", "Victor", "Beskrivning"),
+            new("VictorBook3", "Victor", "Beskrivning"),
+            new("VictorBook4", "Victor", "Beskrivning"),
+            new("VictorBook5", "Victor", "Beskrivning"),
         };
         
         private static List<Author> allAuthorsFromDB = new()
         {
-            new(1, "Victor", "Ivarson"),
-            new(2, "Erik", "Larsson"),
-            new(3, "Cecilia", "Al Mouhib"),
-            new(4, "Lasse", "Ek"),
-            new(5, "Kornelius", "Vanheden"),
+            new("Victor", "Ivarson"),
+            new("Erik", "Larsson"),
+            new("Cecilia", "Al Mouhib"),
+            new("Lasse", "Ek"),
+            new("Kornelius", "Vanheden"),
         };
 
         // --- Book CRUD ---
@@ -34,7 +34,7 @@ namespace Infrastructure.Database
             return book;
         }
 
-        public async Task<Book> GetBookById(int bookId)
+        public async Task<Book> GetBookById(Guid bookId)
         {
             Book book = Books.FirstOrDefault(b => b.Id == bookId);
             return await Task.FromResult(book);
@@ -52,7 +52,7 @@ namespace Infrastructure.Database
             return bookToUpdate;
         }
 
-        public async Task<Book> DeleteBook(int id)
+        public async Task<Book> DeleteBook(Guid id)
         {
             Book bookToDelete = Books.FirstOrDefault(b => b.Id == id); 
             if (bookToDelete != null) 
@@ -71,7 +71,7 @@ namespace Infrastructure.Database
             return author;
         }
 
-        public async Task<Author> GetAuthorById(int authorId)
+        public async Task<Author> GetAuthorById(Guid authorId)
         {
             Author author = Authors.FirstOrDefault(a => a.Id == authorId);
             return await Task.FromResult(author);
@@ -88,7 +88,7 @@ namespace Infrastructure.Database
             return authorToUpdate;
         }
 
-        public async Task<Author> DeleteAuthor(int id)
+        public async Task<Author> DeleteAuthor(Guid id)
         {
             Author authorToDelete = Authors.FirstOrDefault(a => a.Id == id);
             if (authorToDelete != null)
