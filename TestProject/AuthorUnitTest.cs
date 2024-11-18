@@ -11,7 +11,7 @@ namespace TestProject
         {
             FakeDatabase fakeRepository = new();
             AuthorService authorService = new(fakeRepository); 
-            Author authorToTest = new(1, "Victor", "Ivarson");
+            Author authorToTest = new("Victor", "Ivarson");
 
             // Act
             var authorCreated = await authorService.AddNewAuthor(authorToTest);
@@ -26,10 +26,10 @@ namespace TestProject
         {
             var fakeDatabase = new FakeDatabase();
             var authorService = new AuthorService(fakeDatabase);
-            string expectedFirstName = "Victor";
+            string expectedFirstName = "Erik";
 
             // Act 
-            var result = await authorService.GetAuthorById(1);
+            var result = await authorService.GetAuthorById(new Guid());
 
             // Assert
             Assert.That(result.FirstName, Is.EqualTo(expectedFirstName));
@@ -40,13 +40,13 @@ namespace TestProject
         {
             FakeDatabase fakeDatabase = new();
             AuthorService authorService = new(fakeDatabase);
-            var updatedAuthor = new Author(1, "AnnanBok", "Vulle");
+            var updatedAuthor = new Author("AnnanBok", "Vulle");
 
             // Act 
             await authorService.UpdateAuthor(updatedAuthor);
 
             // Assert
-            var result = await authorService.GetAuthorById(1);
+            var result = await authorService.GetAuthorById(new Guid());
             Assert.That(result.FirstName, Is.EqualTo(updatedAuthor.FirstName));
         }
 
@@ -58,7 +58,7 @@ namespace TestProject
             AuthorService authorService = new(fakeDatabase);
 
             // Act 
-            var result = await authorService.DeleteAuthor(1);
+            var result = await authorService.DeleteAuthor(new Guid());
 
             // Assert
             Assert.That(result, Is.Not.EqualTo(null));

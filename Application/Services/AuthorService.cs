@@ -1,12 +1,7 @@
 ﻿using Application.Interfaces;
-using Domain;
 using Domain.Model;
 using Infrastructure.Database;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Application.Services
 {
@@ -15,7 +10,7 @@ namespace Application.Services
         private readonly FakeDatabase _database = database;
 
 
-        public async Task<Author> GetAuthorById(int authorId)
+        public async Task<Author> GetAuthorById(Guid authorId)
         {
             var author = await _database.GetAuthorById(authorId);
             return author;
@@ -34,7 +29,7 @@ namespace Application.Services
             return updatedAuthor;
         }
 
-        public async Task<Author> DeleteAuthor(int id)
+        public async Task<Author> DeleteAuthor(Guid id)
         {
             var result = await _database.DeleteAuthor(id);
             return result;

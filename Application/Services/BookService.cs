@@ -8,7 +8,7 @@ namespace Application
     {
         private readonly FakeDatabase _database = database; 
 
-        public async Task<Book> GetBookById(int bookId)
+        public async Task<Book> GetBookById(Guid bookId)
         {
             Book book = await _database.GetBookById(bookId);
             return book; 
@@ -27,7 +27,7 @@ namespace Application
             return updatedBook; 
         }
 
-        public async Task<Book> DeleteBook(int id)
+        public async Task<Book> DeleteBook(Guid id)
         {
             var result = await _database.DeleteBook(id);
             return result; 

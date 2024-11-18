@@ -15,7 +15,7 @@ namespace API.Controllers
         [HttpGet]
         [SwaggerOperation(Description = "Gets a book by Id weather forecast")]
         [SwaggerResponse(200, "Successfully retrieved Book.")]
-        public Task<Book> GetBook(int id)
+        public Task<Book> GetBook(Guid id)
         {
             FakeDatabase fakeDatabase = new(); 
             BookService bookService = new(fakeDatabase);
@@ -48,7 +48,7 @@ namespace API.Controllers
         [HttpPost]
         [SwaggerOperation(Description = "Deletes Book from library")]
         [SwaggerResponse(204, "Successfully Deleted Book.")]
-        public Task<Book> DeleteBook(int id)
+        public Task<Book> DeleteBook(Guid id)
         {
             FakeDatabase fakeDatabase = new();
             BookService bookService = new(fakeDatabase);
