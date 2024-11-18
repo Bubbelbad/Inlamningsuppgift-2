@@ -34,9 +34,9 @@ jobs:
 
       - name: Deployment Readiness Check
         run: |
-        echo "Performing deployment readiness check for DEVELOPMENT enrivonment..."
-        sleep 2
-        echo "DEVELOPMENT environment readiness check completed successfully!"
+            echo "Performing deployment readiness check for DEVELOPMENT enrivonment..."
+            sleep 2
+            echo "DEVELOPMENT environment readiness check completed successfully!"
 
       - name: Final Message
         run: echo "All checks passed. Ready to merge into development!"
