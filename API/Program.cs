@@ -1,3 +1,5 @@
+using Application;
+using Infrastructure; 
 
 namespace API
 {
@@ -16,6 +18,9 @@ namespace API
             {
                 c.EnableAnnotations();
             });
+
+            builder.Services.AddApplication(); //Lägget till MediatR från Application till API
+            builder.Services.AddInfrastructure(); 
 
             var app = builder.Build();
 

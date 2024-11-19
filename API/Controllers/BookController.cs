@@ -1,36 +1,37 @@
 ﻿using Application;
-using Domain;
+using Application.Commands.AddBook;
+using Application.Dtos;
+using Application.Queries.BookQueries;
+using Domain.Model;
 using Infrastructure.Database;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-
 
 namespace API.Controllers
 {
     [ApiController]
-    [Route("[Controller]")]
+    [Route("api/[Controller]")]
     public class BookController : ControllerBase
     {
-        [Route("Get/{id}")]
+        private readonly IMediator _mediator; 
+
+        [Route("GetBookById/{bookId}")]
         [HttpGet]
-        [SwaggerOperation(Description = "Gets a book by Id weather forecast")]
+        [SwaggerOperation(Description = "Gets a book by Id")]
         [SwaggerResponse(200, "Successfully retrieved Book.")]
-        public Task<Book> GetBook(Guid id)
+        public async Task<IActionResult> GetBook(Guid bookId)
         {
-            FakeDatabase fakeDatabase = new(); 
-            BookService bookService = new(fakeDatabase);
-            return bookService.GetBookById(id);
+            return Ok(await _mediator.Send(new GetBookByIdQuery(bookId)));
         }
 
-        [Route("Add")]
+        [Route("AddNewBook")]
         [HttpPost]
         [SwaggerOperation(Description = "Adds a new Book to library")]
         [SwaggerResponse(200, "Successfully added Book.")]
-        public Task<Book> AddBook([FromBody]Book book)
+        public async Task<IActionResult> AddBook([FromBody]BookDto bookToAdd)
         {
-            FakeDatabase fakeDatabase = new();
-            BookService bookService = new(fakeDatabase);
-            return bookService.AddBook(book);
+            return Ok(await _mediator.Send(new AddBookCommand(bookToAdd)));
         }
 
         [Route("Update")]
@@ -44,15 +45,15 @@ namespace API.Controllers
             return bookService.UpdateBook(book);
         }
 
-        [Route("Delete/{id}")]
-        [HttpPost]
-        [SwaggerOperation(Description = "Deletes Book from library")]
-        [SwaggerResponse(204, "Successfully Deleted Book.")]
-        public Task<Book> DeleteBook(Guid id)
-        {
-            FakeDatabase fakeDatabase = new();
-            BookService bookService = new(fakeDatabase);
-            return bookService.DeleteBook(id);
-        }
+        //[Route("Delete/{id}")]
+        //[HttpPost]
+        //[SwaggerOperation(Description = "Deletes Book from library")]
+        //[SwaggerResponse(204, "Successfully Deleted Book.")]
+        //public Task<Book> DeleteBook(Guid id)
+        //{
+        //    FakeDatabase fakeDatabase = new();
+        //    BookService bookService = new(fakeDatabase);
+        //    return bookService.DeleteBook(id);
+        //}
     }
 }

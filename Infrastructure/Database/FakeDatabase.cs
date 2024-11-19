@@ -10,11 +10,11 @@ namespace Infrastructure.Database
 
         private static List<Book> allBooksFromDB = new()
         {
-            new("VictorBook1", "Victor", "Beskrivning"),
-            new("VictorBook2", "Victor", "Beskrivning"),
-            new("VictorBook3", "Victor", "Beskrivning"),
-            new("VictorBook4", "Victor", "Beskrivning"),
-            new("VictorBook5", "Victor", "Beskrivning"),
+            new(new Guid(), "VictorBook1", "Victor", "Beskrivning"),
+            new(new Guid(), "VictorBook2", "Victor", "Beskrivning"),
+            new(new Guid(), "VictorBook3", "Victor", "Beskrivning"),
+            new(new Guid(), "VictorBook4", "Victor", "Beskrivning"),
+            new(new Guid(), "VictorBook5", "Victor", "Beskrivning"),
         };
         
         private static List<Author> allAuthorsFromDB = new()
@@ -49,17 +49,19 @@ namespace Infrastructure.Database
                 bookToUpdate.Author = updatedBook.Author;
                 bookToUpdate.Description = updatedBook.Description;
             }
-            return bookToUpdate;
+            return await Task.FromResult(bookToUpdate);
         }
 
-        public async Task<Book> DeleteBook(Guid id)
+        public async Task<bool> DeleteBook(Guid id)
         {
-            Book bookToDelete = Books.FirstOrDefault(b => b.Id == id); 
+            Book bookToDelete = Books.FirstOrDefault(b => b.Id == id);
+            bool actionSuccessful = false;
             if (bookToDelete != null) 
             { 
-                Books.Remove(bookToDelete); 
+                Books.Remove(bookToDelete);
+                actionSuccessful = true; 
             }
-            return await Task.FromResult(bookToDelete);
+            return await Task.FromResult(actionSuccessful); 
         }
 
 
