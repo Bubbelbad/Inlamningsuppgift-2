@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Application.Commands.DeleteBook
 {
-    internal sealed class DeleteBookCommandHandler : IRequestHandler<DeleteBookCommand, bool>
+    public class DeleteBookCommandHandler : IRequestHandler<DeleteBookCommand, bool>
     {
         private readonly FakeDatabase _database;
 

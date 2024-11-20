@@ -1,5 +1,4 @@
-﻿using Domain;
-using Domain.Model;
+﻿using Domain.Model;
 
 namespace Infrastructure.Database
 {

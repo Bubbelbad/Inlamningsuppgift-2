@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MediatR;
 using Infrastructure.Database;
-
 namespace Application
 {
     public static class DependencyInjection

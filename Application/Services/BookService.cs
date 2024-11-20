@@ -1,4 +1,5 @@
-﻿using Domain.Model;
+﻿using Application.Dtos;
+using Domain.Model;
 using Infrastructure.Database;
 using MediatR;
 
@@ -22,11 +23,11 @@ namespace Application
         //}
 
 
-        public async Task<Book> UpdateBook(Book book)
-        {
-            Book updatedBook = await _database.UpdateBook(book);
-            return updatedBook; 
-        }
+        //public async Task<Book> UpdateBook(BookDto book)
+        //{
+        //    Book updatedBook = await _database.UpdateBook(book);
+        //    return updatedBook; 
+        //}
 
         //public async Task<Book> DeleteBook(Guid id)
         //{
