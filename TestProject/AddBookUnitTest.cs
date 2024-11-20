@@ -25,7 +25,7 @@ namespace TestProject
         public async Task Handle_ValidBookParam_ReturnsCorrectBook()
         {
             // Arrange
-            BookDto bookToTest = new(new Guid("12345678-1234-5678-1234-567812345678"), "Test", "Victor", "BookService for Testing");
+            BookDto bookToTest = new(new Guid("12345678-1234-5678-1234-567812345678"), "Book of Test", "Test Testsson", "An example book for Testing");
             var command = new AddBookCommand(bookToTest);
 
             // Act
@@ -40,7 +40,7 @@ namespace TestProject
         public async Task Handle_InvalidValiId_ReturnsNull()
         {
             // Arrange
-            BookDto bookToTest = new(new Guid("12345678-1234-5678-1234-56781234567"), "Test", "Victor", "BookService for Testing");
+            BookDto bookToTest = new(new Guid("12345678-1234-5678-1234-56781234567"), "Book of Test", "Test Testsson", "An example book for Testing");
             var command = new AddBookCommand(bookToTest);
 
             // Act

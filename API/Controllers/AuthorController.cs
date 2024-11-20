@@ -5,15 +5,13 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
-
-
 namespace API.Controllers
 {
     [ApiController]
     [Route("api/[Controller]")]
-    public class AuthorController : ControllerBase
+    public class AuthorController(IMediator mediator) : ControllerBase
     {
-        private readonly IMediator _mediator; 
+        private readonly IMediator _mediator = mediator; 
 
         [Route("GetAuthorById/{id}")]
         [HttpGet]
@@ -24,37 +22,36 @@ namespace API.Controllers
             return Ok(await _mediator.Send(new GetAuthorByIdQuery(id)));
         }
 
-        //[Route("Add")]
-        //[HttpPost]
-        //[SwaggerOperation(Description = "Adds a new Author to library")]
-        //[SwaggerResponse(200, "Successfully added Author.")]
-        //public async Task<Author> Addauthor([FromBody] Author author)
-        //{
-        //    return Ok(await _mediator.Send(new AddAuthor))
-        //    //return authorService.AddNewAuthor(author);
+        [Route("Add")]
+        [HttpPost]
+        [SwaggerOperation(Description = "Adds a new Author to library")]
+        [SwaggerResponse(200, "Successfully added Author.")]
+        public async Task<Author> Addauthor([FromBody] Author author)
+        {
+            throw new NotImplementedException();
+            //return Ok(await _mediator.Send(new AddAuthor))
+            //return authorService.AddNewAuthor(author);
 
-        //}
+        }
 
-        //[Route("Update")]
-        //[HttpPost]
-        //[SwaggerOperation(Description = "Updates an existing Author to library")]
-        //[SwaggerResponse(200, "Successfully Updated Author.")]
-        //public Task<Author> UpdateBook([FromBody] Author author)
-        //{
-        //    FakeDatabase fakeDatabase = new();
-        //    AuthorService authorService = new(fakeDatabase);
-        //    return authorService.UpdateAuthor(author);
-        //}
+        [Route("Update")]
+        [HttpPut]
+        [SwaggerOperation(Description = "Updates an existing Author to library")]
+        [SwaggerResponse(200, "Successfully Updated Author.")]
+        public Task<Author> UpdateBook([FromBody] Author author)
+        {
+            throw new NotImplementedException();
+            //return authorService.UpdateAuthor(author);
+        }
 
-        //[Route("Delete/{id}")]
-        //[HttpPost]
-        //[SwaggerOperation(Description = "Deletes Author from library")]
-        //[SwaggerResponse(204, "Successfully Deleted Author.")]
-        //public Task<Author> DeleteAuthor(Guid id)
-        //{
-        //    FakeDatabase fakeDatabase = new();
-        //    AuthorService authorService = new(fakeDatabase);
-        //    return authorService.DeleteAuthor(id);
-        //}
+        [Route("Delete/{id}")]
+        [HttpDelete]
+        [SwaggerOperation(Description = "Deletes Author from library")]
+        [SwaggerResponse(204, "Successfully Deleted Author.")]
+        public Task<Author> DeleteAuthor(Guid id)
+        {
+            throw new NotImplementedException();
+            //return authorService.DeleteAuthor(id);
+        }
     }
 }

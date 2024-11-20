@@ -11,9 +11,9 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/[Controller]")]
-    public class BookController : ControllerBase
+    public class BookController(IMediator mediator) : ControllerBase
     {
-        private readonly IMediator _mediator; 
+        private readonly IMediator _mediator = mediator; 
 
         [Route("GetBookById/{bookId}")]
         [HttpGet]

@@ -9,11 +9,11 @@ namespace Infrastructure.Database
 
         private static List<Book> allBooksFromDB = new()
         {
-            new(new Guid(), "VictorBook1", "Victor", "Beskrivning"),
-            new(new Guid(), "VictorBook2", "Victor", "Beskrivning"),
-            new(new Guid(), "VictorBook3", "Victor", "Beskrivning"),
-            new(new Guid(), "VictorBook4", "Victor", "Beskrivning"),
-            new(new Guid(), "VictorBook5", "Victor", "Beskrivning"),
+            new(new Guid("2bfaf5e9-d978-464c-b778-7567ef2dde29"), "VictorBook1", "Victor", "Beskrivning"),
+            new(new Guid("3e2e66cf-5ba6-4cd0-88a1-c37b71cca899"), "VictorBook2", "Victor", "Beskrivning"),
+            new(new Guid("6896990f-a8ac-42d6-946e-c75a49b4c549"), "VictorBook3", "Victor", "Beskrivning"),
+            new(new Guid("d03ed6bd-63f8-4b19-a9e4-00b1da267186"), "VictorBook4", "Victor", "Beskrivning"),
+            new(new Guid("783307e1-ea3b-400b-919d-0c40b2bbae78"), "VictorBook5", "Victor", "Beskrivning"),
         };
         
         private static List<Author> allAuthorsFromDB = new()
