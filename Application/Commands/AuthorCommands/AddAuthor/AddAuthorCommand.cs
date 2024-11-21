@@ -6,6 +6,6 @@ namespace Application.Commands.AddAuthorCommands.AddAuthor
 {
     public class AddAuthorCommand(AddAuthorDto author) : IRequest<Author>
     {
-        public AddAuthorDto NewAuthor { get; set; } = author;
+        public AddAuthorDto NewAuthor { get; set; } = author; 
     }
 }

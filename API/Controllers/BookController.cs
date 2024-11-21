@@ -19,19 +19,49 @@ namespace API.Controllers
         [HttpGet]
         [SwaggerOperation(Description = "Gets a book by Id")]
         [SwaggerResponse(200, "Successfully retrieved Book.")]
+        [SwaggerResponse(400, "Invalid input data")]
+        [SwaggerResponse(404, "Book not found")]
         public async Task<IActionResult> GetBook(Guid bookId)
         {
-            return Ok(await _mediator.Send(new GetBookByIdQuery(bookId)));
+            if (bookId == null)
+            {
+                return BadRequest(400); 
+            }
+
+            var foundBook = await _mediator.Send(new GetBookByIdQuery(bookId));
+            
+            if (foundBook == null)
+            {
+                return NotFound("Book not found"); 
+            }
+
+            return Ok(foundBook); 
         }
 
-        [Route("AddNewBook")]
+
+        [Route("Create")]
         [HttpPost]
         [SwaggerOperation(Description = "Adds a new Book to library")]
         [SwaggerResponse(200, "Successfully added Book.")]
+        [SwaggerResponse(400, "Invalid input data.")]
+        [SwaggerResponse(404, "Book not found.")]
         public async Task<IActionResult> AddBook([FromBody]AddBookDto bookToAdd)
         {
-            return Ok(await _mediator.Send(new AddBookCommand(bookToAdd)));
+            if (bookToAdd == null)
+            {
+                return BadRequest("Invalid input data.");
+            }
+
+            var addedBook = await _mediator.Send(new AddBookCommand(bookToAdd));
+
+            if (addedBook == null)
+            {
+                return NotFound("Book not found.");
+            }
+
+            return Ok(addedBook);
         }
+
 
         [Route("Update")]
         [HttpPut]
@@ -72,6 +102,5 @@ namespace API.Controllers
             }
             return NoContent();
         }
-
     }
 }
