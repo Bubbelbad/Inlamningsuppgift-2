@@ -8,11 +8,18 @@
 
   <ItemGroup>
     <PackageReference Include="MediatR" Version="12.4.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Commands\AuthorCommands\DeleteAuthor\" />
+    <Folder Include="Commands\AuthorCommands\UpdateAuthor\" />
+    <Folder Include="Commands\BookCommands\" />
   </ItemGroup>
 
 </Project>

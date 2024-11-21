@@ -1,20 +1,21 @@
-﻿using Application.Interfaces;
-using Domain.Model;
+﻿using Domain.Model;
 using Infrastructure.Database;
+using MediatR;
 
 
 namespace Application.Services
 {
-    public class AuthorService(FakeDatabase database) : IAuthorService
+    public class AuthorService(FakeDatabase database)
     {
+        internal readonly IMediator _mediator;
         private readonly FakeDatabase _database = database;
 
 
-        public async Task<Author> GetAuthorById(Guid authorId)
-        {
-            var author = await _database.GetAuthorById(authorId);
-            return author;
-        }
+        //public async Task<Author> GetAuthorById(Guid authorId)
+        //{
+        //    var author = await _database.GetAuthorById(authorId);
+        //    return author;
+        //}
 
         public async Task<Author> AddNewAuthor(Author authorId)
         {

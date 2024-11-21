@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Domain.Model
+﻿namespace Domain.Model
 {
-    public class Author (string firstName, string lastName)
+    public class Author (Guid id, string firstName, string lastName)
     {
-        public Guid Id { get; set; } = new Guid();
+        public Guid Id { get; set; } = id; 
         public string? FirstName { get; set; } = firstName;
         public string? LastName { get; set; } = lastName; 
     }
