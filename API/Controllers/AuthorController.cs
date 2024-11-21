@@ -2,20 +2,21 @@
 using Application.Commands.AuthorCommands.DeleteAuthor;
 using Application.Dtos;
 using Application.Queries.AuthorQueries;
-using Application.Queries.BookQueries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
     [ApiController]
-    [Route("api/[Controller]")]
+    [Microsoft.AspNetCore.Mvc.Route("api/[Controller]")]
     public class AuthorController(IMediator mediator) : ControllerBase
     {
-        private readonly IMediator _mediator = mediator; 
+        private readonly IMediator _mediator = mediator;
 
-        [Route("GetAuthorById/{id}")]
+        [Authorize]
+        [Microsoft.AspNetCore.Mvc.Route("GetAuthorById/{id}")]
         [HttpGet]
         [SwaggerOperation(Description = "Gets Author by Id")]
         [SwaggerResponse(200, "Successfully retrieved Author.")]
@@ -38,7 +39,7 @@ namespace API.Controllers
             return Ok(foundAuthor);
         }
 
-        [Route("Create")]
+        [Microsoft.AspNetCore.Mvc.Route("Create")]
         [HttpPost]
         [SwaggerOperation(Description = "Adds a new Author to library")]
         [SwaggerResponse(200, "Successfully added Author.")]
@@ -59,10 +60,9 @@ namespace API.Controllers
             }
 
             return Ok(addedAuthor);
-
         }
 
-        [Route("Update")]
+        [Microsoft.AspNetCore.Mvc.Route("Update")]
         [HttpPut]
         [SwaggerOperation(Description = "Updates an existing Author to library")]
         [SwaggerResponse(200, "Successfully Updated Author.")]
@@ -85,7 +85,7 @@ namespace API.Controllers
             return Ok(updatedBook);
         }
 
-        [Route("Delete/{id}")]
+        [Microsoft.AspNetCore.Mvc.Route("Delete/{id}")]
         [HttpDelete]
         [SwaggerOperation(Description = "Deletes Author from library")]
         [SwaggerResponse(204, "Successfully Deleted Author.")]

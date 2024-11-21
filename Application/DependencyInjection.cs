@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MediatR;
 using Infrastructure.Database;
+using Application.Queries.UserQueries.Helpers;
 namespace Application
 {
     public static class DependencyInjection
@@ -10,10 +11,11 @@ namespace Application
             var assembly = typeof(DependencyInjection).Assembly;
             services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(assembly));
 
-            // services.AddValidatorsFromAssembly(assembly);
+            services.AddScoped<TokenHelper>();
 
             return services;
 
+           // services.AddValidatorsFromAssembly(assembly);
            // services.AddSungelton(FakeDatabase)
         }
         
