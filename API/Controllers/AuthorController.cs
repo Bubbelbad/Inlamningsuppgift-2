@@ -26,7 +26,7 @@ namespace API.Controllers
         [HttpPost]
         [SwaggerOperation(Description = "Adds a new Author to library")]
         [SwaggerResponse(200, "Successfully added Author.")]
-        public async Task<Author> Addauthor([FromBody] Author author)
+        public async Task<IActionResult> AddAuthor([FromBody] Author author)
         {
             throw new NotImplementedException();
             //return Ok(await _mediator.Send(new AddAuthor))
@@ -38,7 +38,7 @@ namespace API.Controllers
         [HttpPut]
         [SwaggerOperation(Description = "Updates an existing Author to library")]
         [SwaggerResponse(200, "Successfully Updated Author.")]
-        public Task<Author> UpdateBook([FromBody] Author author)
+        public Task<IActionResult> UpdateAuthor([FromBody] Author author)
         {
             throw new NotImplementedException();
             //return authorService.UpdateAuthor(author);
@@ -48,7 +48,7 @@ namespace API.Controllers
         [HttpDelete]
         [SwaggerOperation(Description = "Deletes Author from library")]
         [SwaggerResponse(204, "Successfully Deleted Author.")]
-        public Task<Author> DeleteAuthor(Guid id)
+        public Task<IActionResult> DeleteAuthor(Guid id)
         {
             throw new NotImplementedException();
             //return authorService.DeleteAuthor(id);

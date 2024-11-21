@@ -17,8 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Commands\DeleteAuthor\" />
-    <Folder Include="Commands\UpdateAuthor\" />
+    <Folder Include="Commands\AuthorCommands\DeleteAuthor\" />
+    <Folder Include="Commands\AuthorCommands\UpdateAuthor\" />
+    <Folder Include="Commands\BookCommands\" />
   </ItemGroup>
 
 </Project>

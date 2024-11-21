@@ -7,6 +7,8 @@ namespace Infrastructure.Database
         public List<Book> Books { get { return allBooksFromDB; } set { allBooksFromDB = value; } }
         public List<Author> Authors { get { return allAuthorsFromDB; } set { allAuthorsFromDB = value; } }
 
+
+        //LÄGG TILL LISTA FÖR AUTHORS I BOOK
         private static List<Book> allBooksFromDB = new()
         {
             new(new Guid("2bfaf5e9-d978-464c-b778-7567ef2dde29"), "VictorBook1", "Victor", "Beskrivning"),
@@ -15,15 +17,15 @@ namespace Infrastructure.Database
             new(new Guid("d03ed6bd-63f8-4b19-a9e4-00b1da267186"), "VictorBook4", "Victor", "Beskrivning"),
             new(new Guid("783307e1-ea3b-400b-919d-0c40b2bbae78"), "VictorBook5", "Victor", "Beskrivning"),
         };
-        
+
         private static List<Author> allAuthorsFromDB = new()
         {
-            new("Victor", "Ivarson"),
-            new("Erik", "Larsson"),
-            new("Cecilia", "Al Mouhib"),
-            new("Lasse", "Ek"),
-            new("Kornelius", "Vanheden"),
-        };
+            new Author(new Guid("1051869e-47b8-4c7e-b2b4-799fb441d092"), "Victor", "Ivarson"),
+            new Author(new Guid("d1e16526-228e-4989-af4e-ee9690da3d8a"), "Erik", "Larsson"),
+            new Author(new Guid("6ce82e1f-631f-4447-9b3c-8f7137bc0e31"), "Cecilia", "Al Mouhib"),
+            new Author(new Guid("04c1a20b-ec2f-4eda-bf3b-4fa165529240"), "Lasse", "Ek"),
+            new Author(new Guid("fc22325e-0fa3-4615-aa6c-c7fe459a2735"), "Kornelius", "Vanheden"),
+        }; 
 
         // --- Book CRUD ---
 

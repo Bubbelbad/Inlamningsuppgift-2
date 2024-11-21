@@ -15,7 +15,9 @@ namespace Application.Commands.AddBook
 
         public Task<Book> Handle(AddBookCommand request, CancellationToken cancellationToken)
         {
-            Book bookToCreate = new Book(new Guid(), request.NewBook.Title, request.NewBook.Author, request.NewBook.Description);
+            // var existingAuthor = _database.Authors.Where(author => author.Id == request.NewBook.Author.Id);
+            // Kolla om det finns existerande author eller om en ny ska läggas till
+            Book bookToCreate = new Book(Guid.NewGuid(), request.NewBook.Title, request.NewBook.Author, request.NewBook.Description);
             return _database.AddNewBook(bookToCreate); 
         }
     }

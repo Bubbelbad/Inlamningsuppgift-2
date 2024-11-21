@@ -1,16 +1,16 @@
 ﻿using Application;
-using Application.Commands.AddBook;
+using Application.Commands.AddAuthorCommands.AddAuthor;
 using Application.Dtos;
-using Application.Queries.BookQueries;
+using Application.Queries.AuthorQueries;
 using Domain.Model;
 using Infrastructure.Database;
 
 namespace TestProject
 {
     [TestFixture]
-    public class AddBookUnitTest
+    public class AddAuthorUnitTest
     {
-        private AddBookCommandHandler _handler;
+        private AddAuthorCommandHandler _handler;
         private FakeDatabase _database;
 
         [SetUp]
@@ -18,30 +18,30 @@ namespace TestProject
         {
             // Initialize the handler and mock database before each test
             _database = new FakeDatabase();
-            _handler = new AddBookCommandHandler(_database);
+            _handler = new AddAuthorCommandHandler(_database);
         }
 
-        [Test, Category("AddBook")]
+        [Test, Category("AddAuthor")]
         public async Task Handle_ValidBookParam_ReturnsCorrectBook()
         {
             // Arrange
-            AddBookDto bookToTest = new("Book of Test", "Test Testsson", "An example book for Testing");
-            var command = new AddBookCommand(bookToTest);
+            AddAuthorDto authorToTest = new ("Henrik", "Testsson");
+            var command = new AddAuthorCommand(authorToTest);
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Description, Is.EqualTo(bookToTest.Description));
+            Assert.That(result.FirstName, Is.EqualTo(authorToTest.FirstName));
         }
 
-        [Test, Category("AddBook")]
+        [Test, Category("AddAuthor")]
         public async Task Handle_InvalidValiId_ReturnsNull()
         {
             // Arrange
-            AddBookDto bookToTest = new("Book of Test", "Test Testsson", "An example book for Testing");
-            var command = new AddBookCommand(bookToTest);
+            AddAuthorDto bookToTest = new("Test", "Testsson");
+            var command = new AddAuthorCommand(bookToTest);
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);

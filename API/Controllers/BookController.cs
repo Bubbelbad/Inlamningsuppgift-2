@@ -28,7 +28,7 @@ namespace API.Controllers
         [HttpPost]
         [SwaggerOperation(Description = "Adds a new Book to library")]
         [SwaggerResponse(200, "Successfully added Book.")]
-        public async Task<IActionResult> AddBook([FromBody]BookDto bookToAdd)
+        public async Task<IActionResult> AddBook([FromBody]AddBookDto bookToAdd)
         {
             return Ok(await _mediator.Send(new AddBookCommand(bookToAdd)));
         }

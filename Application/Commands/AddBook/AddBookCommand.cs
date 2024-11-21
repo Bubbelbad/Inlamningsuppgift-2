@@ -4,8 +4,8 @@ using MediatR;
 
 namespace Application.Commands.AddBook
 {
-    public class AddBookCommand(BookDto bookToCreate) : IRequest<Book>
+    public class AddBookCommand(AddBookDto bookToCreate) : IRequest<Book>
     {
-        public BookDto NewBook { get; } = bookToCreate;
+        public AddBookDto NewBook { get; } = bookToCreate;
     }
 }
