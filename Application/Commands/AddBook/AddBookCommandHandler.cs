@@ -4,14 +4,9 @@ using MediatR;
 
 namespace Application.Commands.AddBook
 {
-    public class AddBookCommandHandler : IRequestHandler<AddBookCommand, Book>
+    public class AddBookCommandHandler(FakeDatabase database) : IRequestHandler<AddBookCommand, Book>
     {
-        private readonly FakeDatabase _database; 
-
-        public AddBookCommandHandler(FakeDatabase database)
-        {
-            _database = database; 
-        }
+        private readonly FakeDatabase _database = database; 
 
         public Task<Book> Handle(AddBookCommand request, CancellationToken cancellationToken)
         {

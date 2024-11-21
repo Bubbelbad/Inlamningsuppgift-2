@@ -1,4 +1,5 @@
-﻿using Domain.Model;
+﻿using Application.Queries.UserQueries.Helpers;
+using Domain.Model;
 using Infrastructure.Database;
 using MediatR;
 
@@ -8,10 +9,23 @@ namespace Application.Queries.UserQueries
     {
         private readonly FakeDatabase _database = database;
 
-        public Task<List<User>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
+        public Task<List<User>> Handle(GetAllUsersQuery query, CancellationToken cancellationToken)
         {
-            List<User> allUsersFromFakeDatabase = _database.Users;
-            return Task.FromResult(allUsersFromFakeDatabase); 
+
+            if (query == null)
+            {
+                throw new ArgumentNullException(nameof(query), "Query cannot be null.");
+            }
+
+            try
+            {
+                List<User> allUsersFromFakeDatabase = _database.Users;
+                return Task.FromResult(allUsersFromFakeDatabase);
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("An error occurred while retrieving users from collection.", ex);
+            }
         }
     }
 }

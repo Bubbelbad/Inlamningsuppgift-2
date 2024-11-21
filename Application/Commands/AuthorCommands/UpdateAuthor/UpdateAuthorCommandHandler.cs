@@ -10,14 +10,9 @@ using System.Threading.Tasks;
 
 namespace Application.Commands.AuthorCommands.UpdateAuthor
 {
-    public class UpdateAuthorCommandHandler : IRequestHandler<UpdateAuthorCommand, Author>
+    public class UpdateAuthorCommandHandler(FakeDatabase database) : IRequestHandler<UpdateAuthorCommand, Author>
     {
-        private readonly FakeDatabase _database;
-
-        public UpdateAuthorCommandHandler(FakeDatabase database)
-        {
-            _database = database;
-        }
+        private readonly FakeDatabase _database = database;
 
         public Task<Author> Handle(UpdateAuthorCommand request, CancellationToken cancellationToken)
         {
@@ -26,8 +21,15 @@ namespace Application.Commands.AuthorCommands.UpdateAuthor
                 return Task.FromResult<Author>(null);
             }
 
-            Author authorToUpdate = new Author(request.NewAuthor.Id, request.NewAuthor.FirstName, request.NewAuthor.LastName);
-            return _database.UpdateAuthor(authorToUpdate); 
+            try
+            {
+                Author authorToUpdate = new Author(request.NewAuthor.Id, request.NewAuthor.FirstName, request.NewAuthor.LastName);
+                return _database.UpdateAuthor(authorToUpdate);
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("An error occurred.", ex);
+            }
         }
     }
 }

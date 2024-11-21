@@ -5,19 +5,27 @@ using Application.Queries.AuthorQueries;
 
 namespace Application.Queries.AuthorQueries
 {
-    public class GetAuthorByIdQueryHandler : IRequestHandler<GetAuthorByIdQuery, Author>
+    public class GetAuthorByIdQueryHandler(FakeDatabase database) : IRequestHandler<GetAuthorByIdQuery, Author>
     {
-        private readonly FakeDatabase _database;
+        private readonly FakeDatabase _database = database;
 
-        public GetAuthorByIdQueryHandler(FakeDatabase database)
-        {
-            _database = database;
-        }
 
-        public Task<Author> Handle(GetAuthorByIdQuery request, CancellationToken cancellationToken)
+        public Task<Author> Handle(GetAuthorByIdQuery query, CancellationToken cancellationToken)
         {
-            Author wantedAuthor = _database.Authors.FirstOrDefault(author => author.Id == request.Id)!;
-            return Task.FromResult(wantedAuthor);
+            if (query == null)
+            {
+                throw new ArgumentNullException(nameof(query), "Query can not be null");
+            }
+
+            try
+            {
+                Author wantedAuthor = _database.Authors.FirstOrDefault(author => author.Id == query.Id)!;
+                return Task.FromResult(wantedAuthor);
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("An error occurred while retrieving object from collection.", ex);
+            }
         }
     }
 }

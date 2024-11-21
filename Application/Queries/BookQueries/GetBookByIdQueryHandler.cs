@@ -4,19 +4,27 @@ using Domain.Model;
 
 namespace Application.Queries.BookQueries
 {
-    public class GetBookByIdQueryHandler : IRequestHandler<GetBookByIdQuery, Book>
+    public class GetBookByIdQueryHandler(FakeDatabase database) : IRequestHandler<GetBookByIdQuery, Book>
     {
-        private readonly FakeDatabase _database;
+        private readonly FakeDatabase _database = database;
 
-        public GetBookByIdQueryHandler(FakeDatabase database)
+      
+        public Task<Book> Handle(GetBookByIdQuery query, CancellationToken cancellationToken)
         {
-            _database = database;
-        }
+            if (query == null)
+            {
+                throw new ArgumentNullException(nameof(query), "Query cannot be null.");
+            }
 
-        public Task<Book> Handle(GetBookByIdQuery request, CancellationToken cancellationToken)
-        {
-            Book wantedBook = _database.Books.FirstOrDefault(book => book.Id == request.Id)!;
-            return Task.FromResult(wantedBook);
+            try
+            {
+                Book wantedBook = _database.Books.FirstOrDefault(book => book.Id == query.Id)!;
+                return Task.FromResult(wantedBook);
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("An error occurred while retrieving object from collection.", ex);
+            }
         }
     }
 }

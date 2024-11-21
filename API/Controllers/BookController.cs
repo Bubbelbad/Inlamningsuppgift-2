@@ -6,14 +6,20 @@ using Application.Queries.BookQueries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace API.Controllers
 {
     [ApiController]
     [Route("api/[Controller]")]
-    public class BookController(IMediator mediator) : ControllerBase
+    public class BookController : ControllerBase
     {
-        private readonly IMediator _mediator = mediator; 
+        private readonly IMediator _mediator;
+
+        public BookController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
 
         [Route("GetBookById/{bookId}")]
         [HttpGet]
@@ -21,86 +27,111 @@ namespace API.Controllers
         [SwaggerResponse(200, "Successfully retrieved Book.")]
         [SwaggerResponse(400, "Invalid input data")]
         [SwaggerResponse(404, "Book not found")]
-        public async Task<IActionResult> GetBook(Guid bookId)
+        public async Task<IActionResult> GetBook([FromRoute] Guid bookId)
         {
-            if (bookId == null)
+            if (bookId == Guid.Empty)
             {
-                return BadRequest(400); 
+                return BadRequest("Invalid book ID.");
             }
 
-            var foundBook = await _mediator.Send(new GetBookByIdQuery(bookId));
-            
-            if (foundBook == null)
+            try
             {
-                return NotFound("Book not found"); 
-            }
+                var foundBook = await _mediator.Send(new GetBookByIdQuery(bookId));
+                if (foundBook == null)
+                {
+                    return NotFound("Book not found.");
+                }
 
-            return Ok(foundBook); 
+                return Ok(foundBook);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (ex) here if needed
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
         }
-
 
         [Route("Create")]
         [HttpPost]
         [SwaggerOperation(Description = "Adds a new Book to library")]
         [SwaggerResponse(200, "Successfully added Book.")]
         [SwaggerResponse(400, "Invalid input data.")]
-        [SwaggerResponse(404, "Book not found.")]
-        public async Task<IActionResult> AddBook([FromBody]AddBookDto bookToAdd)
+        public async Task<IActionResult> AddBook([FromBody, Required] AddBookDto bookToAdd)
         {
             if (bookToAdd == null)
             {
                 return BadRequest("Invalid input data.");
             }
 
-            var addedBook = await _mediator.Send(new AddBookCommand(bookToAdd));
-
-            if (addedBook == null)
+            try
             {
-                return NotFound("Book not found.");
+                var addedBook = await _mediator.Send(new AddBookCommand(bookToAdd));
+                return Ok(addedBook);
             }
-
-            return Ok(addedBook);
+            catch (Exception ex)
+            {
+                // Log the exception (ex) here if needed
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
         }
-
 
         [Route("Update")]
         [HttpPut]
-        [SwaggerOperation(Description = "Updates an existing Book in the library")]
+        [SwaggerOperation(Description = "Updates an existing Book in collection")]
         [SwaggerResponse(200, "Successfully Updated Book.", typeof(BookDto))]
         [SwaggerResponse(400, "Invalid input data.")]
         [SwaggerResponse(404, "Book not found.")]
-        public async Task<IActionResult> UpdateBook([FromBody] BookDto book)
+        public async Task<IActionResult> UpdateBook([FromBody, Required] BookDto book)
         {
             if (book == null)
             {
                 return BadRequest("Invalid input data.");
             }
 
-            var updatedBook = await _mediator.Send(new UpdateBookCommand(book));
-
-            if (updatedBook == null)
+            try
             {
-                return NotFound("Book not found.");
+                var updatedBook = await _mediator.Send(new UpdateBookCommand(book));
+                if (updatedBook == null)
+                {
+                    return NotFound("Book not found.");
+                }
+
+                return Ok(updatedBook);
             }
-
-            return Ok(updatedBook);
+            catch (Exception ex)
+            {
+                // Log the exception (ex) here if needed
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
         }
-
 
         [Route("Delete/{id}")]
         [HttpDelete]
-        [SwaggerOperation(Description = "Deletes a Book from the library")]
+        [SwaggerOperation(Description = "Deletes a Book from collection")]
         [SwaggerResponse(204, "Successfully Deleted Book.")]
         [SwaggerResponse(404, "Book not found.")]
-        public async Task<IActionResult> DeleteBook(Guid id)
+        public async Task<IActionResult> DeleteBook([FromRoute] Guid id)
         {
-            var deletedBook = await _mediator.Send(new DeleteBookCommand(id));
-
-            if (deletedBook == null)
+            if (id == Guid.Empty)
             {
-                return NotFound("Book not found.");
+                return BadRequest("Invalid book ID.");
             }
-            return NoContent();
+
+            try
+            {
+                var deletedBook = await _mediator.Send(new DeleteBookCommand(id));
+                if (deletedBook == null)
+                {
+                    return NotFound("Book not found.");
+                }
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (ex) here if needed
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
         }
     }
 }
