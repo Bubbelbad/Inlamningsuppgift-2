@@ -1,11 +1,11 @@
 ﻿using Application.Commands.DeleteBook;
 using Infrastructure.Database;
-using Application.Dtos; 
 
 namespace TestProject
 {
     [TestFixture]
     public class DeleteBookUnitTest
+
     {
         private DeleteBookCommandHandler _handler;
         private FakeDatabase _database;
@@ -18,31 +18,31 @@ namespace TestProject
         }
 
         [Test, Category("DeleteBook")]
-        public async Task Handle_WhenGivenValidId_ReturnsFalse()
+        public async Task Handle_ValidInputId_ReturnsTrue()
         {
             // Arrange
-            Guid bookId = new Guid("12345678-1234-5678-1234-567812345678");
+            Guid bookId = new Guid("783307e1-ea3b-400b-919d-0c40b2bbae78");
             var command = new DeleteBookCommand(bookId);
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            Assert.That(result, Is.True);
+            Assert.That(result, Is.EqualTo(true));
         }
 
         [Test, Category("DeleteBook")]
-        public async Task Handle_InvalidBookId_ReturnsFalse()
+        public async Task Handle_NonExistingBookId_ReturnsFalse()
         {
             // Arrange
-            Guid bookId = new Guid("12345678-1234-5678-1234-567812345678");
+            Guid bookId = new Guid("783307e1-ea3b-400b-919d-0c40b2bbae71");
             var command = new DeleteBookCommand(bookId);
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            Assert.That(result, Is.True);
+            Assert.That(result, Is.False);
         }
     }
 }

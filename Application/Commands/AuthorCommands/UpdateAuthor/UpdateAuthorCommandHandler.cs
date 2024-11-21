@@ -21,7 +21,12 @@ namespace Application.Commands.AuthorCommands.UpdateAuthor
 
         public Task<Author> Handle(UpdateAuthorCommand request, CancellationToken cancellationToken)
         {
-            Author authorToUpdate = new Author(request.Id, request.FirstName, request.LastName);
+            if (request == null || request.NewAuthor == null || string.IsNullOrEmpty(request.NewAuthor.FirstName))
+            {
+                return Task.FromResult<Author>(null);
+            }
+
+            Author authorToUpdate = new Author(request.NewAuthor.Id, request.NewAuthor.FirstName, request.NewAuthor.LastName);
             return _database.UpdateAuthor(authorToUpdate); 
         }
     }
