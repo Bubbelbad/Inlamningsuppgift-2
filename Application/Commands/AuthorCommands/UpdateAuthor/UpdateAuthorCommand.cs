@@ -7,9 +7,6 @@ namespace Application.Commands.AuthorCommands.UpdateAuthor
 {
     public class UpdateAuthorCommand(AuthorDto authorToUpdate) : IRequest<Author>
     {
-        public Guid Id { get; set; } = authorToUpdate.Id;
-        public string FirstName { get; set; } = authorToUpdate.FirstName;
-        public string LastName { get; set; } = authorToUpdate.LastName; 
-
+        public AuthorDto NewAuthor { get; set; } = authorToUpdate;  
     }
 }

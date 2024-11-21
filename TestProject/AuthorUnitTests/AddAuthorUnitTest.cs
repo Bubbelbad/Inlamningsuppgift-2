@@ -1,8 +1,5 @@
-﻿using Application;
-using Application.Commands.AddAuthorCommands.AddAuthor;
+﻿using Application.Commands.AddAuthorCommands.AddAuthor;
 using Application.Dtos;
-using Application.Queries.AuthorQueries;
-using Domain.Model;
 using Infrastructure.Database;
 
 namespace TestProject
@@ -20,12 +17,13 @@ namespace TestProject
             _database = new FakeDatabase();
             _handler = new AddAuthorCommandHandler(_database);
         }
+        
 
         [Test, Category("AddAuthor")]
-        public async Task Handle_ValidBookParam_ReturnsCorrectBook()
+        public async Task Handle_ValidInput_ReturnsCorrectAuthor()
         {
             // Arrange
-            AddAuthorDto authorToTest = new ("Henrik", "Testsson");
+            AddAuthorDto authorToTest = new("Test", "Testsson");
             var command = new AddAuthorCommand(authorToTest);
 
             // Act
@@ -37,11 +35,11 @@ namespace TestProject
         }
 
         [Test, Category("AddAuthor")]
-        public async Task Handle_InvalidValiId_ReturnsNull()
+        public async Task Handle_NullInput_ReturnsNull()
         {
             // Arrange
-            AddAuthorDto bookToTest = new("Test", "Testsson");
-            var command = new AddAuthorCommand(bookToTest);
+            AddAuthorDto authorToTest = null!; // Use null-forgiving operator to explicitly indicate null
+            var command = new AddAuthorCommand(authorToTest);
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);
@@ -49,5 +47,34 @@ namespace TestProject
             // Assert
             Assert.That(result, Is.Null);
         }
+
+        [Test, Category("AddAuthor")]
+        public async Task Handle_MissingFirstName_ReturnsNull()
+        {
+            // Arrange
+            AddAuthorDto authorToTest = new(null!, "Testsson"); // Use null-forgiving operator to explicitly indicate null
+            var command = new AddAuthorCommand(authorToTest);
+
+            // Act
+            var result = await _handler.Handle(command, CancellationToken.None);
+
+            // Assert
+            Assert.That(result, Is.Null);
+        }
+
+        //[Test]
+        //public async Task AddAuthor_WhenGivenCorrectParams_AuthorAddedToList()
+        //{
+        //    FakeDatabase fakeRepository = new();
+        //    AuthorService authorService = new(fakeRepository);
+        //    Author authorToTest = new("Victor", "Ivarson");
+
+        //    // Act
+        //    var authorCreated = await authorService.AddNewAuthor(authorToTest);
+
+        //    // Assert
+        //    Assert.That(authorCreated, Is.Not.Null);
+        //    Assert.That(authorCreated.FirstName, Is.EqualTo(authorToTest.FirstName));
+        //}
     }
 }

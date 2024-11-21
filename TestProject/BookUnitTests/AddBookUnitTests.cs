@@ -1,8 +1,5 @@
-﻿using Application;
-using Application.Commands.AddBook;
+﻿using Application.Commands.AddBook;
 using Application.Dtos;
-using Application.Queries.BookQueries;
-using Domain.Model;
 using Infrastructure.Database;
 
 namespace TestProject
@@ -22,7 +19,7 @@ namespace TestProject
         }
 
         [Test, Category("AddBook")]
-        public async Task Handle_ValidBookParam_ReturnsCorrectBook()
+        public async Task Handle_ValidInput_ReturnsBook()
         {
             // Arrange
             AddBookDto bookToTest = new("Book of Test", "Test Testsson", "An example book for Testing");
@@ -37,10 +34,24 @@ namespace TestProject
         }
 
         [Test, Category("AddBook")]
-        public async Task Handle_InvalidValiId_ReturnsNull()
+        public async Task Handle_NullInput_ReturnsNull()
         {
             // Arrange
-            AddBookDto bookToTest = new("Book of Test", "Test Testsson", "An example book for Testing");
+            AddBookDto bookToTest = null!; // Use null-forgiving operator to explicitly indicate null
+            var command = new AddBookCommand(bookToTest);
+
+            // Act
+            var result = await _handler.Handle(command, CancellationToken.None);
+
+            // Assert
+            Assert.That(result, Is.Null);
+        }
+
+        [Test, Category("AddBook")]
+        public async Task Handle_MissingTitle_ReturnsNull()
+        {
+            // Arrange
+            AddBookDto bookToTest = new(null!, "Test Testsson", "An example book for Testing"); // Use null-forgiving operator to explicitly indicate null
             var command = new AddBookCommand(bookToTest);
 
             // Act

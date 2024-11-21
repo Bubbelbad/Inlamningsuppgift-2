@@ -16,7 +16,12 @@ namespace Application.Commands.UpdateBook
 
         public Task<Book> Handle(UpdateBookCommand request, CancellationToken cancellationToken)
         {
-            Book bookToUpdate = new Book(request.Id, request.Title, request.Author, request.Description); 
+            if (request == null || request.NewBook == null || string.IsNullOrEmpty(request.NewBook.Title))
+            {
+                return Task.FromResult<Book>(null);
+            }
+
+            Book bookToUpdate = new Book(request.NewBook.Id, request.NewBook.Title, request.NewBook.Author, request.NewBook.Description); 
             return _database.UpdateBook(bookToUpdate);
         }
     }
