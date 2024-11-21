@@ -91,14 +91,16 @@ namespace Infrastructure.Database
             return authorToUpdate;
         }
 
-        public async Task<Author> DeleteAuthor(Guid id)
+        public async Task<bool> DeleteAuthor(Guid id)
         {
             Author authorToDelete = Authors.FirstOrDefault(a => a.Id == id);
+            bool actionSuccessful = false;
             if (authorToDelete != null)
             {
                 Authors.Remove(authorToDelete);
+                actionSuccessful = true;
             }
-            return await Task.FromResult(authorToDelete);
+            return await Task.FromResult(actionSuccessful);
         }
     }
 }

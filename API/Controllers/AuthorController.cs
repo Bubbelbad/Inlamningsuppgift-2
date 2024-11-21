@@ -1,6 +1,8 @@
-﻿using Application.Queries.AuthorQueries;
-using Domain.Model;
-using Infrastructure.Database;
+﻿using Application.Commands.AddAuthorCommands.AddAuthor;
+using Application.Commands.AuthorCommands.DeleteAuthor;
+using Application.Dtos;
+using Application.Queries.AuthorQueries;
+using Application.Queries.BookQueries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -15,22 +17,48 @@ namespace API.Controllers
 
         [Route("GetAuthorById/{id}")]
         [HttpGet]
-        [SwaggerOperation(Description = "Gets a author by Id weather forecast")]
-        [SwaggerResponse(200, "Successfully retrieved author.")]
+        [SwaggerOperation(Description = "Gets Author by Id")]
+        [SwaggerResponse(200, "Successfully retrieved Author.")]
+        [SwaggerResponse(400, "Invalid input data")]
+        [SwaggerResponse(404, "Author not found")]
         public async Task<IActionResult> GetAuthor(Guid id)
         {
-            return Ok(await _mediator.Send(new GetAuthorByIdQuery(id)));
+            if (id == null)
+            {
+                return BadRequest(400);
+            }
+
+            var foundAuthor = await _mediator.Send(new GetAuthorByIdQuery(id));
+
+            if (foundAuthor == null)
+            {
+                return NotFound("Book not found");
+            }
+
+            return Ok(foundAuthor);
         }
 
-        [Route("Add")]
+        [Route("Create")]
         [HttpPost]
         [SwaggerOperation(Description = "Adds a new Author to library")]
         [SwaggerResponse(200, "Successfully added Author.")]
-        public async Task<IActionResult> AddAuthor([FromBody] Author author)
+        [SwaggerResponse(400, "Invalid input data")]
+        [SwaggerResponse(404, "Author not found")]
+        public async Task<IActionResult> AddAuthor([FromBody] AddAuthorDto authorToAdd)
         {
-            throw new NotImplementedException();
-            //return Ok(await _mediator.Send(new AddAuthor))
-            //return authorService.AddNewAuthor(author);
+            if (authorToAdd == null)
+            {
+                return BadRequest("Invalid input data.");
+            }
+
+            var addedAuthor = await _mediator.Send(new AddAuthorCommand(authorToAdd));
+
+            if (addedAuthor == null)
+            {
+                return NotFound("Author not found.");
+            }
+
+            return Ok(addedAuthor);
 
         }
 
@@ -38,20 +66,40 @@ namespace API.Controllers
         [HttpPut]
         [SwaggerOperation(Description = "Updates an existing Author to library")]
         [SwaggerResponse(200, "Successfully Updated Author.")]
-        public Task<IActionResult> UpdateAuthor([FromBody] Author author)
+        [SwaggerResponse(400, "Invalid input data")]
+        [SwaggerResponse(404, "Author not found")]
+        public async Task<IActionResult> UpdateAuthor([FromBody] Guid authorId)
         {
-            throw new NotImplementedException();
-            //return authorService.UpdateAuthor(author);
+            if (authorId == null)
+            {
+                return BadRequest("Invalid input data.");
+            }
+
+            var updatedBook = await _mediator.Send(new DeleteAuthorCommand(authorId));
+
+            if (updatedBook == null)
+            {
+                return NotFound("Author not found.");
+            }
+
+            return Ok(updatedBook);
         }
 
         [Route("Delete/{id}")]
         [HttpDelete]
         [SwaggerOperation(Description = "Deletes Author from library")]
         [SwaggerResponse(204, "Successfully Deleted Author.")]
-        public Task<IActionResult> DeleteAuthor(Guid id)
+        [SwaggerResponse(400, "Invalid input data")]
+        [SwaggerResponse(404, "Author not found")]
+        public async Task<IActionResult> DeleteAuthor(Guid id)
         {
-            throw new NotImplementedException();
-            //return authorService.DeleteAuthor(id);
+            var deletedBook = await _mediator.Send(new DeleteAuthorCommand(id));
+
+            if (deletedBook == null)
+            {
+                return NotFound("Author not found.");
+            }
+            return NoContent();
         }
     }
 }
