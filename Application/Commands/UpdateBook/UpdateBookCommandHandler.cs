@@ -21,8 +21,15 @@ namespace Application.Commands.UpdateBook
                 return Task.FromResult<Book>(null);
             }
 
-            Book bookToUpdate = new Book(request.NewBook.Id, request.NewBook.Title, request.NewBook.Author, request.NewBook.Description); 
-            return _database.UpdateBook(bookToUpdate);
+            try
+            {
+                Book bookToUpdate = new Book(request.NewBook.Id, request.NewBook.Title, request.NewBook.Author, request.NewBook.Description); 
+                return _database.UpdateBook(bookToUpdate);
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("An error occurred.", ex);
+            }
         }
     }
 }

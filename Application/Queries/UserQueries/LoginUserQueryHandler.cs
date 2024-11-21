@@ -12,16 +12,26 @@ namespace Application.Queries.UserQueries
 
         public Task<string> Handle(LoginUserQuery request, CancellationToken cancellationToken)
         {
+            if (request == null || request.LoginUser == null)
+            {
+                throw new ArgumentNullException(nameof(request), "Request or LoginUser cannot be null.");
+            }
+
             var user = _database.Users.FirstOrDefault(user => user.UserName == request.LoginUser.UserName && user.Password == request.LoginUser.Password);
 
             if (user == null)
             {
                 throw new UnauthorizedAccessException("Invalid username or password"); 
             }
-
-            string token = _tokenHelper.GenerateTwtToken(user); 
-
-            return Task.FromResult(token); 
+            try
+            {
+                string token = _tokenHelper.GenerateTwtToken(user); 
+                return Task.FromResult(token); 
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("An error occurred while generating the token.", ex);
+            }
         }
     }
 }

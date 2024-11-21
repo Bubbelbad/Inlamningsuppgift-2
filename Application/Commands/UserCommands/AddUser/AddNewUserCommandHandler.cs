@@ -10,16 +10,28 @@ namespace Application.Commands.UserCommands.AddUser
 
         public Task<User> Handle(AddNewUserCommand request, CancellationToken cancellationToken)
         {
-            User userToCreate = new()
+            if (request == null)
             {
-                Id = Guid.NewGuid(),
-                UserName = request.NewUser.UserName,
-                Password = request.NewUser.Password
-            };
+                throw new ArgumentNullException(nameof(request), "Request or LoginUser cannot be null.");
+            }
 
-            _database.Users.Add(userToCreate);
+            try
+            {
+                User userToCreate = new()
+                {
+                    Id = Guid.NewGuid(),
+                    UserName = request.NewUser.UserName,
+                    Password = request.NewUser.Password
+                };
 
-            return Task.FromResult(userToCreate); 
+                _database.Users.Add(userToCreate);
+                return Task.FromResult(userToCreate);
+
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("An error occurred while retrieving object from collection.", ex);
+            }
         }
     }
 }
