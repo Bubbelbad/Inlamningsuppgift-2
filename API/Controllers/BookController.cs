@@ -35,21 +35,43 @@ namespace API.Controllers
 
         [Route("Update")]
         [HttpPut]
-        [SwaggerOperation(Description = "Updates an existing Book to library")]
-        [SwaggerResponse(200, "Successfully Updated Book.")]
-        public async Task<IActionResult> UpdateBook([FromBody]BookDto book)
+        [SwaggerOperation(Description = "Updates an existing Book in the library")]
+        [SwaggerResponse(200, "Successfully Updated Book.", typeof(BookDto))]
+        [SwaggerResponse(400, "Invalid input data.")]
+        [SwaggerResponse(404, "Book not found.")]
+        public async Task<IActionResult> UpdateBook([FromBody] BookDto book)
         {
-            return Ok(await _mediator.Send(new UpdateBookCommand(book)));
+            if (book == null)
+            {
+                return BadRequest("Invalid input data.");
+            }
+
+            var updatedBook = await _mediator.Send(new UpdateBookCommand(book));
+
+            if (updatedBook == null)
+            {
+                return NotFound("Book not found.");
+            }
+
+            return Ok(updatedBook);
         }
+
 
         [Route("Delete/{id}")]
         [HttpDelete]
-        [SwaggerOperation(Description = "Deletes Book from library")]
+        [SwaggerOperation(Description = "Deletes a Book from the library")]
         [SwaggerResponse(204, "Successfully Deleted Book.")]
+        [SwaggerResponse(404, "Book not found.")]
         public async Task<IActionResult> DeleteBook(Guid id)
         {
+            var deletedBook = await _mediator.Send(new DeleteBookCommand(id));
 
-            return Ok(await _mediator.Send(new DeleteBookCommand(id)));
+            if (deletedBook == null)
+            {
+                return NotFound("Book not found.");
+            }
+            return NoContent();
         }
+
     }
 }
