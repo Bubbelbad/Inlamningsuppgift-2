@@ -3,6 +3,9 @@
 
 This is an assignment where I've made an application with Clean Architecture. 
 
+It's a very simple application featuring only two models - book & author with full endpoint CRUD. 
+The essence of the app lies in it's architecture, security and clean code. 
+
 Featuring: 
 
 - Github Actions
