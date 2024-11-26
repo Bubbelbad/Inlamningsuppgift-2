@@ -61,20 +61,5 @@ namespace TestProject
             // Assert
             Assert.That(result, Is.Null);
         }
-
-        //[Test]
-        //public async Task AddAuthor_WhenGivenCorrectParams_AuthorAddedToList()
-        //{
-        //    FakeDatabase fakeRepository = new();
-        //    AuthorService authorService = new(fakeRepository);
-        //    Author authorToTest = new("Victor", "Ivarson");
-
-        //    // Act
-        //    var authorCreated = await authorService.AddNewAuthor(authorToTest);
-
-        //    // Assert
-        //    Assert.That(authorCreated, Is.Not.Null);
-        //    Assert.That(authorCreated.FirstName, Is.EqualTo(authorToTest.FirstName));
-        //}
     }
 }

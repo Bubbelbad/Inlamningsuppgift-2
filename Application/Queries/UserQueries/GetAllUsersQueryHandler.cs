@@ -1,5 +1,4 @@
-﻿using Application.Queries.UserQueries.Helpers;
-using Domain.Model;
+﻿using Domain.Model;
 using Infrastructure.Database;
 using MediatR;
 

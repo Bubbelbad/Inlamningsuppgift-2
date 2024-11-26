@@ -1,8 +1,8 @@
 ﻿using Application.Commands.AddBook;
 using Application.Commands.DeleteBook;
 using Application.Commands.UpdateBook;
-using Application.Dtos;
 using Application.Queries.BookQueries;
+using Application.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;

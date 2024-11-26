@@ -1,6 +1,4 @@
-﻿using Application.Dtos;
-using Domain.Model;
-using MediatR;
+﻿using MediatR;
 
 namespace Application.Commands.AuthorCommands.DeleteAuthor
 {

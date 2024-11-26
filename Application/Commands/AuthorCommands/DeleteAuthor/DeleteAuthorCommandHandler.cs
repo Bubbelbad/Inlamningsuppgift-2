@@ -1,5 +1,4 @@
-﻿using Domain.Model;
-using Infrastructure.Database;
+﻿using Infrastructure.Database;
 using MediatR;
 
 namespace Application.Commands.AuthorCommands.DeleteAuthor

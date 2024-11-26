@@ -47,6 +47,5 @@ namespace TestProject.BookUnitTests
             // Assert
             Assert.IsNull(result);
         }
-
     }
 }
