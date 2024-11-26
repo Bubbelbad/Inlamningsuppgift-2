@@ -1,7 +1,6 @@
 ﻿using Infrastructure.Database;
 using MediatR;
 using Domain.Model;
-using Application.Queries.AuthorQueries;
 
 namespace Application.Queries.AuthorQueries
 {

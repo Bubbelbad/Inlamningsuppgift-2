@@ -1,5 +1,4 @@
-﻿using Application.Dtos;
-using Domain.Model;
+﻿using Domain.Model;
 using Infrastructure.Database;
 using MediatR;
 

@@ -1,7 +1,6 @@
 ﻿using Application.Queries.UserQueries.Helpers;
 using Infrastructure.Database;
 using MediatR;
-using System.IdentityModel.Tokens.Jwt;
 
 namespace Application.Queries.UserQueries
 {

@@ -1,7 +1,6 @@
 ﻿using Application.Dtos;
 using Domain.Model;
 using MediatR;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Application.Commands.AuthorCommands.UpdateAuthor
 {

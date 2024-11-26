@@ -1,13 +1,13 @@
 ﻿using Application.Commands.AddAuthorCommands.AddAuthor;
 using Application.Commands.AuthorCommands.DeleteAuthor;
+using Application.Commands.AuthorCommands.UpdateAuthor;
 using Application.Dtos;
 using Application.Queries.AuthorQueries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
 using Microsoft.AspNetCore.Authorization;
+using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
-using Application.Commands.AuthorCommands.UpdateAuthor;
 
 namespace API.Controllers
 {

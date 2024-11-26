@@ -1,6 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using MediatR;
-using Infrastructure.Database;
 using Application.Queries.UserQueries.Helpers;
 namespace Application
 {
@@ -18,6 +16,5 @@ namespace Application
            // services.AddValidatorsFromAssembly(assembly);
            // services.AddSungelton(FakeDatabase)
         }
-        
     }
 }
