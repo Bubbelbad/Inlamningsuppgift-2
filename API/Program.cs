@@ -1,6 +1,8 @@
 using Application;
 using Infrastructure;
+using Infrastructure.Database;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -68,7 +70,7 @@ namespace API
                         },
                         Array.Empty<string>()
                     }
-                }); 
+                });
 
                 c.EnableAnnotations();
             });
@@ -77,8 +79,8 @@ namespace API
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
 
-            builder.Services.AddApplication(); //Lägget till MediatR från Application till API
-            builder.Services.AddInfrastructure(); 
+            builder.Services.AddApplication(); // Adds MediatR from Application to API
+            builder.Services.AddInfrastructure(builder.Configuration.GetConnectionString("DefaultConnection")!);
 
             var app = builder.Build();
 
@@ -86,7 +88,6 @@ namespace API
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
-                app.UseSwaggerUI();
                 app.UseSwaggerUI(c =>
                 {
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
@@ -96,8 +97,8 @@ namespace API
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication(); // Ensure this is added before UseAuthorization
             app.UseAuthorization();
-
 
             app.MapControllers();
 
