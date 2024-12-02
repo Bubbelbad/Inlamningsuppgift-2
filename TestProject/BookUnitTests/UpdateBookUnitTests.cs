@@ -1,20 +1,32 @@
 ﻿using Application.Commands.UpdateBook;
 using Application.Dtos;
 using Application.Interfaces.RepositoryInterfaces;
-using Infrastructure.Database;
+using Domain.Model;
+using Moq;
 
 namespace TestProject
 {
     [TestFixture]
     public class UpdateBookUnitTest
     {
+        private Mock<IBookRepository> _mockRepository; 
         private UpdateBookCommandHandler _handler;
-        private IBookRepository _repository; 
 
         [SetUp]
         public void Setup()
         {
-            _handler = new UpdateBookCommandHandler(_repository);
+            _mockRepository = new Mock<IBookRepository>();
+
+            Guid validBookId = new Guid("3e2e66cf-5ba6-4cd0-88a1-c37b71cca899");
+            var book = new Book(validBookId, "Test", "Test", "Test");
+            
+            _mockRepository.Setup(repo => repo.UpdateBook(It.Is<Book>(obj => obj.Id == validBookId)))
+                           .ReturnsAsync(book);
+
+            _mockRepository.Setup(repo => repo.GetBookById(It.Is<Guid>(id => id != validBookId)))
+                           .ReturnsAsync((Book)null);
+
+            _handler = new UpdateBookCommandHandler(_mockRepository.Object);
         }
 
 
@@ -22,7 +34,7 @@ namespace TestProject
         public async Task Handle_ValidInput_ReturnsBook()
         {
             // Arrange
-            BookDto bookToTest = new(new Guid("3e2e66cf-5ba6-4cd0-88a1-c37b71cca899"), "Test", "Victor", "BookService for Testing");
+            BookDto bookToTest = new(new Guid("3e2e66cf-5ba6-4cd0-88a1-c37b71cca899"), "Test", "Test", "Test");
             var command = new UpdateBookCommand(bookToTest);
 
             // Act
