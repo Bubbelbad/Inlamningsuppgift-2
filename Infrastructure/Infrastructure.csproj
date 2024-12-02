@@ -8,8 +8,11 @@
 
   <ItemGroup>
     <Compile Remove="ExternalServices\**" />
+    <Compile Remove="NewFolder\**" />
     <EmbeddedResource Remove="ExternalServices\**" />
+    <EmbeddedResource Remove="NewFolder\**" />
     <None Remove="ExternalServices\**" />
+    <None Remove="NewFolder\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
 

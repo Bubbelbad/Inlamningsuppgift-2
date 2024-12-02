@@ -1,6 +1,5 @@
 using Application;
 using Infrastructure;
-using Infrastructure.Database;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -81,6 +80,8 @@ namespace API
 
             builder.Services.AddApplication(); // Adds MediatR from Application to API
             builder.Services.AddInfrastructure(builder.Configuration.GetConnectionString("DefaultConnection")!);
+            // Example of registering a repository
+
 
             var app = builder.Build();
 
@@ -91,7 +92,7 @@ namespace API
                 app.UseSwaggerUI(c =>
                 {
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-                    c.RoutePrefix = string.Empty; // Set Swagger UI at the app's root
+                    c.RoutePrefix = "swagger";  // Set Swagger UI at the app's root
                 });
             }
 

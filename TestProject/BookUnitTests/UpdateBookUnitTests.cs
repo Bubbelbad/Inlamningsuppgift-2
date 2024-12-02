@@ -1,5 +1,6 @@
 ﻿using Application.Commands.UpdateBook;
 using Application.Dtos;
+using Application.Interfaces.RepositoryInterfaces;
 using Infrastructure.Database;
 
 namespace TestProject
@@ -8,13 +9,12 @@ namespace TestProject
     public class UpdateBookUnitTest
     {
         private UpdateBookCommandHandler _handler;
-        private FakeDatabase _database;
+        private IBookRepository _repository; 
 
         [SetUp]
         public void Setup()
         {
-            _database = new FakeDatabase();
-            _handler = new UpdateBookCommandHandler(_database);
+            _handler = new UpdateBookCommandHandler(_repository);
         }
 
 

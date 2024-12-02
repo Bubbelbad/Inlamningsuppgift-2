@@ -1,5 +1,6 @@
 ﻿using Application.Commands.AddBook;
 using Application.Dtos;
+using Application.Interfaces.RepositoryInterfaces;
 using Infrastructure.Database;
 
 namespace TestProject
@@ -8,14 +9,14 @@ namespace TestProject
     public class AddBookUnitTest
     {
         private AddBookCommandHandler _handler;
-        private FakeDatabase _database;
+        private IBookRepository _repository;
 
         [SetUp]
         public void SetUp()
         {
             // Initialize the handler and mock database before each test
-            _database = new FakeDatabase();
-            _handler = new AddBookCommandHandler(_database);
+
+            _handler = new AddBookCommandHandler(_repository);
         }
 
         [Test, Category("AddBook")]

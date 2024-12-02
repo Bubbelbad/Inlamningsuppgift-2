@@ -1,6 +1,7 @@
 ﻿using Application.Commands.AuthorCommands.UpdateAuthor;
 using Application.Commands.UpdateBook;
 using Application.Dtos;
+using Application.Interfaces.RepositoryInterfaces;
 using Infrastructure.Database;
 
 namespace TestProject.AuthorUnitTests
@@ -8,14 +9,13 @@ namespace TestProject.AuthorUnitTests
     [TestFixture]
     public class UpdateAuthorUnitTest
     {
-        private FakeDatabase _database;
+        private IAuthorRepository _repository; 
         private UpdateAuthorCommandHandler _handler;
 
         [SetUp]
         public void Setup()
         {
-            _database = new FakeDatabase(); 
-            _handler = new UpdateAuthorCommandHandler(_database); 
+            _handler = new UpdateAuthorCommandHandler(_repository); 
         }
 
         [Test, Category("UpdateAuthor")]

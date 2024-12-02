@@ -1,20 +1,20 @@
 ﻿using Infrastructure.Database;
 using Application.Queries.BookQueries;
+using Application.Interfaces.RepositoryInterfaces;
 
 namespace TestProject.BookUnitTests
 {
     [TestFixture]
     public class GetBookUnitTests
     {
-        private FakeDatabase _database;
+        private IBookRepository _repository;
         private GetBookByIdQueryHandler _handler;
 
         [SetUp]
         public void SetUp()
         {
             // Initialize the handler and mock database before each test
-            _database = new FakeDatabase();
-            _handler = new GetBookByIdQueryHandler(_database);
+            _handler = new GetBookByIdQueryHandler(_repository);
         }
 
         [Test, Category("GetBook")]

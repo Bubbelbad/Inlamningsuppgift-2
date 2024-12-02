@@ -1,4 +1,5 @@
-﻿using Application.Queries.AuthorQueries;
+﻿using Application.Interfaces.RepositoryInterfaces;
+using Application.Queries.AuthorQueries;
 using Infrastructure.Database;
 
 namespace TestProject.AuthorUnitTests
@@ -6,14 +7,13 @@ namespace TestProject.AuthorUnitTests
     [TestFixture]
     public class GetAuthorUnitTest
     {
-        private FakeDatabase _database;
+        private IAuthorRepository _repository; 
         private GetAuthorByIdQueryHandler _handler;
 
         [SetUp]
         public void Setup()
         {
-            _database = new FakeDatabase();
-            _handler = new GetAuthorByIdQueryHandler(_database);
+            _handler = new GetAuthorByIdQueryHandler(_repository);
         }
 
         [Test, Category("GetAuthor")]

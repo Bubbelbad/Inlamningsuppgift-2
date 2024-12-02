@@ -1,4 +1,5 @@
 ﻿using Application.Commands.DeleteBook;
+using Application.Interfaces.RepositoryInterfaces;
 using Infrastructure.Database;
 
 namespace TestProject
@@ -7,14 +8,13 @@ namespace TestProject
     public class DeleteBookUnitTest
 
     {
+        private IBookRepository _repository;
         private DeleteBookCommandHandler _handler;
-        private FakeDatabase _database;
 
         [SetUp]
         public void Setup()
         {
-            _database = new FakeDatabase();
-            _handler = new DeleteBookCommandHandler(_database);
+            _handler = new DeleteBookCommandHandler(_repository);
         }
 
         [Test, Category("DeleteBook")]

@@ -1,11 +1,11 @@
-﻿using Infrastructure.Database;
+﻿using Application.Interfaces.RepositoryInterfaces;
 using MediatR;
 
 namespace Application.Commands.AuthorCommands.DeleteAuthor
 {
-    public class DeleteAuthorCommandHandler(FakeDatabase database) : IRequestHandler<DeleteAuthorCommand, bool>
+    public class DeleteAuthorCommandHandler(IAuthorRepository authorRepository) : IRequestHandler<DeleteAuthorCommand, bool>
     {
-        private readonly FakeDatabase _database = database;
+        private readonly IAuthorRepository _authorRepository = authorRepository;
 
 
         public async Task<bool> Handle(DeleteAuthorCommand request, CancellationToken cancellationToken)
@@ -14,10 +14,10 @@ namespace Application.Commands.AuthorCommands.DeleteAuthor
             {
                 throw new ArgumentNullException(nameof(request), "Request cannot be null.");
             }
-
             try
             {
-                return await _database.DeleteAuthor(request.Id);
+                var deletedAuthor = await _authorRepository.DeleteAuthor(request.Id);
+                return deletedAuthor; 
             }
             catch (Exception ex)
             {
