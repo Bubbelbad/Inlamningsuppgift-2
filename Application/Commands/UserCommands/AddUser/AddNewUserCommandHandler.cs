@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Application.Commands.UserCommands.AddUser
 {
-    internal sealed class AddNewUserCommandHandler(IUserRepository userRepository) : IRequestHandler<AddNewUserCommand, User>
+    public class AddNewUserCommandHandler(IUserRepository userRepository) : IRequestHandler<AddNewUserCommand, User>
     {
         private readonly IUserRepository _userReposiory = userRepository;
 

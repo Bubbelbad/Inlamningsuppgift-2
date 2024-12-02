@@ -2,7 +2,6 @@
 using Application.Dtos;
 using Application.Interfaces.RepositoryInterfaces;
 using Domain.Model;
-using Infrastructure.Database;
 using Moq;
 
 namespace TestProject
