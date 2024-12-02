@@ -1,6 +1,9 @@
 ﻿using Application.Commands.AddBook;
 using Application.Dtos;
+using Application.Interfaces.RepositoryInterfaces;
+using Domain.Model;
 using Infrastructure.Database;
+using Moq;
 
 namespace TestProject
 {
@@ -8,14 +11,19 @@ namespace TestProject
     public class AddBookUnitTest
     {
         private AddBookCommandHandler _handler;
-        private FakeDatabase _database;
+        private Mock<IBookRepository> _mockRepository; 
 
         [SetUp]
         public void SetUp()
         {
             // Initialize the handler and mock database before each test
-            _database = new FakeDatabase();
-            _handler = new AddBookCommandHandler(_database);
+            _mockRepository = new Mock<IBookRepository>();
+
+            //Set up mock to return a new Book when AddBook is called
+            _mockRepository.Setup(repo => repo.AddBook(It.IsAny<Book>()))
+                .ReturnsAsync((Book book) => book); 
+
+            _handler = new AddBookCommandHandler(_mockRepository.Object);
         }
 
         [Test, Category("AddBook")]

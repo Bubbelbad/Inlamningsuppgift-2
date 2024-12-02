@@ -1,12 +1,12 @@
-﻿using Domain.Model;
-using Infrastructure.Database;
+﻿using Application.Interfaces.RepositoryInterfaces;
+using Domain.Model;
 using MediatR;
 
 namespace Application.Commands.AddBook
 {
-    public class AddBookCommandHandler(FakeDatabase database) : IRequestHandler<AddBookCommand, Book>
+    public class AddBookCommandHandler(IBookRepository bookRepository) : IRequestHandler<AddBookCommand, Book>
     {
-        private readonly FakeDatabase _database = database; 
+        private readonly IBookRepository _bookRepository = bookRepository; 
 
         public Task<Book> Handle(AddBookCommand request, CancellationToken cancellationToken)
         {
@@ -19,7 +19,7 @@ namespace Application.Commands.AddBook
             }
 
             Book bookToCreate = new Book(Guid.NewGuid(), request.NewBook.Title, request.NewBook.Author, request.NewBook.Description);
-            return _database.AddNewBook(bookToCreate); 
+            return _bookRepository.AddBook(bookToCreate); 
         }
     }
 }

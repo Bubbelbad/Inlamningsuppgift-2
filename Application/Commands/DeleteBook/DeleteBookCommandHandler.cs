@@ -1,12 +1,12 @@
-﻿using Infrastructure.Database;
+﻿using Application.Interfaces.RepositoryInterfaces;
 using MediatR;
 
 
 namespace Application.Commands.DeleteBook
 {
-    public class DeleteBookCommandHandler(FakeDatabase database) : IRequestHandler<DeleteBookCommand, bool>
+    public class DeleteBookCommandHandler(IBookRepository bookRepository) : IRequestHandler<DeleteBookCommand, bool>
     {
-        private readonly FakeDatabase _database = database;
+        private readonly IBookRepository _bookRepository = bookRepository;
 
         public Task<bool> Handle(DeleteBookCommand request, CancellationToken cancellationToken)
         {
@@ -18,7 +18,8 @@ namespace Application.Commands.DeleteBook
 
             try
             {
-                return _database.DeleteBook(request.bookIdToDelete);
+                var boolean = _bookRepository.DeleteBook(request.bookIdToDelete);
+                return boolean; 
             }
             catch (Exception ex)
             {

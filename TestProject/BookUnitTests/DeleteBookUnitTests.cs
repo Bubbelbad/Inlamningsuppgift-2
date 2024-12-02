@@ -1,5 +1,7 @@
 ﻿using Application.Commands.DeleteBook;
+using Application.Interfaces.RepositoryInterfaces;
 using Infrastructure.Database;
+using Moq;
 
 namespace TestProject
 {
@@ -7,14 +9,22 @@ namespace TestProject
     public class DeleteBookUnitTest
 
     {
+        private Mock<IBookRepository> _mockRepository; 
         private DeleteBookCommandHandler _handler;
-        private FakeDatabase _database;
 
         [SetUp]
         public void Setup()
         {
-            _database = new FakeDatabase();
-            _handler = new DeleteBookCommandHandler(_database);
+            _mockRepository = new Mock<IBookRepository>();
+
+            // Setup mock.DeleteBook returns true when valid ID
+            _mockRepository.Setup(repo => repo.DeleteBook(It.Is<Guid>(id => id == new Guid("783307e1-ea3b-400b-919d-0c40b2bbae78"))))
+                           .ReturnsAsync(true);
+
+            _mockRepository.Setup(repo => repo.DeleteBook(It.Is<Guid>(id => id != new Guid("783307e1-ea3b-400b-919d-0c40b2bbae78"))))
+                           .ReturnsAsync(false); 
+                
+            _handler = new DeleteBookCommandHandler(_mockRepository.Object);
         }
 
         [Test, Category("DeleteBook")]

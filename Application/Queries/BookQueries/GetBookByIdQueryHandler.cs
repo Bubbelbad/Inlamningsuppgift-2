@@ -1,15 +1,19 @@
-﻿using Infrastructure.Database;
-using MediatR;
+﻿using MediatR;
 using Domain.Model;
+using Application.Interfaces.RepositoryInterfaces;
 
 namespace Application.Queries.BookQueries
 {
-    public class GetBookByIdQueryHandler(FakeDatabase database) : IRequestHandler<GetBookByIdQuery, Book>
+    public class GetBookByIdQueryHandler : IRequestHandler<GetBookByIdQuery, Book>
     {
-        private readonly FakeDatabase _database = database;
+        private readonly IBookRepository _bookRepository;
 
-      
-        public Task<Book> Handle(GetBookByIdQuery query, CancellationToken cancellationToken)
+        public GetBookByIdQueryHandler(IBookRepository bookRepository)
+        {
+            _bookRepository = bookRepository ?? throw new ArgumentNullException(nameof(bookRepository));
+        }
+
+        public async Task<Book> Handle(GetBookByIdQuery query, CancellationToken cancellationToken)
         {
             if (query == null)
             {
@@ -18,8 +22,8 @@ namespace Application.Queries.BookQueries
 
             try
             {
-                Book wantedBook = _database.Books.FirstOrDefault(book => book.Id == query.Id)!;
-                return Task.FromResult(wantedBook);
+                Book wantedBook = await _bookRepository.GetBookById(query.Id);
+                return wantedBook;
             }
             catch (Exception ex)
             {

@@ -1,28 +1,40 @@
 ﻿using Application.Commands.AuthorCommands.UpdateAuthor;
 using Application.Commands.UpdateBook;
 using Application.Dtos;
+using Application.Interfaces.RepositoryInterfaces;
+using Domain.Model;
 using Infrastructure.Database;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Moq;
 
 namespace TestProject.AuthorUnitTests
 {
     [TestFixture]
     public class UpdateAuthorUnitTest
     {
-        private FakeDatabase _database;
+        private Mock<IAuthorRepository> _mockRepository; 
         private UpdateAuthorCommandHandler _handler;
 
         [SetUp]
         public void Setup()
         {
-            _database = new FakeDatabase(); 
-            _handler = new UpdateAuthorCommandHandler(_database); 
+            _mockRepository = new Mock<IAuthorRepository>();
+
+            Guid validAuthorId = new Guid("6ce82e1f-631f-4447-9b3c-8f7137bc0e31");
+            Author author = new(validAuthorId, "Test", "Test");
+
+            // Set up the mock repository to handle any Author object with the same Id
+            _mockRepository.Setup(repo => repo.UpdateAuthor(It.Is<Author>(obj => obj.Id == validAuthorId)))
+                           .ReturnsAsync((Author updatedAuthor) => updatedAuthor);
+
+            _handler = new UpdateAuthorCommandHandler(_mockRepository.Object); 
         }
 
         [Test, Category("UpdateAuthor")]
         public async Task Handle_ValidInput_ReturnsAuthor()
         {
             // Arrange
-            AuthorDto authorToTest = new(new Guid("6ce82e1f-631f-4447-9b3c-8f7137bc0e31"), "Testarn", "Victorsson");
+            AuthorDto authorToTest = new(new Guid("6ce82e1f-631f-4447-9b3c-8f7137bc0e31"), "Test", "Test");
             var command = new UpdateAuthorCommand(authorToTest);
 
             // Act
@@ -31,6 +43,7 @@ namespace TestProject.AuthorUnitTests
             // Assert
             Assert.That(result, Is.Not.Null);
             Assert.That(result.FirstName, Is.EqualTo(authorToTest.FirstName));
+            Assert.That(result.LastName, Is.EqualTo(authorToTest.LastName));
         }
 
 
@@ -60,7 +73,7 @@ namespace TestProject.AuthorUnitTests
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            Assert.That(result, Is.Null);
+            Assert.That(result, Is.Null); 
         }
     }
 }

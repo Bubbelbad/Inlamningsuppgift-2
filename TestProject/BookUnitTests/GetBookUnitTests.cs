@@ -1,20 +1,32 @@
-﻿using Infrastructure.Database;
-using Application.Queries.BookQueries;
+﻿using Application.Queries.BookQueries;
+using Application.Interfaces.RepositoryInterfaces;
+using Moq;
+using Domain.Model;
 
 namespace TestProject.BookUnitTests
 {
     [TestFixture]
     public class GetBookUnitTests
     {
-        private FakeDatabase _database;
+        private Mock<IBookRepository> _mockRepository; 
         private GetBookByIdQueryHandler _handler;
 
         [SetUp]
         public void SetUp()
         {
             // Initialize the handler and mock database before each test
-            _database = new FakeDatabase();
-            _handler = new GetBookByIdQueryHandler(_database);
+            _mockRepository = new Mock<IBookRepository>();
+
+            Guid validBookGuid = new Guid("2bfaf5e9-d978-464c-b778-7567ef2dde29");
+            var book = new Book(validBookGuid, "Test", "Test", "Test");
+
+            _mockRepository.Setup(repo => repo.GetBookById(It.Is<Guid>(id => id == validBookGuid)))
+                           .ReturnsAsync(book);
+
+            _mockRepository.Setup(repo => repo.GetBookById(It.Is<Guid>(id => id != validBookGuid)))
+                           .ReturnsAsync((Book)null);
+
+            _handler = new GetBookByIdQueryHandler(_mockRepository.Object);
         }
 
         [Test, Category("GetBook")]

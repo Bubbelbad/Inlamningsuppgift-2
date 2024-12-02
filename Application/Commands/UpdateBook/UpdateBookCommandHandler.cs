@@ -1,17 +1,12 @@
-﻿using Domain.Model;
-using Infrastructure.Database;
+﻿using Application.Interfaces.RepositoryInterfaces;
+using Domain.Model;
 using MediatR;
 
 namespace Application.Commands.UpdateBook
 {
-    public class UpdateBookCommandHandler : IRequestHandler<UpdateBookCommand, Book>
+    public class UpdateBookCommandHandler(IBookRepository bookRepository) : IRequestHandler<UpdateBookCommand, Book>
     {
-        private readonly FakeDatabase _database;
-
-        public UpdateBookCommandHandler(FakeDatabase database)
-        {
-            _database = database;
-        }
+        private readonly IBookRepository _bookRepository = bookRepository;
 
         public Task<Book> Handle(UpdateBookCommand request, CancellationToken cancellationToken)
         {
@@ -23,7 +18,7 @@ namespace Application.Commands.UpdateBook
             try
             {
                 Book bookToUpdate = new Book(request.NewBook.Id, request.NewBook.Title, request.NewBook.Author, request.NewBook.Description); 
-                return _database.UpdateBook(bookToUpdate);
+                return _bookRepository.UpdateBook(bookToUpdate);
             }
             catch (Exception ex)
             {

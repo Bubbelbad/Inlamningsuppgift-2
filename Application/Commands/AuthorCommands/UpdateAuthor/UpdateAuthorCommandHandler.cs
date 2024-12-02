@@ -1,13 +1,13 @@
 ﻿using Application.Commands.UpdateBook;
+using Application.Interfaces.RepositoryInterfaces;
 using Domain.Model;
-using Infrastructure.Database;
 using MediatR;
 
 namespace Application.Commands.AuthorCommands.UpdateAuthor
 {
-    public class UpdateAuthorCommandHandler(FakeDatabase database) : IRequestHandler<UpdateAuthorCommand, Author>
+    public class UpdateAuthorCommandHandler(IAuthorRepository authorRepository) : IRequestHandler<UpdateAuthorCommand, Author>
     {
-        private readonly FakeDatabase _database = database;
+        private readonly IAuthorRepository _authorRepository = authorRepository;
 
         public Task<Author> Handle(UpdateAuthorCommand request, CancellationToken cancellationToken)
         {
@@ -19,7 +19,7 @@ namespace Application.Commands.AuthorCommands.UpdateAuthor
             try
             {
                 Author authorToUpdate = new Author(request.NewAuthor.Id, request.NewAuthor.FirstName, request.NewAuthor.LastName);
-                return _database.UpdateAuthor(authorToUpdate);
+                return _authorRepository.UpdateAuthor(authorToUpdate);
             }
             catch (Exception ex)
             {
