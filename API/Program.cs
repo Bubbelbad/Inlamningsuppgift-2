@@ -1,6 +1,7 @@
 using Application;
 using Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -75,13 +76,22 @@ namespace API
             });
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers(options =>
+            {
+                options.CacheProfiles.Add("DefaultCache",
+                    new CacheProfile()
+                    {
+                        Duration = 60,
+                        Location = ResponseCacheLocation.Any,
+                    });
+                    
+            });
+            builder.Services.AddMemoryCache(); 
+
             builder.Services.AddEndpointsApiExplorer();
 
             builder.Services.AddApplication(); // Adds MediatR from Application to API
             builder.Services.AddInfrastructure(builder.Configuration.GetConnectionString("DefaultConnection")!);
-            // Example of registering a repository
-
 
             var app = builder.Build();
 
