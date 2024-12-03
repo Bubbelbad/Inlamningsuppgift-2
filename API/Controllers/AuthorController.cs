@@ -31,9 +31,9 @@ namespace API.Controllers
         [SwaggerResponse(404, "Author not found")]
         public async Task<IActionResult> GetAuthor([FromRoute] Guid id)
         {
-            if (id == Guid.Empty)
+            if (!ModelState.IsValid)
             {
-                return BadRequest("Invalid author ID.");
+                return BadRequest(ModelState);
             }
 
             try
@@ -48,8 +48,7 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception (ex) here if needed
-                return StatusCode(500, "An error occurred while processing your request.");
+                return BadRequest(ex.InnerException);
             }
         }
 

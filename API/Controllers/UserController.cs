@@ -20,6 +20,7 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("getAllUsers")]
+        [ResponseCache(CacheProfileName = "DefaultCache")]
         public async Task<IActionResult> GetAllUsers()
         {
             try
