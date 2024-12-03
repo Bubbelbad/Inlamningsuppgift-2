@@ -8,11 +8,34 @@ namespace Infrastructure.Repositories
     {
         private readonly RealDatabase _realDatabase = database; 
 
+        public async Task<List<Author>> GetAllAuthors()
+        {
+            return _realDatabase.Authors.ToList();  
+        } 
+
+        public async Task<Author> GetAuthorById(Guid id)
+        {
+            Author author = _realDatabase.Authors.FirstOrDefault(author => author.Id == id);
+            return author; 
+        }
+
         public async Task<Author> AddAuthor(Author author)
         {
             _realDatabase.Authors.Add(author);
             _realDatabase.SaveChanges();
             return author; 
+        }
+
+        public async Task<Author> UpdateAuthor(Author author)
+        {
+            Author authorToUpdate = _realDatabase.Authors.FirstOrDefault(obj => obj.Id == author.Id);
+            if (authorToUpdate is not null)
+            {
+                authorToUpdate.FirstName = author.FirstName;
+                authorToUpdate.LastName = author.LastName;
+                _realDatabase.SaveChanges();
+            }
+            return authorToUpdate;
         }
 
         public async Task<bool> DeleteAuthor(Guid id)
@@ -26,21 +49,6 @@ namespace Infrastructure.Repositories
                 actionSuccessful = true;
             }
             return await Task.FromResult(actionSuccessful);
-        }
-
-        public async Task<List<Author>> GetAllAuthors()
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<Author> GetAuthorById(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<Author> UpdateAuthor(Author author)
-        {
-            throw new NotImplementedException();
         }
     }
 }

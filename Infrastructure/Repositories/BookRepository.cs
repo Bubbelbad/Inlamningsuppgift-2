@@ -8,29 +8,49 @@ namespace Infrastructure.Repositories
     {
         private readonly RealDatabase _realDatabase = database;
 
-        public async Task<Book> AddBook(Book book)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<bool> DeleteBook(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<List<Book>> GetAllBooks()
         {
-            throw new NotImplementedException();
+            List<Book> allBooksFromDatabase = _realDatabase.Books.ToList();
+            return allBooksFromDatabase; 
         }
 
         public async Task<Book> GetBookById(Guid id)
         {
-            throw new NotImplementedException();
+            Book book = _realDatabase.Books.FirstOrDefault(book => book.Id == id);
+            return book; 
+        }
+
+        public async Task<Book> AddBook(Book book)
+        {
+            _realDatabase.Books.Add(book);
+            _realDatabase.SaveChanges();
+            return book; 
         }
 
         public async Task<Book> UpdateBook(Book book)
         {
-            throw new NotImplementedException();
+            Book bookToUpdate = _realDatabase.Books.FirstOrDefault(obj => obj.Id == book.Id);
+            if (bookToUpdate is not null)
+            {
+                bookToUpdate.Author = book.Author;
+                bookToUpdate.Description = book.Description;
+                bookToUpdate.Title = book.Title;
+                _realDatabase.SaveChanges(); 
+            }
+            return bookToUpdate; 
+        }
+
+        public async Task<bool> DeleteBook(Guid id)
+        {
+            bool actionSuccessful = false; 
+            Book bookToDelete = _realDatabase.Books.FirstOrDefault(obj => obj.Id == id); 
+            if (bookToDelete is not null)
+            {
+                _realDatabase.Books.Remove(bookToDelete);
+                _realDatabase.SaveChanges();
+                actionSuccessful = true; 
+            }
+            return actionSuccessful; 
         }
     }
 }

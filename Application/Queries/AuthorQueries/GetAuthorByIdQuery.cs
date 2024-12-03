@@ -9,7 +9,6 @@ namespace Application.Queries.AuthorQueries
         {
             Id = authorId;
         }
-
         public Guid Id { get; }
     }
 }
