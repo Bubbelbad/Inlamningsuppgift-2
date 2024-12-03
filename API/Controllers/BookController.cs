@@ -21,6 +21,31 @@ namespace API.Controllers
             _mediator = mediator;
         }
 
+        [Route("GetAllBooks")]
+        [HttpGet]
+        [SwaggerOperation(Description = "Gets all books")]
+        [SwaggerResponse(200, "Successfully retrieved Books.")]
+        [SwaggerResponse(400, "Invalid input data")]
+        [SwaggerResponse(404, "Books not found")]
+        public async Task<IActionResult> GetAllBooks()
+        {
+            try
+            {
+                var foundBooks = await _mediator.Send(new GetAllBooksQuery());
+                if (foundBooks == null)
+                {
+                    return NotFound("Book not found.");
+                }
+
+                return Ok(foundBooks);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (ex) here if needed
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
+        }
+
         [Route("GetBookById/{bookId}")]
         [HttpGet]
         [SwaggerOperation(Description = "Gets a book by Id")]

@@ -7,8 +7,8 @@ namespace Application.Queries.AuthorQueries
 {
     internal class GetAllAuthorsQueryHandler(IMemoryCache memoryCache, IAuthorRepository repository) : IRequestHandler<GetAllAuthorsQuery, List<Author>>
     {
-        private IMemoryCache _memoryCache = memoryCache;
-        private IAuthorRepository _authorRepository = repository;
+        private readonly IMemoryCache _memoryCache = memoryCache;
+        private readonly IAuthorRepository _authorRepository = repository;
         private const string cacheKey = "allAuthors";
 
         public async Task<List<Author>> Handle(GetAllAuthorsQuery query, CancellationToken cancellationToken)
