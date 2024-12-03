@@ -8,6 +8,11 @@ namespace Infrastructure.Repositories
     {
         private readonly RealDatabase _realDatabase = database; 
 
+        public async Task<List<Author>> GetAllAuthors()
+        {
+            return _realDatabase.Authors.ToList();  
+        } 
+
         public async Task<Author> AddAuthor(Author author)
         {
             _realDatabase.Authors.Add(author);
@@ -28,14 +33,10 @@ namespace Infrastructure.Repositories
             return await Task.FromResult(actionSuccessful);
         }
 
-        public async Task<List<Author>> GetAllAuthors()
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<Author> GetAuthorById(Guid id)
         {
-            throw new NotImplementedException();
+            Author author = _realDatabase.Authors.FirstOrDefault(author => author.Id == id);
+            return author; 
         }
 
         public async Task<Author> UpdateAuthor(Author author)

@@ -5,7 +5,7 @@ using Application.Dtos;
 using Application.Queries.AuthorQueries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
+//using Microsoft.AspNetCore.Authorization;
 using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
 
@@ -13,16 +13,36 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/[Controller]")]
-    public class AuthorController : ControllerBase
+    public class AuthorController(IMediator mediator) : ControllerBase
     {
-        private readonly IMediator _mediator;
+        private readonly IMediator _mediator = mediator;
 
-        public AuthorController(IMediator mediator)
+        // [Authorize]
+        [Route("GetAllAuthors")]
+        [HttpGet]
+        [SwaggerOperation(Description = "Gets All Authors")]
+        [SwaggerResponse(200, "Successfully retrieved Authors.")]
+        [SwaggerResponse(400, "Invalid input data")]
+        [SwaggerResponse(404, "Authors not found")]
+        public async Task<IActionResult> GetAllAuthors()
         {
-            _mediator = mediator;
+            try
+            {
+                var foundAuthors = await _mediator.Send(new GetAllAuthorsQuery());
+                if (foundAuthors == null)
+                {
+                    return NotFound("Author not found.");
+                }
+                return Ok(foundAuthors);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.InnerException);
+            }
         }
 
-        [Authorize]
+
+        // [Authorize]
         [Route("GetAuthorById/{id}")]
         [HttpGet]
         [SwaggerOperation(Description = "Gets Author by Id")]
