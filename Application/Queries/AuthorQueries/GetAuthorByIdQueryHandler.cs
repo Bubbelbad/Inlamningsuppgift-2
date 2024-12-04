@@ -5,10 +5,10 @@ using AutoMapper;
 
 namespace Application.Queries.AuthorQueries
 {
-    public class GetAuthorByIdQueryHandler() : IRequestHandler<GetAuthorByIdQuery, OperationResult<Author>>
+    public class GetAuthorByIdQueryHandler(IAuthorRepository repository, IMapper mapper) : IRequestHandler<GetAuthorByIdQuery, OperationResult<Author>>
     {
-        private IAuthorRepository _authorRepository { get;  }
-        public IMapper _mapper { get; }
+        private IAuthorRepository _authorRepository = repository;
+        public IMapper _mapper = mapper; 
 
         public async Task<OperationResult<Author>> Handle(GetAuthorByIdQuery query, CancellationToken cancellationToken)
         {

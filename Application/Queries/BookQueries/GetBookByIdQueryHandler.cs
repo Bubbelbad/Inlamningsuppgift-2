@@ -5,10 +5,10 @@ using AutoMapper;
 
 namespace Application.Queries.BookQueries
 {
-    public class GetBookByIdQueryHandler(IBookRepository repository) : IRequestHandler<GetBookByIdQuery, OperationResult<Book>>
+    public class GetBookByIdQueryHandler(IBookRepository repository, IMapper mapper) : IRequestHandler<GetBookByIdQuery, OperationResult<Book>>
     {
         private readonly IBookRepository _bookRepository = repository;
-        public IMapper _mapper { get; }
+        public IMapper _mapper = mapper; 
 
         public async Task<OperationResult<Book>> Handle(GetBookByIdQuery query, CancellationToken cancellationToken)
         {

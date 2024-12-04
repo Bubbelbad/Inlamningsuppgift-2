@@ -147,7 +147,7 @@ namespace API.Controllers
         [Route("Delete/{id}")]
         [HttpDelete]
         [SwaggerOperation(Description = "Deletes a Book from collection")]
-        [SwaggerResponse(204, "Successfully Deleted Book.")]
+        [SwaggerResponse(200, "Successfully Deleted Book.")]
         [SwaggerResponse(404, "Book not found.")]
         public async Task<IActionResult> DeleteBook([FromRoute] Guid id)
         {
@@ -161,7 +161,7 @@ namespace API.Controllers
                 var operationResult = await _mediator.Send(new DeleteBookCommand(id));
                 if (operationResult.IsSuccess)
                 {
-                    return Ok(operationResult.Data);
+                    return Ok(operationResult.Message);
                 }
 
                 return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage });

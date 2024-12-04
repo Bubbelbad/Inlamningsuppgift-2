@@ -42,19 +42,20 @@ namespace API.Controllers
 
             try
             {
-                var foundAuthors = await _mediator.Send(new GetAllAuthorsQuery());
-                if (foundAuthors == null)
+                var operationResult = await _mediator.Send(new GetAllAuthorsQuery());
+
+                if (operationResult.IsSuccess)
                 {
-                    return NotFound("Author not found.");
+                    return Ok(operationResult.Data);
                 }
-                return Ok(foundAuthors);
+                return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage });
             }
+
             catch (Exception ex)
             {
                 return BadRequest(ex.InnerException);
             }
         }
-
 
         // [Authorize]
         [Route("GetAuthorById/{id}")]
@@ -72,13 +73,14 @@ namespace API.Controllers
 
             try
             {
-                var foundAuthor = await _mediator.Send(new GetAuthorByIdQuery(id));
-                if (foundAuthor == null)
-                {
-                    return NotFound("Author not found.");
-                }
+                var operationResult = await _mediator.Send(new GetAuthorByIdQuery(id));
 
-                return Ok(foundAuthor);
+                if (operationResult.IsSuccess)
+                {
+                    return Ok(operationResult.Data);
+                }
+                return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage });
+
             }
             catch (Exception ex)
             { 
@@ -100,8 +102,14 @@ namespace API.Controllers
 
             try
             {
-                var addedAuthor = await _mediator.Send(new AddAuthorCommand(authorToAdd));
-                return Ok(addedAuthor);
+                var operationResult = await _mediator.Send(new AddAuthorCommand(authorToAdd));
+
+                if (operationResult.IsSuccess)
+                { 
+                    return Ok(operationResult.Data);
+                }
+                return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage });
+
             }
             catch (Exception ex)
             {
@@ -125,13 +133,13 @@ namespace API.Controllers
 
             try
             {
-                var updatedAuthor = await _mediator.Send(new UpdateAuthorCommand(authorToUpdate));
-                if (updatedAuthor == null)
+                var operationResult = await _mediator.Send(new UpdateAuthorCommand(authorToUpdate));
+                if (operationResult.IsSuccess)
                 {
-                    return NotFound("Author not found.");
+                    return Ok(operationResult.Data);
                 }
 
-                return Ok(updatedAuthor);
+                return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage });
             }
             catch (Exception ex)
             {
@@ -143,7 +151,7 @@ namespace API.Controllers
         [Route("Delete/{id}")]
         [HttpDelete]
         [SwaggerOperation(Description = "Deletes Author from collection")]
-        [SwaggerResponse(204, "Successfully Deleted Author.")]
+        [SwaggerResponse(200, "Successfully Deleted Author.")]
         [SwaggerResponse(400, "Invalid input data")]
         [SwaggerResponse(404, "Author not found")]
         public async Task<IActionResult> DeleteAuthor([FromRoute] Guid id)
@@ -155,14 +163,14 @@ namespace API.Controllers
 
             try
             {
-                var deletedAuthor = await _mediator.Send(new DeleteAuthorCommand(id));
-                if (deletedAuthor == null)
+                var operaionResult = await _mediator.Send(new DeleteAuthorCommand(id));
+                if (operaionResult.IsSuccess)
                 {
-                    return NotFound("Author not found.");
+                    return Ok(operaionResult.Message);
                 }
-
-                return NoContent();
+                return BadRequest(new { message = operaionResult.Message, errors = operaionResult.ErrorMessage });
             }
+
             catch (Exception ex)
             {
                 // Log the exception (ex) here if needed

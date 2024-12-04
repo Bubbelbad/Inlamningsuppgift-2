@@ -1,23 +1,28 @@
 ﻿using Application.Interfaces.RepositoryInterfaces;
+using AutoMapper;
 using Domain.Model;
 using MediatR;
 
 namespace Application.Commands.AddAuthorCommands.AddAuthor
 {
-    public class AddAuthorCommandHandler(IAuthorRepository authorRepository) : IRequestHandler<AddAuthorCommand, Author>
+    public class AddAuthorCommandHandler(IAuthorRepository authorRepository, IMapper mapper) : IRequestHandler<AddAuthorCommand, OperationResult<Author>>
     {
         private readonly IAuthorRepository _authorRepository = authorRepository;
+        public IMapper _mapper = mapper; 
 
-        public Task<Author> Handle(AddAuthorCommand request, CancellationToken cancellationToken)
+        public async Task<OperationResult<Author>> Handle(AddAuthorCommand request, CancellationToken cancellationToken)
         {
             if (request == null || request.NewAuthor == null || string.IsNullOrEmpty(request.NewAuthor.FirstName))
             {
-                return Task.FromResult<Author>(null);
+                return OperationResult<Author>.Failure("Invalid input");
             }
+
             try
             {
-                Author authorToCreate = new(Guid.NewGuid(), request.NewAuthor.FirstName, request.NewAuthor.LastName);
-                return _authorRepository.AddAuthor(authorToCreate);
+                var authorToCreate = new Author(Guid.NewGuid(), request.NewAuthor.FirstName, request.NewAuthor.LastName);
+                var createdAutor = await _authorRepository.AddAuthor(authorToCreate);
+                var mappedAuthor = _mapper.Map<Author>(createdAutor);
+                return OperationResult<Author>.Success(mappedAuthor); 
             }
             catch
             {

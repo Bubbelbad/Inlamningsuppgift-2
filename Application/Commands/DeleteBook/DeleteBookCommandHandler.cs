@@ -20,9 +20,9 @@ namespace Application.Commands.DeleteBook
 
             try
             {
-                bool operationResult = await _bookRepository.DeleteBook(request.bookIdToDelete);
-                var mappedBool = _mapper.Map<bool>(operationResult); 
-                if (operationResult)
+                bool successfulDeletion = await _bookRepository.DeleteBook(request.bookIdToDelete);
+                var mappedBool = _mapper.Map<bool>(successfulDeletion); 
+                if (successfulDeletion)
                 {
                     return OperationResult<bool>.Success(mappedBool); 
                 }
