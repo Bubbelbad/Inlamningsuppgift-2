@@ -3,7 +3,7 @@ using Domain.Model;
 
 namespace Application.Queries.BookQueries
 {
-    public class GetBookByIdQuery : IRequest<Book>
+    public class GetBookByIdQuery : IRequest<OperationResult<Book>>
     {
         public GetBookByIdQuery(Guid bookId)
         {

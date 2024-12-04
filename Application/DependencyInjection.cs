@@ -8,13 +8,13 @@ namespace Application
         {
             var assembly = typeof(DependencyInjection).Assembly;
             services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(assembly));
-
+            services.AddAutoMapper(assembly); // Specify the assembly to resolve ambiguity
             services.AddScoped<TokenHelper>();
 
             return services;
 
-           // services.AddValidatorsFromAssembly(assembly);
-           // services.AddSungelton(FakeDatabase)
+            // services.AddValidatorsFromAssembly(assembly);
+            // services.AddSungelton(FakeDatabase)
         }
     }
 }

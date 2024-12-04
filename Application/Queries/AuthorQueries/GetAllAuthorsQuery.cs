@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Application.Queries.AuthorQueries
 {
-    public class GetAllAuthorsQuery() : IRequest<List<Author>>
+    public class GetAllAuthorsQuery() : IRequest<OperationResult<List<Author>>>
     {
      
     }

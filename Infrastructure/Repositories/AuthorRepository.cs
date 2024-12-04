@@ -31,8 +31,8 @@ namespace Infrastructure.Repositories
             Author authorToUpdate = _realDatabase.Authors.FirstOrDefault(obj => obj.Id == author.Id);
             if (authorToUpdate is not null)
             {
-                authorToUpdate.FirstName = author.FirstName;
-                authorToUpdate.LastName = author.LastName;
+                author.FirstName = authorToUpdate.FirstName;
+                author.LastName = authorToUpdate.LastName; 
                 _realDatabase.SaveChanges();
             }
             return authorToUpdate;

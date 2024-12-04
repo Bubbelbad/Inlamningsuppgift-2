@@ -1,30 +1,31 @@
 ﻿using MediatR;
 using Domain.Model;
 using Application.Interfaces.RepositoryInterfaces;
+using AutoMapper;
 
 namespace Application.Queries.BookQueries
 {
-    public class GetBookByIdQueryHandler : IRequestHandler<GetBookByIdQuery, Book>
+    public class GetBookByIdQueryHandler(IBookRepository repository, IMapper mapper) : IRequestHandler<GetBookByIdQuery, OperationResult<Book>>
     {
-        private readonly IBookRepository _bookRepository;
+        private readonly IBookRepository _bookRepository = repository;
+        public IMapper _mapper = mapper; 
 
-        public GetBookByIdQueryHandler(IBookRepository bookRepository)
+        public async Task<OperationResult<Book>> Handle(GetBookByIdQuery query, CancellationToken cancellationToken)
         {
-            _bookRepository = bookRepository ?? throw new ArgumentNullException(nameof(bookRepository));
-        }
-
-        public async Task<Book> Handle(GetBookByIdQuery query, CancellationToken cancellationToken)
-        {
-            if (query == null)
+            if (query.Id.Equals(Guid.Empty))
             {
-                throw new ArgumentNullException(nameof(query), "Query cannot be null.");
+                return OperationResult<Book>.Failure("The book Id was an empty Guid"); 
             }
 
             try
             {
-                Book wantedBook = await _bookRepository.GetBookById(query.Id);
-                return wantedBook;
+                var book = await _bookRepository.GetBookById(query.Id);
+
+                var mappedBook = _mapper.Map<Book>(book);
+
+                return OperationResult<Book>.Success(mappedBook, "Operation successful"); 
             }
+
             catch (Exception ex)
             {
                 throw new ApplicationException("An error occurred while retrieving object from collection.", ex);
