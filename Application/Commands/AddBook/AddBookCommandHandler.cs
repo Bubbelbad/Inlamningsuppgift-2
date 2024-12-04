@@ -1,25 +1,32 @@
 ﻿using Application.Interfaces.RepositoryInterfaces;
+using AutoMapper;
 using Domain.Model;
 using MediatR;
 
 namespace Application.Commands.AddBook
 {
-    public class AddBookCommandHandler(IBookRepository bookRepository) : IRequestHandler<AddBookCommand, Book>
+    public class AddBookCommandHandler(IBookRepository bookRepository, IMapper mapper) : IRequestHandler<AddBookCommand, OperationResult<Book>>
     {
         private readonly IBookRepository _bookRepository = bookRepository; 
+        public IMapper _mapper = mapper; 
 
-        public Task<Book> Handle(AddBookCommand request, CancellationToken cancellationToken)
+        public async Task<OperationResult<Book>> Handle(AddBookCommand request, CancellationToken cancellationToken)
         {
             // var existingAuthor = _database.Authors.Where(author => author.Id == request.NewBook.Author.Id);
             // Kolla om det finns existerande author eller om en ny ska läggas till
 
             if (request == null || request.NewBook == null || string.IsNullOrEmpty(request.NewBook.Title))
             {
-                return Task.FromResult<Book>(null);
+                return OperationResult<Book>.Failure("Not valid input"); 
             }
 
-            Book bookToCreate = new Book(Guid.NewGuid(), request.NewBook.Title, request.NewBook.Author, request.NewBook.Description);
-            return _bookRepository.AddBook(bookToCreate); 
+            var bookToCreate = new Book(Guid.NewGuid(), request.NewBook.Title, request.NewBook.Author, request.NewBook.Description);
+
+            var createdBook = await _bookRepository.AddBook(bookToCreate);
+
+            var mappedBook = _mapper.Map<Book>(createdBook);
+
+            return OperationResult<Book>.Success(mappedBook); 
         }
     }
 }

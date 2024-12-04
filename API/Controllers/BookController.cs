@@ -29,15 +29,20 @@ namespace API.Controllers
         [SwaggerResponse(404, "Books not found")]
         public async Task<IActionResult> GetAllBooks()
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
-                var foundBooks = await _mediator.Send(new GetAllBooksQuery());
-                if (foundBooks == null)
+                var operationResult = await _mediator.Send(new GetAllBooksQuery());
+                if (operationResult.IsSuccess)
                 {
-                    return NotFound("Book not found.");
+                    return Ok(operationResult.Data);
                 }
 
-                return Ok(foundBooks);
+                return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage});
             }
             catch (Exception ex)
             {
@@ -54,21 +59,23 @@ namespace API.Controllers
         [SwaggerResponse(404, "Book not found")]
         public async Task<IActionResult> GetBook([FromRoute] Guid bookId)
         {
-            if (bookId == Guid.Empty)
+            if (!ModelState.IsValid)
             {
-                return BadRequest("Invalid book ID.");
+                return BadRequest(ModelState);
             }
 
             try
             {
-                var foundBook = await _mediator.Send(new GetBookByIdQuery(bookId));
-                if (foundBook == null)
+                var operationResult = await _mediator.Send(new GetBookByIdQuery(bookId));
+                if (operationResult.IsSuccess)
                 {
-                    return NotFound("Book not found.");
+                    return Ok(operationResult.Data); 
+                    
                 }
 
-                return Ok(foundBook);
+                return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage });
             }
+
             catch (Exception ex)
             {
                 // Log the exception (ex) here if needed
@@ -83,16 +90,17 @@ namespace API.Controllers
         [SwaggerResponse(400, "Invalid input data.")]
         public async Task<IActionResult> AddBook([FromBody, Required] AddBookDto bookToAdd)
         {
-            if (bookToAdd == null)
+            if (!ModelState.IsValid)
             {
-                return BadRequest("Invalid input data.");
+                return BadRequest(ModelState);
             }
 
             try
             {
-                var addedBook = await _mediator.Send(new AddBookCommand(bookToAdd));
-                return Ok(addedBook);
+                var operationResult = await _mediator.Send(new AddBookCommand(bookToAdd));
+                return Ok(operationResult.Data);
             }
+
             catch (Exception ex)
             {
                 // Log the exception (ex) here if needed
@@ -108,9 +116,9 @@ namespace API.Controllers
         [SwaggerResponse(404, "Book not found.")]
         public async Task<IActionResult> UpdateBook([FromBody, Required] BookDto book)
         {
-            if (book == null)
+            if (!ModelState.IsValid)
             {
-                return BadRequest("Invalid input data.");
+                return BadRequest(ModelState);
             }
 
             try
@@ -137,9 +145,9 @@ namespace API.Controllers
         [SwaggerResponse(404, "Book not found.")]
         public async Task<IActionResult> DeleteBook([FromRoute] Guid id)
         {
-            if (id == Guid.Empty)
+            if (!ModelState.IsValid)
             {
-                return BadRequest("Invalid book ID.");
+                return BadRequest(ModelState);
             }
 
             try
@@ -154,8 +162,7 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception (ex) here if needed
-                return StatusCode(500, "An error occurred while processing your request.");
+                return BadRequest(ex.InnerException); 
             }
         }
     }

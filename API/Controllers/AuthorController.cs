@@ -26,6 +26,20 @@ namespace API.Controllers
         [SwaggerResponse(404, "Authors not found")]
         public async Task<IActionResult> GetAllAuthors()
         {
+            if (!ModelState.IsValid)
+            {
+                List<string> errors = new List<string>(); 
+                foreach (var value in ModelState.Values)
+                {
+                    foreach (var error in value.Errors)
+                    {
+                        errors.Add(error.ErrorMessage); 
+                    }
+                }
+                string errorMessages = string.Join("\n", errors); 
+                return BadRequest(errorMessages);
+            }
+
             try
             {
                 var foundAuthors = await _mediator.Send(new GetAllAuthorsQuery());
@@ -67,7 +81,7 @@ namespace API.Controllers
                 return Ok(foundAuthor);
             }
             catch (Exception ex)
-            {
+            { 
                 return BadRequest(ex.InnerException);
             }
         }
@@ -79,9 +93,9 @@ namespace API.Controllers
         [SwaggerResponse(400, "Invalid input data")]
         public async Task<IActionResult> AddAuthor([FromBody, Required] AddAuthorDto authorToAdd)
         {
-            if (authorToAdd == null)
+            if (!ModelState.IsValid)
             {
-                return BadRequest("Invalid input data.");
+                return BadRequest(ModelState);
             }
 
             try
@@ -104,9 +118,9 @@ namespace API.Controllers
         [SwaggerResponse(404, "Author not found")]
         public async Task<IActionResult> UpdateAuthor([FromBody, Required] AuthorDto authorToUpdate)
         {
-            if (authorToUpdate == null)
+            if (!ModelState.IsValid)
             {
-                return BadRequest("Invalid input data.");
+                return BadRequest(ModelState);
             }
 
             try
@@ -134,9 +148,9 @@ namespace API.Controllers
         [SwaggerResponse(404, "Author not found")]
         public async Task<IActionResult> DeleteAuthor([FromRoute] Guid id)
         {
-            if (id == Guid.Empty)
+            if (!ModelState.IsValid)
             {
-                return BadRequest("Invalid author ID.");
+                return BadRequest(ModelState);
             }
 
             try

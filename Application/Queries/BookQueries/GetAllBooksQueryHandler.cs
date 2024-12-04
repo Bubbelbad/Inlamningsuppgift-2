@@ -1,28 +1,30 @@
-﻿
-
-using Application.Interfaces.RepositoryInterfaces;
+﻿using Application.Interfaces.RepositoryInterfaces;
+using AutoMapper;
 using Domain.Model;
 using MediatR;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace Application.Queries.BookQueries
 {
-    internal class GetAllBooksQueryHandler(IMemoryCache memoryCache, IBookRepository repository) : IRequestHandler<GetAllBooksQuery, List<Book>>
+    internal class GetAllBooksQueryHandler(IMemoryCache memoryCache, IBookRepository repository, IMapper mapper) : IRequestHandler<GetAllBooksQuery, OperationResult<List<Book>>>
     {
-        private readonly IMemoryCache _memoryCache = memoryCache;
         private readonly IBookRepository _bookRepository = repository;
+        private readonly IMemoryCache _memoryCache = memoryCache;
         private const string cacheKey = "allBooks";
+        public IMapper _mapper = mapper; 
 
-        public async Task<List<Book>> Handle(GetAllBooksQuery request, CancellationToken cancellationToken)
+        public async Task<OperationResult<List<Book>>> Handle(GetAllBooksQuery request, CancellationToken cancellationToken)
         {
             try
             {
-                if (!_memoryCache.TryGetValue(cacheKey, out List<Book> allBooksFromDatabase))
+                if (!_memoryCache.TryGetValue(cacheKey, out List<Book> mappedBooksFromDatabase))
                 {
-                    allBooksFromDatabase = await _bookRepository.GetAllBooks();
-                    _memoryCache.Set(cacheKey, allBooksFromDatabase, TimeSpan.FromMinutes(5));
+                    var allBooksFromDatabase = await _bookRepository.GetAllBooks();
+                    mappedBooksFromDatabase = _mapper.Map<List<Book>>(allBooksFromDatabase); 
+
+                    _memoryCache.Set(cacheKey, mappedBooksFromDatabase, TimeSpan.FromMinutes(5));
                 }
-                return allBooksFromDatabase;
+                return OperationResult<List<Book>>.Success(mappedBooksFromDatabase);
             }
             catch 
             {

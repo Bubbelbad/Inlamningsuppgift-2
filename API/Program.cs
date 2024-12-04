@@ -86,7 +86,7 @@ namespace API
                     });
                     
             });
-            builder.Services.AddMemoryCache(); 
+            builder.Services.AddMemoryCache();
 
             builder.Services.AddEndpointsApiExplorer();
 
