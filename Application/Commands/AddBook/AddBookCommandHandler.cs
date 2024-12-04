@@ -17,7 +17,7 @@ namespace Application.Commands.AddBook
 
             if (request == null || request.NewBook == null || string.IsNullOrEmpty(request.NewBook.Title))
             {
-                return OperationResult<Book>.Failure("Not valid input"); 
+                return OperationResult<Book>.Failure("Not valid input"); //Is this if-statement really needed with my ModelState now ? 
             }
 
             var bookToCreate = new Book(Guid.NewGuid(), request.NewBook.Title, request.NewBook.Author, request.NewBook.Description);

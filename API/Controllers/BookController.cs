@@ -98,7 +98,12 @@ namespace API.Controllers
             try
             {
                 var operationResult = await _mediator.Send(new AddBookCommand(bookToAdd));
-                return Ok(operationResult.Data);
+                if (operationResult.IsSuccess)
+                {
+                    return Ok(operationResult.Data); 
+                }
+
+                return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage });
             }
 
             catch (Exception ex)
@@ -123,14 +128,15 @@ namespace API.Controllers
 
             try
             {
-                var updatedBook = await _mediator.Send(new UpdateBookCommand(book));
-                if (updatedBook == null)
+                var operationResult = await _mediator.Send(new UpdateBookCommand(book));
+                if (operationResult.IsSuccess)
                 {
-                    return NotFound("Book not found.");
+                    return Ok(operationResult.Data);
                 }
 
-                return Ok(updatedBook);
+                return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage });
             }
+
             catch (Exception ex)
             {
                 // Log the exception (ex) here if needed
@@ -152,13 +158,13 @@ namespace API.Controllers
 
             try
             {
-                var deletedBook = await _mediator.Send(new DeleteBookCommand(id));
-                if (deletedBook == null)
+                var operationResult = await _mediator.Send(new DeleteBookCommand(id));
+                if (operationResult.IsSuccess)
                 {
-                    return NotFound("Book not found.");
+                    return Ok(operationResult.Data);
                 }
 
-                return NoContent();
+                return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage });
             }
             catch (Exception ex)
             {
