@@ -1,10 +1,8 @@
 ﻿using Application.Commands.AuthorCommands.UpdateAuthor;
-using Application.Commands.UpdateBook;
 using Application.Dtos;
 using Application.Interfaces.RepositoryInterfaces;
+using AutoMapper;
 using Domain.Model;
-using Infrastructure.Database;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Moq;
 
 namespace TestProject.AuthorUnitTests
@@ -12,53 +10,57 @@ namespace TestProject.AuthorUnitTests
     [TestFixture]
     public class UpdateAuthorUnitTest
     {
-        private Mock<IAuthorRepository> _mockRepository; 
         private UpdateAuthorCommandHandler _handler;
+        private Mock<IAuthorRepository> _mockRepository; 
+        private Mock<IMapper> _mockMapper; 
+
+        private static readonly Guid ExampleAuthorId = Guid.Parse("12345678-1234-1234-1234-1234567890ab");
+        private static readonly AuthorDto ExampleAuthorDto = new(ExampleAuthorId, "Test", "Testsson");
 
         [SetUp]
         public void Setup()
         {
             _mockRepository = new Mock<IAuthorRepository>();
-
-            Guid validAuthorId = new Guid("6ce82e1f-631f-4447-9b3c-8f7137bc0e31");
-            Author author = new(validAuthorId, "Test", "Test");
+            _mockMapper = new Mock<IMapper>();
 
             // Set up the mock repository to handle any Author object with the same Id
-            _mockRepository.Setup(repo => repo.UpdateAuthor(It.Is<Author>(obj => obj.Id == validAuthorId)))
+            _mockRepository.Setup(repo => repo.UpdateAuthor(It.Is<Author>(obj => obj.Id == ExampleAuthorId)))
                            .ReturnsAsync((Author updatedAuthor) => updatedAuthor);
 
-            _handler = new UpdateAuthorCommandHandler(_mockRepository.Object); 
+            _mockMapper.Setup(mapper => mapper.Map<Author>(It.IsAny<Author>()))
+                       .Returns((Author author) => new Author(ExampleAuthorId, author.FirstName, author.LastName));
+
+
+            _handler = new UpdateAuthorCommandHandler(_mockRepository.Object, _mockMapper.Object); 
         }
 
         [Test, Category("UpdateAuthor")]
         public async Task Handle_ValidInput_ReturnsAuthor()
         {
             // Arrange
-            AuthorDto authorToTest = new(new Guid("6ce82e1f-631f-4447-9b3c-8f7137bc0e31"), "Test", "Test");
-            var command = new UpdateAuthorCommand(authorToTest);
+            var command = new UpdateAuthorCommand(ExampleAuthorDto);
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.FirstName, Is.EqualTo(authorToTest.FirstName));
-            Assert.That(result.LastName, Is.EqualTo(authorToTest.LastName));
+            Assert.That(result.Data.FirstName, Is.EqualTo(ExampleAuthorDto.FirstName));
+            Assert.That(result.Data.LastName, Is.EqualTo(ExampleAuthorDto.LastName));
         }
-
 
         [Test, Category("UpdateAuthor")]
         public async Task Handle_NullInput_ReturnsNull()
         {
             // Arrange
-            AuthorDto authorToTest = null!; // Use null-forgiving operator to explicitly indicate null
+            AuthorDto authorToTest = null!; 
             var command = new UpdateAuthorCommand(authorToTest);
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            Assert.That(result, Is.Null);
+            Assert.That(result.IsSuccess, Is.EqualTo(false));
         }
 
 
@@ -66,14 +68,14 @@ namespace TestProject.AuthorUnitTests
         public async Task Handle_MissingFirstName_ReturnsNull()
         {
             // Arrange
-            AuthorDto bookToTest = new(new Guid("12345678-1234-5678-1234-567812345678"), "Test", "Victorsson"); // Use null-forgiving operator to explicitly indicate null
-            var command = new UpdateAuthorCommand(bookToTest);
+            AuthorDto invalidAuthorDto = new(Guid.NewGuid(), null!, "Testsson");
+            var command = new UpdateAuthorCommand(invalidAuthorDto);
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            Assert.That(result, Is.Null); 
+            Assert.That(result.IsSuccess, Is.EqualTo(false)); 
         }
     }
 }

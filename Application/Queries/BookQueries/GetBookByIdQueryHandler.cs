@@ -19,13 +19,15 @@ namespace Application.Queries.BookQueries
 
             try
             {
-                var book = await _bookRepository.GetBookById(query.Id);
+                Book book = await _bookRepository.GetBookById(query.Id);
+                if (book is null)
+                {
+                    return OperationResult<Book>.Failure("The book was not found in the collection");
+                }
 
                 var mappedBook = _mapper.Map<Book>(book);
-
                 return OperationResult<Book>.Success(mappedBook, "Operation successful"); 
             }
-
             catch (Exception ex)
             {
                 throw new ApplicationException("An error occurred while retrieving object from collection.", ex);

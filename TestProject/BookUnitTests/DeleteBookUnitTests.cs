@@ -1,21 +1,24 @@
 ﻿using Application.Commands.DeleteBook;
 using Application.Interfaces.RepositoryInterfaces;
-using Infrastructure.Database;
+using AutoMapper;
 using Moq;
 
 namespace TestProject
 {
     [TestFixture]
     public class DeleteBookUnitTest
-
     {
-        private Mock<IBookRepository> _mockRepository; 
         private DeleteBookCommandHandler _handler;
+        private Mock<IBookRepository> _mockRepository;
+        private Mock<IMapper> _mockMapper;
+
+        private static readonly Guid ExampleBookId = Guid.Parse("783307e1-ea3b-400b-919d-0c40b2bbae78");
 
         [SetUp]
         public void Setup()
         {
             _mockRepository = new Mock<IBookRepository>();
+            _mockMapper = new Mock<IMapper>();
 
             // Setup mock.DeleteBook returns true when valid ID
             _mockRepository.Setup(repo => repo.DeleteBook(It.Is<Guid>(id => id == new Guid("783307e1-ea3b-400b-919d-0c40b2bbae78"))))
@@ -24,35 +27,33 @@ namespace TestProject
             _mockRepository.Setup(repo => repo.DeleteBook(It.Is<Guid>(id => id != new Guid("783307e1-ea3b-400b-919d-0c40b2bbae78"))))
                            .ReturnsAsync(false); 
                 
-            _handler = new DeleteBookCommandHandler(_mockRepository.Object);
+            _handler = new DeleteBookCommandHandler(_mockRepository.Object, _mockMapper.Object);
         }
 
         [Test, Category("DeleteBook")]
         public async Task Handle_ValidInputId_ReturnsTrue()
         {
             // Arrange
-            Guid bookId = new Guid("783307e1-ea3b-400b-919d-0c40b2bbae78");
-            var command = new DeleteBookCommand(bookId);
+            var command = new DeleteBookCommand(ExampleBookId);
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            Assert.That(result, Is.EqualTo(true));
+            Assert.That(result.IsSuccess, Is.EqualTo(true));
         }
 
         [Test, Category("DeleteBook")]
         public async Task Handle_NonExistingBookId_ReturnsFalse()
         {
             // Arrange
-            Guid bookId = new Guid("783307e1-ea3b-400b-919d-0c40b2bbae71");
-            var command = new DeleteBookCommand(bookId);
+            var command = new DeleteBookCommand(Guid.NewGuid());
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            Assert.That(result, Is.False);
+            Assert.That(result.IsSuccess, Is.EqualTo(false));
         }
     }
 }
