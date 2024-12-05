@@ -1,8 +1,8 @@
 ﻿using Application.Commands.AddBook;
 using Application.Dtos;
 using Application.Interfaces.RepositoryInterfaces;
+using AutoMapper;
 using Domain.Model;
-using Infrastructure.Database;
 using Moq;
 
 namespace TestProject
@@ -11,34 +11,41 @@ namespace TestProject
     public class AddBookUnitTest
     {
         private AddBookCommandHandler _handler;
-        private Mock<IBookRepository> _mockRepository; 
+        private Mock<IBookRepository> _mockRepository;
+        private Mock<IMapper> _mockMapper; 
+
+        private static readonly Guid ExampleBookId = Guid.Parse("12345678-1234-1234-1234-1234567890ab");
+        private static readonly AddBookDto ExampleBookDto = new("Test", "Testsson", "An example book for Testing");
 
         [SetUp]
         public void SetUp()
         {
             // Initialize the handler and mock database before each test
             _mockRepository = new Mock<IBookRepository>();
+            _mockMapper = new Mock<IMapper>();
 
             //Set up mock to return a new Book when AddBook is called
             _mockRepository.Setup(repo => repo.AddBook(It.IsAny<Book>()))
-                .ReturnsAsync((Book book) => book); 
+                .ReturnsAsync((Book book) => book);
 
-            _handler = new AddBookCommandHandler(_mockRepository.Object);
+            _mockMapper.Setup(mapper => mapper.Map<Book>(It.IsAny<Book>()))
+                .Returns((Book book) => new Book(ExampleBookId, book.Title, book.Author, book.Description)); 
+
+            _handler = new AddBookCommandHandler(_mockRepository.Object, _mockMapper.Object);
         }
 
         [Test, Category("AddBook")]
         public async Task Handle_ValidInput_ReturnsBook()
         {
             // Arrange
-            AddBookDto bookToTest = new("Book of Test", "Test Testsson", "An example book for Testing");
-            var command = new AddBookCommand(bookToTest);
+            var command = new AddBookCommand(ExampleBookDto);
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Description, Is.EqualTo(bookToTest.Description));
+            Assert.That(result.Data.Description, Is.EqualTo(ExampleBookDto.Description));
         }
 
         [Test, Category("AddBook")]
@@ -52,7 +59,8 @@ namespace TestProject
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            Assert.That(result, Is.Null);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.IsSuccess, Is.EqualTo(false));
         }
 
         [Test, Category("AddBook")]
@@ -66,7 +74,8 @@ namespace TestProject
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            Assert.That(result, Is.Null);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.IsSuccess, Is.EqualTo(false));
         }
     }
 }

@@ -19,14 +19,17 @@ namespace Application.Commands.AddBook
             {
                 return OperationResult<Book>.Failure("Not valid input"); //Is this if-statement really needed with my ModelState now ? 
             }
-
-            var bookToCreate = new Book(Guid.NewGuid(), request.NewBook.Title, request.NewBook.Author, request.NewBook.Description);
-
-            var createdBook = await _bookRepository.AddBook(bookToCreate);
-
-            var mappedBook = _mapper.Map<Book>(createdBook);
-
-            return OperationResult<Book>.Success(mappedBook); 
+            try
+            {
+                var bookToCreate = new Book(Guid.NewGuid(), request.NewBook.Title, request.NewBook.Author, request.NewBook.Description);
+                var createdBook = await _bookRepository.AddBook(bookToCreate);
+                var mappedBook = _mapper.Map<Book>(createdBook);
+                return OperationResult<Book>.Success(mappedBook); 
+            }
+            catch
+            {
+                throw new Exception("Book not added");
+            }
         }
     }
 }

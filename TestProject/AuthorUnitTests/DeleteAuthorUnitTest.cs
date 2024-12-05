@@ -1,7 +1,6 @@
 ﻿using Application.Commands.AuthorCommands.DeleteAuthor;
 using Application.Interfaces.RepositoryInterfaces;
-using Domain.Model;
-using Infrastructure.Database;
+using AutoMapper;
 using Moq;
 
 namespace TestProject.AuthorUnitTests
@@ -10,50 +9,52 @@ namespace TestProject.AuthorUnitTests
     public class DeleteAuthorUnitTest
     {
         private DeleteAuthorCommandHandler _handler;
-        private Mock<IAuthorRepository> _mockRepository; 
+        private Mock<IAuthorRepository> _mockRepository;
+        private Mock<IMapper> _mockMapper; 
+
+        private static readonly Guid ExampleAuthorId = Guid.Parse("d1e16526-228e-4989-af4e-ee9690da3d8a");
 
         [SetUp]
         public void Setup()
         {
             _mockRepository = new Mock<IAuthorRepository>();
+            _mockMapper = new Mock<IMapper>();
 
             // Return true for a valid author ID
-            _mockRepository.Setup(repo => repo.DeleteAuthor(It.Is<Guid>(id => id == new Guid("d1e16526-228e-4989-af4e-ee9690da3d8a"))))
+            _mockRepository.Setup(repo => repo.DeleteAuthor(It.Is<Guid>(id => id == ExampleAuthorId)))
                            .ReturnsAsync(true);
 
             // Return false for a non-existing author ID
-            _mockRepository.Setup(repo => repo.DeleteAuthor(It.Is<Guid>(id => id != new Guid("d1e16526-228e-4989-af4e-ee9690da3d8a"))))
+            _mockRepository.Setup(repo => repo.DeleteAuthor(It.Is<Guid>(id => id != ExampleAuthorId)))
                            .ReturnsAsync(false);
 
-            _handler = new DeleteAuthorCommandHandler(_mockRepository.Object);
+            _handler = new DeleteAuthorCommandHandler(_mockRepository.Object, _mockMapper.Object);
         }
 
         [Test, Category("DeleteAuthor")]
         public async Task Handle_ValidInputId_ReturnsTrue()
         {
             // Arrange
-            Guid authorId = new Guid("d1e16526-228e-4989-af4e-ee9690da3d8a");
-            var command = new DeleteAuthorCommand(authorId);
+            var command = new DeleteAuthorCommand(ExampleAuthorId);
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            Assert.That(result, Is.EqualTo(true));
+            Assert.That(result.IsSuccess, Is.EqualTo(true));
         }
 
         [Test, Category("DeleteAuthor")]
         public async Task Handle_NonExistingBookId_ReturnsFalse()
         {
             // Arrange
-            Guid authorId = new Guid("91e16526-228e-4989-af4e-ee9690da3d8a");
-            var command = new DeleteAuthorCommand(authorId);
+            var command = new DeleteAuthorCommand(new Guid());
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            Assert.That(result, Is.False);
+            Assert.That(result.IsSuccess, Is.EqualTo(false));
         }
     }
 }
