@@ -7,6 +7,7 @@ using Moq;
 namespace TestProject.AuthorUnitTests
 {
     [TestFixture]
+    [Category("Author/UnitTests/GetAuthorById")]
     public class GetAuthorUnitTest
     {
         private Mock<IAuthorRepository> _mockRepository;
@@ -35,7 +36,7 @@ namespace TestProject.AuthorUnitTests
             _handler = new GetAuthorByIdQueryHandler(_mockRepository.Object, _mockMapper.Object);
         }
 
-        [Test, Category("GetAuthor")]
+        [Test]
         public async Task Handle_ValidId_ReturnsCorrectAuthor()
         {
             // Arrange
@@ -49,7 +50,7 @@ namespace TestProject.AuthorUnitTests
             Assert.That(result.Data.Id, Is.EqualTo(ExampleAuthorId));
         }
 
-        [Test, Category("GetAuthor")]
+        [Test]
         public async Task Handle_InvalidId_ReturnsNull()
         {
             // Arrange

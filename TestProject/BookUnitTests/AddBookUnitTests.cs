@@ -8,6 +8,7 @@ using Moq;
 namespace TestProject
 {
     [TestFixture]
+    [Category("Book/UnitTests/AddBook")]
     public class AddBookUnitTest
     {
         private AddBookCommandHandler _handler;
@@ -34,7 +35,7 @@ namespace TestProject
             _handler = new AddBookCommandHandler(_mockRepository.Object, _mockMapper.Object);
         }
 
-        [Test, Category("AddBook")]
+        [Test]
         public async Task Handle_ValidInput_ReturnsBook()
         {
             // Arrange
@@ -48,7 +49,7 @@ namespace TestProject
             Assert.That(result.Data.Description, Is.EqualTo(ExampleBookDto.Description));
         }
 
-        [Test, Category("AddBook")]
+        [Test]
         public async Task Handle_NullInput_ReturnsNull()
         {
             // Arrange
@@ -63,7 +64,7 @@ namespace TestProject
             Assert.That(result.IsSuccess, Is.EqualTo(false));
         }
 
-        [Test, Category("AddBook")]
+        [Test]
         public async Task Handle_MissingTitle_ReturnsNull()
         {
             // Arrange

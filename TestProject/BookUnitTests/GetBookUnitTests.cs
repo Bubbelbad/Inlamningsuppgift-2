@@ -7,6 +7,7 @@ using AutoMapper;
 namespace TestProject.BookUnitTests
 {
     [TestFixture]
+    [Category("Book/UnitTests/GetBookById")]
     public class GetBookUnitTests
     {
         private GetBookByIdQueryHandler _handler;
@@ -36,7 +37,7 @@ namespace TestProject.BookUnitTests
             _handler = new GetBookByIdQueryHandler(_mockRepository.Object, _mockMapper.Object);
         }
 
-        [Test, Category("GetBook")]
+        [Test]
         public async Task Handle_ValidId_ReturnsCorrectBook()
         {
             // Arrange
@@ -51,7 +52,7 @@ namespace TestProject.BookUnitTests
             Assert.That(result.Data.Id, Is.EqualTo(ExampleBookId));
         }
 
-        [Test, Category("GetBook")]
+        [Test]
         public async Task Handle_NonExisitingId_ReturnsNull()
         {
             // Arrange

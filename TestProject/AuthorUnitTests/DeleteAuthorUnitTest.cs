@@ -6,6 +6,7 @@ using Moq;
 namespace TestProject.AuthorUnitTests
 {
     [TestFixture]
+    [Category("Author/UnitTests/DeleteAuthor")]
     public class DeleteAuthorUnitTest
     {
         private DeleteAuthorCommandHandler _handler;
@@ -31,7 +32,7 @@ namespace TestProject.AuthorUnitTests
             _handler = new DeleteAuthorCommandHandler(_mockRepository.Object, _mockMapper.Object);
         }
 
-        [Test, Category("DeleteAuthor")]
+        [Test]
         public async Task Handle_ValidInputId_ReturnsTrue()
         {
             // Arrange
@@ -44,7 +45,7 @@ namespace TestProject.AuthorUnitTests
             Assert.That(result.IsSuccess, Is.EqualTo(true));
         }
 
-        [Test, Category("DeleteAuthor")]
+        [Test]
         public async Task Handle_NonExistingBookId_ReturnsFalse()
         {
             // Arrange
