@@ -12,14 +12,10 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/[Controller]")]
-    public class BookController : ControllerBase
+    public class BookController(IMediator mediator, ILogger<BookController> logger) : ControllerBase
     {
-        private readonly IMediator _mediator;
-
-        public BookController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
+        private readonly IMediator _mediator = mediator;
+        private readonly ILogger<BookController> _logger = logger;
 
         [Route("GetAllBooks")]
         [HttpGet]
@@ -29,24 +25,24 @@ namespace API.Controllers
         [SwaggerResponse(404, "Books not found")]
         public async Task<IActionResult> GetAllBooks()
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            _logger.LogInformation("Fetching all Books at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
 
             try
             {
                 var operationResult = await _mediator.Send(new GetAllBooksQuery());
+
                 if (operationResult.IsSuccess)
                 {
+                    _logger.LogInformation("Successfully retrieved all Books");
                     return Ok(operationResult.Data);
                 }
 
+                _logger.LogError($"Could not fetch all books. Errors: {operationResult.ErrorMessage}");
                 return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage});
             }
             catch (Exception ex)
             {
-                // Log the exception (ex) here if needed
+                _logger.LogError(ex, "An error occurred while fetching all Books at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
                 return StatusCode(500, "An error occurred while processing your request.");
             }
         }
@@ -61,6 +57,7 @@ namespace API.Controllers
         {
             if (!ModelState.IsValid)
             {
+                _logger.LogWarning("Invalid ID: {id}", bookId);
                 return BadRequest(ModelState);
             }
 
@@ -69,16 +66,17 @@ namespace API.Controllers
                 var operationResult = await _mediator.Send(new GetBookByIdQuery(bookId));
                 if (operationResult.IsSuccess)
                 {
+                    _logger.LogInformation("Successfully retrieved Book with ID: {id}", bookId);
                     return Ok(operationResult.Data); 
                     
                 }
-
+                _logger.LogWarning("Book with ID: {id} not found", bookId);
                 return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage });
             }
 
             catch (Exception ex)
             {
-                // Log the exception (ex) here if needed
+                _logger.LogError(ex, "An error occurred while fetching Book with ID: {id} at {time}", bookId, DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
                 return StatusCode(500, "An error occurred while processing your request.");
             }
         }
@@ -92,6 +90,7 @@ namespace API.Controllers
         {
             if (!ModelState.IsValid)
             {
+                _logger.LogWarning($"Invalid Book data: {ModelState}");
                 return BadRequest(ModelState);
             }
 
@@ -100,6 +99,7 @@ namespace API.Controllers
                 var operationResult = await _mediator.Send(new AddBookCommand(bookToAdd));
                 if (operationResult.IsSuccess)
                 {
+                    _logger.LogInformation("Book added successfully");
                     return Ok(operationResult.Data); 
                 }
 
@@ -108,7 +108,7 @@ namespace API.Controllers
 
             catch (Exception ex)
             {
-                // Log the exception (ex) here if needed
+                _logger.LogError(ex, "An error occurred while adding new Book at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
                 return StatusCode(500, "An error occurred while processing your request.");
             }
         }
@@ -123,6 +123,7 @@ namespace API.Controllers
         {
             if (!ModelState.IsValid)
             {
+                _logger.LogWarning($"Invalid Book data: {ModelState}");
                 return BadRequest(ModelState);
             }
 
@@ -131,6 +132,7 @@ namespace API.Controllers
                 var operationResult = await _mediator.Send(new UpdateBookCommand(book));
                 if (operationResult.IsSuccess)
                 {
+                    _logger.LogInformation("Book updated successfully");
                     return Ok(operationResult.Data);
                 }
 
@@ -139,7 +141,7 @@ namespace API.Controllers
 
             catch (Exception ex)
             {
-                // Log the exception (ex) here if needed
+                _logger.LogError(ex, "An error occurred while updating Book at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
                 return StatusCode(500, "An error occurred while processing your request.");
             }
         }
@@ -153,6 +155,7 @@ namespace API.Controllers
         {
             if (!ModelState.IsValid)
             {
+                _logger.LogWarning($"Invalid ID: {id}");
                 return BadRequest(ModelState);
             }
 
@@ -161,6 +164,7 @@ namespace API.Controllers
                 var operationResult = await _mediator.Send(new DeleteBookCommand(id));
                 if (operationResult.IsSuccess)
                 {
+                    _logger.LogInformation("Book deleted successfully");
                     return Ok(operationResult.Message);
                 }
 
@@ -168,6 +172,7 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred while deleting Book at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
                 return BadRequest(ex.InnerException); 
             }
         }

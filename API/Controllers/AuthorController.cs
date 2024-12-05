@@ -13,9 +13,10 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/[Controller]")]
-    public class AuthorController(IMediator mediator) : ControllerBase
+    public class AuthorController(IMediator mediator, ILogger<AuthorController> logger) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
+        private readonly ILogger<AuthorController> _logger = logger;
 
         // [Authorize]
         [Route("GetAllAuthors")]
@@ -26,6 +27,8 @@ namespace API.Controllers
         [SwaggerResponse(404, "Authors not found")]
         public async Task<IActionResult> GetAllAuthors()
         {
+            _logger.LogInformation("Fetching all Authors at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
+
             if (!ModelState.IsValid)
             {
                 List<string> errors = new List<string>(); 
@@ -37,6 +40,8 @@ namespace API.Controllers
                     }
                 }
                 string errorMessages = string.Join("\n", errors); 
+
+                _logger.LogWarning(errorMessages); 
                 return BadRequest(errorMessages);
             }
 
@@ -53,6 +58,7 @@ namespace API.Controllers
 
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred while fetching all Authors at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
                 return BadRequest(ex.InnerException);
             }
         }
@@ -66,8 +72,11 @@ namespace API.Controllers
         [SwaggerResponse(404, "Author not found")]
         public async Task<IActionResult> GetAuthor([FromRoute] Guid id)
         {
+            _logger.LogInformation("Fetching Author with ID: {id} at {time}", id, DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
+
             if (!ModelState.IsValid)
             {
+                _logger.LogWarning("Invalid ID: {Id}", id);
                 return BadRequest(ModelState);
             }
 
@@ -77,13 +86,15 @@ namespace API.Controllers
 
                 if (operationResult.IsSuccess)
                 {
+                    _logger.LogInformation("Author with ID: {id} found", id);
                     return Ok(operationResult.Data);
                 }
                 return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage });
 
             }
             catch (Exception ex)
-            { 
+            {
+                _logger.LogError(ex, "An error occurred while fetching Author with ID: {id} at {time}", id, DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
                 return BadRequest(ex.InnerException);
             }
         }
@@ -97,15 +108,18 @@ namespace API.Controllers
         {
             if (!ModelState.IsValid)
             {
+                _logger.LogWarning("Invalid Author data: {authorToAdd}", authorToAdd);
                 return BadRequest(ModelState);
             }
 
             try
             {
+                _logger.LogInformation("Adding new Author at {time}", authorToAdd, DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
                 var operationResult = await _mediator.Send(new AddAuthorCommand(authorToAdd));
 
                 if (operationResult.IsSuccess)
                 { 
+                    _logger.LogInformation("Author added successfully");
                     return Ok(operationResult.Data);
                 }
                 return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage });
@@ -113,7 +127,7 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception (ex) here if needed
+                _logger.LogError(ex, "An error occurred while adding new Author at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
                 return StatusCode(500, "An error occurred while processing your request.");
             }
         }
@@ -126,8 +140,10 @@ namespace API.Controllers
         [SwaggerResponse(404, "Author not found")]
         public async Task<IActionResult> UpdateAuthor([FromBody, Required] AuthorDto authorToUpdate)
         {
+            _logger.LogInformation("Updating Author at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
             if (!ModelState.IsValid)
             {
+                _logger.LogWarning("Invalid Author data: {ModelState}", ModelState);
                 return BadRequest(ModelState);
             }
 
@@ -136,6 +152,7 @@ namespace API.Controllers
                 var operationResult = await _mediator.Send(new UpdateAuthorCommand(authorToUpdate));
                 if (operationResult.IsSuccess)
                 {
+                    _logger.LogInformation("Author updated successfully");
                     return Ok(operationResult.Data);
                 }
 
@@ -143,7 +160,7 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception (ex) here if needed
+                _logger.LogError(ex, "An error occurred while updating Author at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
                 return StatusCode(500, "An error occurred while processing your request.");
             }
         }
@@ -156,24 +173,28 @@ namespace API.Controllers
         [SwaggerResponse(404, "Author not found")]
         public async Task<IActionResult> DeleteAuthor([FromRoute] Guid id)
         {
+            _logger.LogInformation("Deleting Author with ID: {id} at {time}", id, DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
             if (!ModelState.IsValid)
             {
+                _logger.LogWarning("Invalid Author ID: {id}", id);
                 return BadRequest(ModelState);
             }
 
             try
             {
-                var operaionResult = await _mediator.Send(new DeleteAuthorCommand(id));
-                if (operaionResult.IsSuccess)
+                var operationResult = await _mediator.Send(new DeleteAuthorCommand(id));
+                if (operationResult.IsSuccess)
                 {
-                    return Ok(operaionResult.Message);
+                    _logger.LogInformation("Author with ID: {id} deleted successfully", id);
+                    return Ok(operationResult.Message);
                 }
-                return BadRequest(new { message = operaionResult.Message, errors = operaionResult.ErrorMessage });
+                _logger.LogWarning("Author with ID: {id} not found. Error message: {operationResult.ErrorMessage}", id, operationResult.ErrorMessage);
+                return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage });
             }
 
             catch (Exception ex)
             {
-                // Log the exception (ex) here if needed
+                _logger.LogError(ex, "An error occurred while deleting Author with ID: {id} at {time}", id, DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
                 return StatusCode(500, "An error occurred while processing your request.");
             }
         }
