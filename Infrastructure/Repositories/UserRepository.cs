@@ -11,7 +11,7 @@ namespace Infrastructure.Repositories
         public async Task<User> AddUser(User user)
         {
             _realDatabase.Users.Add(user);
-            return user; 
+            return user;
         }
 
         public async Task<bool> DeleteUser(Guid id)
@@ -30,7 +30,7 @@ namespace Infrastructure.Repositories
         public async Task<List<User>> GetAllUsers()
         {
             List<User> allUsersFromDatabase = _realDatabase.Users.ToList();
-            return allUsersFromDatabase; 
+            return allUsersFromDatabase;
         }
 
         public Task<User> LogInUser(string password, string username)
