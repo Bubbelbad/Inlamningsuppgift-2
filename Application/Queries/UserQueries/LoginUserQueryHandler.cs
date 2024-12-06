@@ -7,7 +7,7 @@ namespace Application.Queries.UserQueries
     internal sealed class LoginUserQueryHandler(IUserRepository userRepository, TokenHelper helper) : IRequestHandler<LoginUserQuery, string>
     {
         private readonly IUserRepository _userRepository = userRepository;
-        private readonly TokenHelper _tokenHelper = helper; 
+        private readonly TokenHelper _tokenHelper = helper;
 
         public async Task<string> Handle(LoginUserQuery request, CancellationToken cancellationToken)
         {
@@ -16,7 +16,7 @@ namespace Application.Queries.UserQueries
                 throw new ArgumentNullException(nameof(request), "Request or LoginUser cannot be null.");
             }
             //Implement logic here:
-            var user = await _userRepository.LogInUser(request.LoginUser.UserName, request.LoginUser.Password); 
+            var user = await _userRepository.LogInUser(request.LoginUser.UserName, request.LoginUser.Password);
             //var user = _database.Users.FirstOrDefault(user => user.UserName == request.LoginUser.UserName && user.Password == request.LoginUser.Password);
 
             if (user == null)

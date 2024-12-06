@@ -25,7 +25,7 @@ namespace Application.Commands.UpdateBook
 
                 var mappedBook = _mapper.Map<Book>(updatedBook);
 
-                return OperationResult<Book>.Success(mappedBook); 
+                return OperationResult<Book>.Success(mappedBook);
             }
 
             catch (Exception ex)

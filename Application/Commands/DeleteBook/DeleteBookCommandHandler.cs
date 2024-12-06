@@ -21,13 +21,13 @@ namespace Application.Commands.DeleteBook
             try
             {
                 bool successfulDeletion = await _bookRepository.DeleteBook(request.bookIdToDelete);
-                var mappedBool = _mapper.Map<bool>(successfulDeletion); 
+                var mappedBool = _mapper.Map<bool>(successfulDeletion);
                 if (successfulDeletion)
                 {
-                    return OperationResult<bool>.Success(mappedBool); 
+                    return OperationResult<bool>.Success(mappedBool);
                 }
 
-                return OperationResult<bool>.Failure("Operation failed"); 
+                return OperationResult<bool>.Failure("Operation failed");
             }
             catch (Exception ex)
             {

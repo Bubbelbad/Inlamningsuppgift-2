@@ -6,6 +6,6 @@ namespace Application.Commands.UpdateBook
 {
     public class UpdateBookCommand(BookDto bookToUpdate) : IRequest<OperationResult<Book>>
     {
-        public BookDto NewBook { get; set; } = bookToUpdate; 
+        public BookDto NewBook { get; set; } = bookToUpdate;
     }
 }

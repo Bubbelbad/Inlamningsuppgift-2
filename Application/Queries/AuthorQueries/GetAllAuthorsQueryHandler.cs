@@ -8,7 +8,7 @@ namespace Application.Queries.AuthorQueries
 {
     internal class GetAllAuthorsQueryHandler(IMemoryCache memoryCache, IAuthorRepository repository, IMapper mapper) : IRequestHandler<GetAllAuthorsQuery, OperationResult<List<Author>>>
     {
-        public IMapper _mapper = mapper; 
+        public IMapper _mapper = mapper;
         private readonly IAuthorRepository _authorRepository = repository;
         private readonly IMemoryCache _memoryCache = memoryCache;
         private const string cacheKey = "allAuthors";
@@ -21,7 +21,7 @@ namespace Application.Queries.AuthorQueries
                 {
                     var allAuthorsFromDatabase = await _authorRepository.GetAllAuthors();
 
-                    mappedAuthorsFromDatabase = _mapper.Map<List<Author>>(allAuthorsFromDatabase); 
+                    mappedAuthorsFromDatabase = _mapper.Map<List<Author>>(allAuthorsFromDatabase);
 
                     _memoryCache.Set(cacheKey, allAuthorsFromDatabase, TimeSpan.FromMinutes(5));
                 }

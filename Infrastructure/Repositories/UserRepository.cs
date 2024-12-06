@@ -25,12 +25,12 @@ namespace Infrastructure.Repositories
 
         public Task<User> LogInUser(string password, string username)
         {
-            User user = _realDatabase.Users.FirstOrDefault(user => user.UserName == username && user.Password ==password); 
+            User user = _realDatabase.Users.FirstOrDefault(user => user.UserName == username && user.Password == password);
             if (user is not null)
             {
-                return Task.FromResult(user); 
+                return Task.FromResult(user);
             }
-            return Task.FromResult(user); 
+            return Task.FromResult(user);
         }
     }
 }

@@ -30,9 +30,9 @@ namespace Infrastructure.Database
 
         private static List<User> allUsersFromDB = new()
         {
-            new User { Id = Guid.NewGuid(), UserName = "Victor"}, 
-            new User { Id = Guid.NewGuid(), UserName = "Bjarne"}, 
-            new User { Id = Guid.NewGuid(), UserName = "Svinto"}, 
+            new User { Id = Guid.NewGuid(), UserName = "Victor"},
+            new User { Id = Guid.NewGuid(), UserName = "Bjarne"},
+            new User { Id = Guid.NewGuid(), UserName = "Svinto"},
             new User { Id = new Guid("f2062082-d361-4826-8980-5241d1e4384a"), UserName = "TestUserForUnitTests"},
         };
 
@@ -68,12 +68,12 @@ namespace Infrastructure.Database
         {
             Book bookToDelete = Books.FirstOrDefault(b => b.Id == id);
             bool actionSuccessful = false;
-            if (bookToDelete != null) 
-            { 
+            if (bookToDelete != null)
+            {
                 Books.Remove(bookToDelete);
-                actionSuccessful = true; 
+                actionSuccessful = true;
             }
-            return await Task.FromResult(actionSuccessful); 
+            return await Task.FromResult(actionSuccessful);
         }
 
 

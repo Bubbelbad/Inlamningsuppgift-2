@@ -84,7 +84,7 @@ namespace API
                         Duration = 60,
                         Location = ResponseCacheLocation.Any,
                     });
-                    
+
             });
             builder.Services.AddMemoryCache();
 

@@ -6,24 +6,24 @@ namespace Infrastructure.Repositories
 {
     public class AuthorRepository(RealDatabase database) : IAuthorRepository
     {
-        private readonly RealDatabase _realDatabase = database; 
+        private readonly RealDatabase _realDatabase = database;
 
         public async Task<List<Author>> GetAllAuthors()
         {
-            return _realDatabase.Authors.ToList();  
-        } 
+            return _realDatabase.Authors.ToList();
+        }
 
         public async Task<Author> GetAuthorById(Guid id)
         {
             Author author = _realDatabase.Authors.FirstOrDefault(author => author.Id == id);
-            return author; 
+            return author;
         }
 
         public async Task<Author> AddAuthor(Author author)
         {
             _realDatabase.Authors.Add(author);
             _realDatabase.SaveChanges();
-            return author; 
+            return author;
         }
 
         public async Task<Author> UpdateAuthor(Author author)
@@ -32,7 +32,7 @@ namespace Infrastructure.Repositories
             if (authorToUpdate is not null)
             {
                 author.FirstName = authorToUpdate.FirstName;
-                author.LastName = authorToUpdate.LastName; 
+                author.LastName = authorToUpdate.LastName;
                 _realDatabase.SaveChanges();
             }
             return authorToUpdate;
@@ -44,7 +44,7 @@ namespace Infrastructure.Repositories
             var authorToDelete = _realDatabase.Authors.Where(author => author.Id == id).First();
             if (authorToDelete is not null)
             {
-                _realDatabase.Authors.Remove(authorToDelete); 
+                _realDatabase.Authors.Remove(authorToDelete);
                 _realDatabase.SaveChanges();
                 actionSuccessful = true;
             }

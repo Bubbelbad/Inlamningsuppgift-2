@@ -13,7 +13,7 @@ namespace TestProject
     {
         private AddBookCommandHandler _handler;
         private Mock<IBookRepository> _mockRepository;
-        private Mock<IMapper> _mockMapper; 
+        private Mock<IMapper> _mockMapper;
 
         private static readonly Guid ExampleBookId = Guid.Parse("12345678-1234-1234-1234-1234567890ab");
         private static readonly AddBookDto ExampleBookDto = new("Test", "Testsson", "An example book for Testing");
@@ -30,7 +30,7 @@ namespace TestProject
                 .ReturnsAsync((Book book) => book);
 
             _mockMapper.Setup(mapper => mapper.Map<Book>(It.IsAny<Book>()))
-                .Returns((Book book) => new Book(ExampleBookId, book.Title, book.Author, book.Description)); 
+                .Returns((Book book) => new Book(ExampleBookId, book.Title, book.Author, book.Description));
 
             _handler = new AddBookCommandHandler(_mockRepository.Object, _mockMapper.Object);
         }

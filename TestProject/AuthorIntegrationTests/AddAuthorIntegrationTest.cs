@@ -18,7 +18,7 @@ namespace TestProject.AuthorIntegrationTests
         private IAuthorRepository _repository;
         private IMapper _mapper;
 
-        private static readonly Guid ExampleAuthorId = new Guid("12345678-1234-1234-1234-1234567890ab"); 
+        private static readonly Guid ExampleAuthorId = new Guid("12345678-1234-1234-1234-1234567890ab");
 
         [SetUp]
         public void Setup()

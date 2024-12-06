@@ -12,7 +12,7 @@
             IsSuccess = isSuccess;
             Data = data;
             Message = message;
-            ErrorMessage = errorMessage ?? string.Empty; 
+            ErrorMessage = errorMessage ?? string.Empty;
         }
 
         public static OperationResult<T> Success(T data, string message = "Operation successful")

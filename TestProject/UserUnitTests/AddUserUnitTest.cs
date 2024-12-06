@@ -35,7 +35,7 @@ namespace TestProject.UserUnitTests
         {
             // Arrange
             Guid validUserId = new Guid("59ca7b98-b918-4ff1-a7f8-83d2777021e9");
-            UserDto userToTest = new() {  UserName = "Test", Password = "Test" };
+            UserDto userToTest = new() { UserName = "Test", Password = "Test" };
 
             // Act
             var command = new AddNewUserCommand(userToTest);

@@ -9,7 +9,7 @@ namespace Application.Queries.UserQueries.Helpers
 {
     public class TokenHelper(IConfiguration configuration)
     {
-        private readonly IConfiguration _configuration = configuration; 
+        private readonly IConfiguration _configuration = configuration;
 
         public string GenerateTwtToken(User user)
         {

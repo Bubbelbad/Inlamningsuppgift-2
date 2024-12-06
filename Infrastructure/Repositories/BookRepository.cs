@@ -11,20 +11,20 @@ namespace Infrastructure.Repositories
         public async Task<List<Book>> GetAllBooks()
         {
             List<Book> allBooksFromDatabase = _realDatabase.Books.ToList();
-            return allBooksFromDatabase; 
+            return allBooksFromDatabase;
         }
 
         public async Task<Book> GetBookById(Guid id)
         {
             Book book = _realDatabase.Books.FirstOrDefault(book => book.Id == id);
-            return book; 
+            return book;
         }
 
         public async Task<Book> AddBook(Book book)
         {
             _realDatabase.Books.Add(book);
             _realDatabase.SaveChanges();
-            return book; 
+            return book;
         }
 
         public async Task<Book> UpdateBook(Book book)
@@ -35,22 +35,22 @@ namespace Infrastructure.Repositories
                 bookToUpdate.Author = book.Author;
                 bookToUpdate.Description = book.Description;
                 bookToUpdate.Title = book.Title;
-                _realDatabase.SaveChanges(); 
+                _realDatabase.SaveChanges();
             }
-            return bookToUpdate; 
+            return bookToUpdate;
         }
 
         public async Task<bool> DeleteBook(Guid id)
         {
-            bool actionSuccessful = false; 
-            Book bookToDelete = _realDatabase.Books.FirstOrDefault(obj => obj.Id == id); 
+            bool actionSuccessful = false;
+            Book bookToDelete = _realDatabase.Books.FirstOrDefault(obj => obj.Id == id);
             if (bookToDelete is not null)
             {
                 _realDatabase.Books.Remove(bookToDelete);
                 _realDatabase.SaveChanges();
-                actionSuccessful = true; 
+                actionSuccessful = true;
             }
-            return actionSuccessful; 
+            return actionSuccessful;
         }
     }
 }

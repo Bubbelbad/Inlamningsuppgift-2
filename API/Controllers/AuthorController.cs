@@ -31,17 +31,17 @@ namespace API.Controllers
 
             if (!ModelState.IsValid)
             {
-                List<string> errors = new List<string>(); 
+                List<string> errors = new List<string>();
                 foreach (var value in ModelState.Values)
                 {
                     foreach (var error in value.Errors)
                     {
-                        errors.Add(error.ErrorMessage); 
+                        errors.Add(error.ErrorMessage);
                     }
                 }
-                string errorMessages = string.Join("\n", errors); 
+                string errorMessages = string.Join("\n", errors);
 
-                _logger.LogWarning(errorMessages); 
+                _logger.LogWarning(errorMessages);
                 return BadRequest(errorMessages);
             }
 
@@ -114,11 +114,11 @@ namespace API.Controllers
 
             try
             {
-                _logger.LogInformation("Adding new Author at {time}", authorToAdd, DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
+                _logger.LogInformation("Adding new Author at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
                 var operationResult = await _mediator.Send(new AddAuthorCommand(authorToAdd));
 
                 if (operationResult.IsSuccess)
-                { 
+                {
                     _logger.LogInformation("Author added successfully");
                     return Ok(operationResult.Data);
                 }

@@ -26,8 +26,8 @@ namespace TestProject
                            .ReturnsAsync(true);
 
             _mockRepository.Setup(repo => repo.DeleteBook(It.Is<Guid>(id => id != new Guid("783307e1-ea3b-400b-919d-0c40b2bbae78"))))
-                           .ReturnsAsync(false); 
-                
+                           .ReturnsAsync(false);
+
             _handler = new DeleteBookCommandHandler(_mockRepository.Object, _mockMapper.Object);
         }
 
