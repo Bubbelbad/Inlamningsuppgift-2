@@ -1,6 +1,7 @@
 ﻿using Application.Commands.UserCommands.AddUser;
 using Application.Dtos;
 using Application.Queries.UserQueries;
+using Application.Queries.UserQueries.GetUserById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
@@ -16,16 +17,42 @@ namespace API.Controllers
 
 
         [HttpGet]
-        [Route("getAllUsers")]
+        [Route("GetAllUsers")]
         [ResponseCache(CacheProfileName = "DefaultCache")]
         public async Task<IActionResult> GetAllUsers()
         {
             _logger.LogInformation("Fetching all Users at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
             try
             {
-                var users = await _mediator.Send(new GetAllUsersQuery());
+                var operationResult = await _mediator.Send(new GetAllUsersQuery());
                 _logger.LogInformation("Successfully retrieved all Users");
-                return Ok(users);
+                return Ok(operationResult.Data);
+            }
+
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while fetching all Users at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
+        }
+
+        [HttpGet]
+        [Route("GetUserById")]
+        [ResponseCache(CacheProfileName = "DefaultCache")]
+        public async Task<IActionResult> GetUserById(Guid id)
+        {
+            if (id == Guid.Empty)
+            {
+                _logger.LogWarning("Invalid input data");
+                return BadRequest("Invalid input data.");
+            }
+
+            _logger.LogInformation("Fetching Users at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
+            try
+            {
+                var operationResult = await _mediator.Send(new GetUserByIdQuery(id));
+                _logger.LogInformation("Successfully retrieved all Users");
+                return Ok(operationResult.Data);
             }
 
             catch (Exception ex)
@@ -48,9 +75,9 @@ namespace API.Controllers
 
             try
             {
-                var addedUser = await _mediator.Send(new AddNewUserCommand(newUser));
-                _logger.LogInformation("User {username} added successfully", addedUser.UserName);
-                return Ok(addedUser);
+                var operationResult = await _mediator.Send(new AddNewUserCommand(newUser));
+                _logger.LogInformation("User {username} added successfully", operationResult.Data.UserName);
+                return Ok(operationResult.Data);
             }
 
             catch (Exception ex)

@@ -7,10 +7,21 @@ namespace Infrastructure.Repositories
     public class UserRepository(RealDatabase database) : IUserRepository
     {
         private readonly RealDatabase _realDatabase = database;
+        public async Task<List<User>> GetAllUsers()
+        {
+            List<User> allUsersFromDatabase = _realDatabase.Users.ToList();
+            return allUsersFromDatabase;
+        }
+        public async Task<User> GetUserById(Guid id)
+        {
+            User user = _realDatabase.Users.FirstOrDefault(user => user.Id == id);
+            return user;
+        }
 
         public async Task<User> AddUser(User user)
         {
             _realDatabase.Users.Add(user);
+            _realDatabase.SaveChanges();
             return user;
         }
 
@@ -27,11 +38,6 @@ namespace Infrastructure.Repositories
             return actionSuccessful;
         }
 
-        public async Task<List<User>> GetAllUsers()
-        {
-            List<User> allUsersFromDatabase = _realDatabase.Users.ToList();
-            return allUsersFromDatabase;
-        }
 
         public Task<User> LogInUser(string password, string username)
         {

@@ -1,14 +1,16 @@
 ﻿using Application.Interfaces.RepositoryInterfaces;
+using AutoMapper;
 using Domain.Model;
 using MediatR;
 
 namespace Application.Commands.UserCommands.AddUser
 {
-    public class AddNewUserCommandHandler(IUserRepository userRepository) : IRequestHandler<AddNewUserCommand, User>
+    public class AddNewUserCommandHandler(IUserRepository userRepository, IMapper mapper) : IRequestHandler<AddNewUserCommand, OperationResult<User>>
     {
         private readonly IUserRepository _userReposiory = userRepository;
+        private readonly IMapper _mapper = mapper;
 
-        public Task<User> Handle(AddNewUserCommand request, CancellationToken cancellationToken)
+        public async Task<OperationResult<User>> Handle(AddNewUserCommand request, CancellationToken cancellationToken)
         {
             if (request == null)
             {
@@ -24,9 +26,9 @@ namespace Application.Commands.UserCommands.AddUser
                     Password = request.NewUser.Password
                 };
 
-                _userReposiory.AddUser(userToCreate);
-                return Task.FromResult(userToCreate);
-
+                var createdUser = await _userReposiory.AddUser(userToCreate);
+                var mappedUser = _mapper.Map<User>(createdUser);
+                return OperationResult<User>.Success(mappedUser);
             }
             catch (Exception ex)
             {
