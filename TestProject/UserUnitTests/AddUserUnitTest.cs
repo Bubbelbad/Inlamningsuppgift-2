@@ -3,6 +3,7 @@ using Application.Commands.UserCommands.AddUser;
 using Application.Dtos;
 using Domain.Model;
 using Moq;
+using AutoMapper;
 
 namespace TestProject.UserUnitTests
 {
@@ -12,11 +13,13 @@ namespace TestProject.UserUnitTests
     {
         private Mock<IUserRepository> _mockRepository;
         private AddNewUserCommandHandler _handler;
+        private Mock<IMapper> _mockMapper;
 
         [SetUp]
         public void Setup()
         {
             _mockRepository = new Mock<IUserRepository>();
+            _mockMapper = new Mock<IMapper>();
 
             var validUserId = new Guid("59ca7b98-b918-4ff1-a7f8-83d2777021e9");
             User user = new() { Id = validUserId, UserName = "Test", Password = "Test" };
@@ -27,7 +30,7 @@ namespace TestProject.UserUnitTests
             _mockRepository.Setup(repo => repo.AddUser(It.Is<User>(user => user.Id != validUserId)))
                            .ReturnsAsync((User)null!);
 
-            _handler = new AddNewUserCommandHandler(_mockRepository.Object);
+            _handler = new AddNewUserCommandHandler(_mockRepository.Object, _mockMapper.Object);
         }
 
         [Test]

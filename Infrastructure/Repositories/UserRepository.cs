@@ -7,21 +7,37 @@ namespace Infrastructure.Repositories
     public class UserRepository(RealDatabase database) : IUserRepository
     {
         private readonly RealDatabase _realDatabase = database;
-
-        public Task<User> AddUser(User user)
+        public async Task<List<User>> GetAllUsers()
         {
-            throw new NotImplementedException();
+            List<User> allUsersFromDatabase = _realDatabase.Users.ToList();
+            return allUsersFromDatabase;
+        }
+        public async Task<User> GetUserById(Guid id)
+        {
+            User user = _realDatabase.Users.FirstOrDefault(user => user.Id == id);
+            return user;
         }
 
-        public Task<string> DeleteUser(Guid id)
+        public async Task<User> AddUser(User user)
         {
-            throw new NotImplementedException();
+            _realDatabase.Users.Add(user);
+            _realDatabase.SaveChanges();
+            return user;
         }
 
-        public Task<List<User>> GetAllUsers()
+        public async Task<bool> DeleteUser(Guid id)
         {
-            throw new NotImplementedException();
+            bool actionSuccessful = false;
+            User userToDelete = _realDatabase.Users.FirstOrDefault(obj => obj.Id == id);
+            if (userToDelete is not null)
+            {
+                _realDatabase.Users.Remove(userToDelete);
+                _realDatabase.SaveChanges();
+                actionSuccessful = true;
+            }
+            return actionSuccessful;
         }
+
 
         public Task<User> LogInUser(string password, string username)
         {
