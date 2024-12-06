@@ -8,6 +8,7 @@ using Moq;
 namespace TestProject
 {
     [TestFixture]
+    [Category("Author/UnitTests/AddAuthor")]
     public class AddAuthorUnitTest
     {
         private AddAuthorCommandHandler _handler;
@@ -35,7 +36,7 @@ namespace TestProject
         }
 
 
-        [Test, Category("AddAuthor")]
+        [Test]
         public async Task Handle_ValidInput_ReturnsCorrectAuthor()
         {
             // Arrange
@@ -50,7 +51,7 @@ namespace TestProject
             Assert.That(result.Data.FirstName, Is.EqualTo(authorToTest.FirstName));
         }
 
-        [Test, Category("AddAuthor")]
+        [Test]
         public async Task Handle_NullInput_ReturnsNull()
         {
             // Arrange
@@ -65,7 +66,7 @@ namespace TestProject
             Assert.That(result.IsSuccess, Is.EqualTo(false));
         }
 
-        [Test, Category("AddAuthor")]
+        [Test]
         public async Task Handle_MissingFirstName_ReturnsNull()
         {
             // Arrange

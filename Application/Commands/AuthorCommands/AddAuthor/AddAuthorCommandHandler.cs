@@ -28,7 +28,6 @@ namespace Application.Commands.AddAuthorCommands.AddAuthor
             {
                 throw new Exception("Author not added"); 
             }
-
         }
     }
 }

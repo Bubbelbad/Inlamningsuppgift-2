@@ -1,38 +1,57 @@
-﻿using Application.Commands.AddBook;
+﻿using Application.Commands.AddAuthorCommands.AddAuthor;
+using Application.Commands.AddBook;
 using Application.Dtos;
 using Application.Interfaces.RepositoryInterfaces;
 using AutoMapper;
 using Domain.Model;
-using Moq;
+using Infrastructure.Database;
+using Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
 
-namespace TestProject
+
+namespace TestProject.BookIntegrationTests
 {
     [TestFixture]
-    [Category("Book/UnitTests/AddBook")]
-    public class AddBookUnitTest
+    [Category("Book/Integration/AddBook")]
+    public class AddBookIntegrationTest
     {
         private AddBookCommandHandler _handler;
-        private Mock<IBookRepository> _mockRepository;
-        private Mock<IMapper> _mockMapper; 
+        private RealDatabase _database;
+        private IMapper _mapper;
+        private IBookRepository _repository;
 
-        private static readonly Guid ExampleBookId = Guid.Parse("12345678-1234-1234-1234-1234567890ab");
+        private static readonly Guid ExampleBookId = new Guid("12345678-1234-1234-1234-1234567890ab");
         private static readonly AddBookDto ExampleBookDto = new("Test", "Testsson", "An example book for Testing");
 
         [SetUp]
-        public void SetUp()
+        public void Setup()
         {
-            // Initialize the handler and mock database before each test
-            _mockRepository = new Mock<IBookRepository>();
-            _mockMapper = new Mock<IMapper>();
+            // Set up in-memory database
+            var options = new DbContextOptionsBuilder<RealDatabase>()
+                .UseInMemoryDatabase(databaseName: "TestDatabase")
+                .Options;
+            _database = new RealDatabase(options);
 
-            //Set up mock to return a new Book when AddBook is called
-            _mockRepository.Setup(repo => repo.AddBook(It.IsAny<Book>()))
-                .ReturnsAsync((Book book) => book);
+            // Initialize the repository with the in-memory database
+            _repository = new BookRepository(_database);
 
-            _mockMapper.Setup(mapper => mapper.Map<Book>(It.IsAny<Book>()))
-                .Returns((Book book) => new Book(ExampleBookId, book.Title, book.Author, book.Description)); 
+            // Set up AutoMapper with actual configuration
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<AddAuthorDto, Author>()
+                   .ForMember(dest => dest.Id, opt => opt.MapFrom(src => ExampleBookId));
+            });
+            _mapper = config.CreateMapper();
 
-            _handler = new AddBookCommandHandler(_mockRepository.Object, _mockMapper.Object);
+            // Initialize the handler with the actual repository and mapper
+            _handler = new AddBookCommandHandler(_repository, _mapper);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            _database.Database.EnsureDeleted();
+            _database.Dispose();
         }
 
         [Test]

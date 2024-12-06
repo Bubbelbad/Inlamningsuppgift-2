@@ -8,6 +8,7 @@ using Moq;
 namespace TestProject
 {
     [TestFixture]
+    [Category("Book/UnitTests/UpdateBook")]
     public class UpdateBookUnitTest
     {
         private UpdateBookCommandHandler _handler;
@@ -36,7 +37,7 @@ namespace TestProject
         }
 
 
-        [Test, Category("UpdateBook")]
+        [Test]
         public async Task Handle_ValidInput_ReturnsBook()
         {
             // Arrange
@@ -52,7 +53,7 @@ namespace TestProject
         }
 
 
-        [Test, Category("UpdateBook")]
+        [Test]
         public async Task Handle_NullInput_ReturnsNull()
         {
             // Arrange
@@ -67,7 +68,7 @@ namespace TestProject
         }
 
 
-        [Test, Category("UpdateBook")]
+        [Test]
         public async Task Handle_MissingTitle_ReturnsNull()
         {
             // Arrange

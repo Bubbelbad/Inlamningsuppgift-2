@@ -7,6 +7,7 @@ using Moq;
 namespace TestProject.UserUnitTests
 {
     [TestFixture]
+    [Category("User/UnitTests/AddUser")]
     public class AddUserUnitTest
     {
         private Mock<IUserRepository> _mockRepository;
@@ -24,12 +25,12 @@ namespace TestProject.UserUnitTests
                            .ReturnsAsync(user);
 
             _mockRepository.Setup(repo => repo.AddUser(It.Is<User>(user => user.Id != validUserId)))
-                           .ReturnsAsync((User)null);
+                           .ReturnsAsync((User)null!);
 
             _handler = new AddNewUserCommandHandler(_mockRepository.Object);
         }
 
-        [Test, Category("AddUser")]
+        [Test]
         public async Task Handle_ValidInput_ReturnsUser()
         {
             // Arrange
@@ -38,7 +39,7 @@ namespace TestProject.UserUnitTests
 
             // Act
             var command = new AddNewUserCommand(userToTest);
-            var result = _handler.Handle(command, CancellationToken.None);
+            var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
             Assert.That(result, Is.Not.Null);
