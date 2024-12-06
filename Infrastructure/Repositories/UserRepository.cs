@@ -8,19 +8,29 @@ namespace Infrastructure.Repositories
     {
         private readonly RealDatabase _realDatabase = database;
 
-        public Task<User> AddUser(User user)
+        public async Task<User> AddUser(User user)
         {
-            throw new NotImplementedException();
+            _realDatabase.Users.Add(user);
+            return user; 
         }
 
-        public Task<string> DeleteUser(Guid id)
+        public async Task<bool> DeleteUser(Guid id)
         {
-            throw new NotImplementedException();
+            bool actionSuccessful = false;
+            User userToDelete = _realDatabase.Users.FirstOrDefault(obj => obj.Id == id);
+            if (userToDelete is not null)
+            {
+                _realDatabase.Users.Remove(userToDelete);
+                _realDatabase.SaveChanges();
+                actionSuccessful = true;
+            }
+            return actionSuccessful;
         }
 
-        public Task<List<User>> GetAllUsers()
+        public async Task<List<User>> GetAllUsers()
         {
-            throw new NotImplementedException();
+            List<User> allUsersFromDatabase = _realDatabase.Users.ToList();
+            return allUsersFromDatabase; 
         }
 
         public Task<User> LogInUser(string password, string username)

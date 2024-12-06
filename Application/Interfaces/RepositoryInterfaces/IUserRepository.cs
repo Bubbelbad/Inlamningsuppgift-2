@@ -6,6 +6,6 @@ namespace Application.Interfaces.RepositoryInterfaces
         Task<User> AddUser(User user);
         Task<List<User>> GetAllUsers();
         Task<User> LogInUser(string username, string password);
-        Task<string> DeleteUser(Guid id);
+        Task<bool> DeleteUser(Guid id);
     }
 }
