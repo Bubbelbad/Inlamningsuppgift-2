@@ -8,7 +8,7 @@ namespace Application.Commands.AuthorCommands.DeleteAuthor
     public class DeleteAuthorCommandHandler(IAuthorRepository authorRepository, IMapper mapper) : IRequestHandler<DeleteAuthorCommand, OperationResult<bool>>
     {
         private readonly IAuthorRepository _authorRepository = authorRepository;
-        public IMapper _mapper = mapper; 
+        public IMapper _mapper = mapper;
 
 
         public async Task<OperationResult<bool>> Handle(DeleteAuthorCommand request, CancellationToken cancellationToken)

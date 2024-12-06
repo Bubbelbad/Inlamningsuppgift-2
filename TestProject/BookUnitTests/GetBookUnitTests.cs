@@ -11,7 +11,7 @@ namespace TestProject.BookUnitTests
     public class GetBookUnitTests
     {
         private GetBookByIdQueryHandler _handler;
-        private Mock<IBookRepository> _mockRepository; 
+        private Mock<IBookRepository> _mockRepository;
         private Mock<IMapper> _mockMapper;
 
         private static readonly Guid ExampleBookId = Guid.Parse("2bfaf5e9-d978-464c-b778-7567ef2dde29");

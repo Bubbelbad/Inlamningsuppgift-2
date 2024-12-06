@@ -9,7 +9,7 @@ namespace Application.Queries.UserQueries
     {
         private readonly IUserRepository _userRepository = userRepository;
         private readonly IMemoryCache _memoryCache = memoryCache;
-        private const string cacheKey = "allUsers"; 
+        private const string cacheKey = "allUsers";
 
         public async Task<List<User>> Handle(GetAllUsersQuery query, CancellationToken cancellationToken)
         {
@@ -22,7 +22,7 @@ namespace Application.Queries.UserQueries
                 if (!_memoryCache.TryGetValue(cacheKey, out List<User> allUsersFromDatabase))
                 {
                     allUsersFromDatabase = await _userRepository.GetAllUsers();
-                    _memoryCache.Set(cacheKey, allUsersFromDatabase, TimeSpan.FromMinutes(5)); 
+                    _memoryCache.Set(cacheKey, allUsersFromDatabase, TimeSpan.FromMinutes(5));
                 }
                 return allUsersFromDatabase;
             }

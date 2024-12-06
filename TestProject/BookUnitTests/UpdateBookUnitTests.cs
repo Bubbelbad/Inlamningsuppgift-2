@@ -13,7 +13,7 @@ namespace TestProject
     {
         private UpdateBookCommandHandler _handler;
         private Mock<IBookRepository> _mockRepository;
-        private Mock<IMapper> _mockMapper; 
+        private Mock<IMapper> _mockMapper;
 
         private static readonly Guid ExampleBookId = Guid.Parse("3e2e66cf-5ba6-4cd0-88a1-c37b71cca899");
         private static readonly Book ExampleBook = new(ExampleBookId, "Test", "Test", "Test");
@@ -23,7 +23,7 @@ namespace TestProject
         {
             _mockRepository = new Mock<IBookRepository>();
             _mockMapper = new Mock<IMapper>();
-            
+
             _mockRepository.Setup(repo => repo.UpdateBook(It.Is<Book>(obj => obj.Id == ExampleBookId)))
                            .ReturnsAsync(ExampleBook);
 

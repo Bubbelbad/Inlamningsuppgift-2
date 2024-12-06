@@ -12,7 +12,7 @@ namespace TestProject.AuthorUnitTests
     {
         private Mock<IAuthorRepository> _mockRepository;
         private GetAuthorByIdQueryHandler _handler;
-        private Mock<IMapper> _mockMapper; 
+        private Mock<IMapper> _mockMapper;
 
         private static Guid ExampleAuthorId = Guid.Parse("fc22325e-0fa3-4615-aa6c-c7fe459a2735");
         private static Author ExampleAuthor = new(ExampleAuthorId, "Test", "Author");
@@ -31,7 +31,7 @@ namespace TestProject.AuthorUnitTests
                            .ReturnsAsync((Author)null!);
 
             _mockMapper.Setup(Setup => Setup.Map<Author>(It.IsAny<Author>()))
-                       .Returns((Author author) => author); 
+                       .Returns((Author author) => author);
 
             _handler = new GetAuthorByIdQueryHandler(_mockRepository.Object, _mockMapper.Object);
         }

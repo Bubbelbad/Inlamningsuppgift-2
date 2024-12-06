@@ -11,7 +11,7 @@ namespace API.Controllers
     [ApiController]
     public class UserController(IMediator mediator, ILogger<UserController> logger) : ControllerBase
     {
-        private readonly IMediator _mediator = mediator; 
+        private readonly IMediator _mediator = mediator;
         private readonly ILogger<UserController> _logger = logger;
 
 

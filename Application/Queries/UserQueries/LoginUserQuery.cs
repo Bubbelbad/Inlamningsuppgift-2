@@ -6,6 +6,6 @@ namespace Application.Queries.UserQueries
 {
     public class LoginUserQuery(UserDto loginUser) : IRequest<string>
     {
-        public UserDto LoginUser { get; set; } = loginUser; 
+        public UserDto LoginUser { get; set; } = loginUser;
     }
 }

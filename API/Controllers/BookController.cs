@@ -38,7 +38,7 @@ namespace API.Controllers
                 }
 
                 _logger.LogError($"Could not fetch all books. Errors: {operationResult.ErrorMessage}");
-                return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage});
+                return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage });
             }
             catch (Exception ex)
             {
@@ -67,8 +67,8 @@ namespace API.Controllers
                 if (operationResult.IsSuccess)
                 {
                     _logger.LogInformation("Successfully retrieved Book with ID: {id}", bookId);
-                    return Ok(operationResult.Data); 
-                    
+                    return Ok(operationResult.Data);
+
                 }
                 _logger.LogWarning("Book with ID: {id} not found", bookId);
                 return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage });
@@ -100,7 +100,7 @@ namespace API.Controllers
                 if (operationResult.IsSuccess)
                 {
                     _logger.LogInformation("Book added successfully");
-                    return Ok(operationResult.Data); 
+                    return Ok(operationResult.Data);
                 }
 
                 return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage });
@@ -173,7 +173,7 @@ namespace API.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred while deleting Book at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
-                return BadRequest(ex.InnerException); 
+                return BadRequest(ex.InnerException);
             }
         }
     }

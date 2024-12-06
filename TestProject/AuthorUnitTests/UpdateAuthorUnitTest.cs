@@ -12,8 +12,8 @@ namespace TestProject.AuthorUnitTests
     public class UpdateAuthorUnitTest
     {
         private UpdateAuthorCommandHandler _handler;
-        private Mock<IAuthorRepository> _mockRepository; 
-        private Mock<IMapper> _mockMapper; 
+        private Mock<IAuthorRepository> _mockRepository;
+        private Mock<IMapper> _mockMapper;
 
         private static readonly Guid ExampleAuthorId = Guid.Parse("12345678-1234-1234-1234-1234567890ab");
         private static readonly AuthorDto ExampleAuthorDto = new(ExampleAuthorId, "Test", "Testsson");
@@ -32,7 +32,7 @@ namespace TestProject.AuthorUnitTests
                        .Returns((Author author) => new Author(ExampleAuthorId, author.FirstName, author.LastName));
 
 
-            _handler = new UpdateAuthorCommandHandler(_mockRepository.Object, _mockMapper.Object); 
+            _handler = new UpdateAuthorCommandHandler(_mockRepository.Object, _mockMapper.Object);
         }
 
         [Test]
@@ -54,7 +54,7 @@ namespace TestProject.AuthorUnitTests
         public async Task Handle_NullInput_ReturnsNull()
         {
             // Arrange
-            AuthorDto authorToTest = null!; 
+            AuthorDto authorToTest = null!;
             var command = new UpdateAuthorCommand(authorToTest);
 
             // Act
@@ -76,7 +76,7 @@ namespace TestProject.AuthorUnitTests
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            Assert.That(result.IsSuccess, Is.EqualTo(false)); 
+            Assert.That(result.IsSuccess, Is.EqualTo(false));
         }
     }
 }

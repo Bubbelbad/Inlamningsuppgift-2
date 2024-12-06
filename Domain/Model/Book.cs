@@ -2,7 +2,7 @@
 
 namespace Domain.Model
 {
-    public class Book (Guid id, string title, string author, string description)
+    public class Book(Guid id, string title, string author, string description)
     {
         [Required(ErrorMessage = "Id is required")]
         public Guid Id { get; set; } = id;

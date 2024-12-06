@@ -11,7 +11,7 @@ namespace TestProject.AuthorUnitTests
     {
         private DeleteAuthorCommandHandler _handler;
         private Mock<IAuthorRepository> _mockRepository;
-        private Mock<IMapper> _mockMapper; 
+        private Mock<IMapper> _mockMapper;
 
         private static readonly Guid ExampleAuthorId = Guid.Parse("d1e16526-228e-4989-af4e-ee9690da3d8a");
 

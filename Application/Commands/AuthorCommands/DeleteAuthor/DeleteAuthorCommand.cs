@@ -5,6 +5,6 @@ namespace Application.Commands.AuthorCommands.DeleteAuthor
 {
     public class DeleteAuthorCommand(Guid authorId) : IRequest<OperationResult<bool>>
     {
-        public Guid Id { get; set; } = authorId; 
+        public Guid Id { get; set; } = authorId;
     }
 }

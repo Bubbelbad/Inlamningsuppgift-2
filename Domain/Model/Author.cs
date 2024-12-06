@@ -2,7 +2,7 @@
 
 namespace Domain.Model
 {
-    public class Author (Guid id, string firstName, string lastName)
+    public class Author(Guid id, string firstName, string lastName)
     {
         [Required(ErrorMessage = "{0} is required")]
         public Guid Id { get; set; } = id;
@@ -13,6 +13,6 @@ namespace Domain.Model
 
         [Required(ErrorMessage = "{0} is required")]
         [StringLength(100, ErrorMessage = "Name cant be longer than 100 characters")]
-        public string LastName { get; set; } = lastName; 
+        public string LastName { get; set; } = lastName;
     }
 }

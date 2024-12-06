@@ -7,8 +7,8 @@ namespace Application.Commands.AddBook
 {
     public class AddBookCommandHandler(IBookRepository bookRepository, IMapper mapper) : IRequestHandler<AddBookCommand, OperationResult<Book>>
     {
-        private readonly IBookRepository _bookRepository = bookRepository; 
-        public IMapper _mapper = mapper; 
+        private readonly IBookRepository _bookRepository = bookRepository;
+        public IMapper _mapper = mapper;
 
         public async Task<OperationResult<Book>> Handle(AddBookCommand request, CancellationToken cancellationToken)
         {
@@ -24,7 +24,7 @@ namespace Application.Commands.AddBook
                 var bookToCreate = new Book(Guid.NewGuid(), request.NewBook.Title, request.NewBook.Author, request.NewBook.Description);
                 var createdBook = await _bookRepository.AddBook(bookToCreate);
                 var mappedBook = _mapper.Map<Book>(createdBook);
-                return OperationResult<Book>.Success(mappedBook); 
+                return OperationResult<Book>.Success(mappedBook);
             }
             catch
             {

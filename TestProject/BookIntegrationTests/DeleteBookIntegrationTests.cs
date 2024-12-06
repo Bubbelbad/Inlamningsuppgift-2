@@ -49,7 +49,7 @@ namespace TestProject.BookIntegrationTests
             var book = new Book(ExampleBookId, "Test", "Testsson", "An example book for Testing");
             _database.Books.Add(book);
             _database.SaveChanges();
-  
+
             // Initialize the handler with the actual repository and mapper
             _handler = new DeleteBookCommandHandler(_repository, _mapper);
         }

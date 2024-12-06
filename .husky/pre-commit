@@ -1,0 +1,73 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+## husky task runner examples -------------------
+## Note : for local installation use 'dotnet' prefix. e.g. 'dotnet husky'
+
+## run all tasks
+#husky run
+
+### run all tasks with group: 'group-name'
+#husky run --group group-name
+
+## run task with name: 'task-name'
+#husky run --name task-name
+
+## pass hook arguments to task
+#husky run --args "$1" "$2"
+
+## or put your custom commands -------------------
+#echo 'Husky.Net is awesome!'
+
+echo 'Welcome to pre-commit git hook with Husky.Net'
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+ 
+# Define color variables
+red='\033[0;31m'
+green='\033[0;32m'
+yellow='\033[0;33m'
+blue='\033[0;34m'
+no_color='\033[0m'
+ 
+# Define Unicode icons
+checkmark='✔'
+crossmark='✖'
+ 
+echo -e "${yellow}------PRE-COMMIT HOOK START------${no_color}"
+echo -e "${yellow}------RUNNING PRE COMMIT HOOK BY INFINET CODE------${no_color}"
+ 
+echo -e "${blue}------CHECK NR. 1------${no_color}"
+# Check if the code needs formatting
+echo -e "${yellow}------CODE FORMATTING CHECK------${no_color}"
+if ! dotnet format --verify-no-changes; then
+ echo -e "${red}------CODE NEEDS FORMATTING. RUNNING DOTNET FORMAT.....------${no_color}"
+ dotnet format
+ echo -e "${red}------CODE FORMATED, CHECK CHANGED FILES IN GIT CHANGES AND COMMIT AGAIN------${no_color}"
+ exit 1
+fi
+echo -e "${green}------CODE LOOKS GOOD ${checkmark} ${checkmark} ${checkmark} ------${no_color}"
+ 
+echo -e "${blue}------CHECK NR. 2------${no_color}"
+# Build the project
+echo -e "${yellow}------BUILD CHECK------${no_color}"
+if ! dotnet build --no-restore; then
+ echo -e "${red}------BUILD-FAILED ${crossmark} ${crossmark} ${crossmark} ------${no_color}"
+ echo -e "${red}------PRE-COMMIT HOOK CANCELED ${crossmark} ${crossmark} ${crossmark} ------${no_color}"
+ exit 1
+fi
+echo -e "${green}------BUILD SUCCESSFULL ${checkmark} ${checkmark} ${checkmark} ------${no_color}"
+ 
+echo -e "${blue}------CHECK NR. 3------${no_color}"
+# Test the project - to be implemented when test come
+echo -e "${yellow}------TEST CHECK------${no_color}"
+
+# if ! dotnet test --verbosity normal --no-restore; then
+#  echo -e "${red}------TEST-FAILED ${crossmark} ${crossmark} ${crossmark} ------${no_color}"
+#  echo -e "${red}------PRE-COMMIT HOOK CANCELED ${crossmark} ${crossmark} ${crossmark} ------${no_color}"
+#  exit 1
+# fi
+# echo -e "${green}------ALL TESTS PASSED ${checkmark} ${checkmark} ${checkmark} ------${no_color}"
+
+echo -e "${green}------PRE-COMMIT HOOK EXECUTED SUCCESSFULLY ${checkmark} ${checkmark} ${checkmark} ------${no_color}"
+echo -e "${green}------PRE-COMMIT HOOK END------${no_color}"

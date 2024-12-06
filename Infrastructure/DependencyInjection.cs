@@ -15,7 +15,7 @@ namespace Infrastructure
             services.AddDbContext<RealDatabase>(options =>
             {
                 options.UseSqlServer(connectionString);
-            }); 
+            });
 
             services.AddScoped<IAuthorRepository, AuthorRepository>();
             services.AddScoped<IBookRepository, BookRepository>();
