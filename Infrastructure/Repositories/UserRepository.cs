@@ -25,6 +25,18 @@ namespace Infrastructure.Repositories
             return user;
         }
 
+        public async Task<User> UpdateUser(User user)
+        {
+            User userToUpdate = _realDatabase.Users.FirstOrDefault(obj => obj.Id == user.Id);
+            if (userToUpdate is not null)
+            {
+                userToUpdate.UserName = user.UserName;
+                userToUpdate.Password = user.Password;
+                _realDatabase.SaveChanges();
+            }
+            return userToUpdate;
+        }
+
         public async Task<bool> DeleteUser(Guid id)
         {
             bool actionSuccessful = false;

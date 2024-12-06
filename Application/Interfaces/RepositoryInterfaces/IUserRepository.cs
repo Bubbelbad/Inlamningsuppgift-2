@@ -3,10 +3,11 @@ namespace Application.Interfaces.RepositoryInterfaces
 {
     public interface IUserRepository
     {
-        Task<User> AddUser(User user);
-        Task<User> GetUserById(Guid id);
         Task<List<User>> GetAllUsers();
+        Task<User> GetUserById(Guid id);
+        Task<User> AddUser(User user);
         Task<User> LogInUser(string username, string password);
+        Task<User> UpdateUser(User user);
         Task<bool> DeleteUser(Guid id);
     }
 }
