@@ -1,4 +1,6 @@
 ﻿using Application.Commands.UserCommands.AddUser;
+using Application.Commands.UserCommands.DeleteUser;
+using Application.Commands.UserCommands.UpdateUser;
 using Application.Dtos;
 using Application.Queries.UserQueries;
 using Application.Queries.UserQueries.GetUserById;
@@ -62,6 +64,31 @@ namespace API.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("Login")]
+        public async Task<IActionResult> Login([FromBody, Required] UserDto userWantingToLogIn)
+        {
+            _logger.LogInformation("Logging in User {username}", userWantingToLogIn.UserName);
+            if (userWantingToLogIn == null)
+            {
+                _logger.LogWarning("Invalid input data");
+                return BadRequest("Invalid input data.");
+            }
+
+            try
+            {
+                var loggedInUser = await _mediator.Send(new LoginUserQuery(userWantingToLogIn));
+                _logger.LogInformation("User {username} logged in successfully", loggedInUser);
+                return Ok(loggedInUser);
+            }
+
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while logging in User");
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
+        }
+
         [HttpPost]
         [Route("Register")]
         public async Task<IActionResult> Register([FromBody, Required] UserDto newUser)
@@ -87,27 +114,54 @@ namespace API.Controllers
             }
         }
 
-        [HttpPost]
-        [Route("Login")]
-        public async Task<IActionResult> Login([FromBody, Required] UserDto userWantingToLogIn)
+
+
+        [HttpPut]
+        [Route("Update")]
+        public async Task<IActionResult> Update([FromBody, Required] UpdateUserDto newUser)
         {
-            _logger.LogInformation("Logging in User {username}", userWantingToLogIn.UserName);
-            if (userWantingToLogIn == null)
+            _logger.LogInformation("Updating new User {username}", newUser.Username);
+            if (!ModelState.IsValid)
             {
                 _logger.LogWarning("Invalid input data");
-                return BadRequest("Invalid input data.");
+                return BadRequest(ModelState);
             }
 
             try
             {
-                var loggedInUser = await _mediator.Send(new LoginUserQuery(userWantingToLogIn));
-                _logger.LogInformation("User {username} logged in successfully", loggedInUser);
-                return Ok(loggedInUser);
+                var operationResult = await _mediator.Send(new UpdateUserCommand(newUser));
+                _logger.LogInformation("User {username} updated successfully", operationResult.Data.UserName);
+                return Ok(operationResult.Data);
             }
 
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while logging in User");
+                _logger.LogError(ex, "An error occurred while adding new User");
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
+        }
+
+        [HttpDelete]
+        [Route("DeleteUser{id}")]
+        public async Task<IActionResult> DeleteUser([Required] Guid id)
+        {
+            _logger.LogInformation("Deleting user with ID: {id}", id);
+            if (id == Guid.Empty)
+            {
+                _logger.LogWarning("Invalid input data");
+                return BadRequest("Guid can not be empty");
+            }
+
+            try
+            {
+                var operationResult = await _mediator.Send(new DeleteUserCommand(id));
+                _logger.LogInformation("User deleted successfully");
+                return Ok(operationResult.Data);
+            }
+
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while adding new User");
                 return StatusCode(500, "An error occurred while processing your request.");
             }
         }
