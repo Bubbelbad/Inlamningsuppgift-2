@@ -37,7 +37,6 @@ namespace TestProject.UserUnitTests
         public async Task Handle_ValidInput_ReturnsUser()
         {
             // Arrange
-            Guid validUserId = new Guid("59ca7b98-b918-4ff1-a7f8-83d2777021e9");
             UserDto userToTest = new() { UserName = "Test", Password = "Test" };
 
             // Act

@@ -14,8 +14,8 @@ namespace TestProject.AuthorUnitTests
         private GetAuthorByIdQueryHandler _handler;
         private Mock<IMapper> _mockMapper;
 
-        private static Guid ExampleAuthorId = Guid.Parse("fc22325e-0fa3-4615-aa6c-c7fe459a2735");
-        private static Author ExampleAuthor = new(ExampleAuthorId, "Test", "Author");
+        private static readonly Guid ExampleAuthorId = Guid.Parse("fc22325e-0fa3-4615-aa6c-c7fe459a2735");
+        private static readonly Author ExampleAuthor = new(ExampleAuthorId, "Test", "Author");
 
         [SetUp]
         public void Setup()
@@ -46,7 +46,7 @@ namespace TestProject.AuthorUnitTests
             var result = await _handler.Handle(query, CancellationToken.None);
 
             // Assert
-            Assert.NotNull(result);
+            Assert.That(result, Is.Not.Null);
             Assert.That(result.Data.Id, Is.EqualTo(ExampleAuthorId));
         }
 
@@ -61,7 +61,7 @@ namespace TestProject.AuthorUnitTests
             var result = await _handler.Handle(query, CancellationToken.None);
 
             // Assert
-            Assert.IsNull(result.Data);
+            Assert.That(result.Data, Is.Null);
         }
     }
 }

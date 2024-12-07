@@ -1,11 +1,11 @@
-﻿using Application.Commands.AddAuthorCommands.AddAuthor;
+﻿using Application.Commands.AuthorCommands.AddAuthor;
 using Application.Dtos;
 using Application.Interfaces.RepositoryInterfaces;
 using AutoMapper;
 using Domain.Model;
 using Moq;
 
-namespace TestProject
+namespace TestProject.AuthorUnitTests
 {
     [TestFixture]
     [Category("Author/UnitTests/AddAuthor")]

@@ -2,7 +2,7 @@
 using Domain.Model;
 using MediatR;
 
-namespace Application.Commands.AddAuthorCommands.AddAuthor
+namespace Application.Commands.AuthorCommands.AddAuthor
 {
     public class AddAuthorCommand(AddAuthorDto author) : IRequest<OperationResult<Author>>
     {

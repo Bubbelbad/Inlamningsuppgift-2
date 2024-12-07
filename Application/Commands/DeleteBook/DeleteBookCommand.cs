@@ -5,6 +5,6 @@ namespace Application.Commands.DeleteBook
 {
     public class DeleteBookCommand(Guid id) : IRequest<OperationResult<bool>>
     {
-        public Guid bookIdToDelete { get; } = id;
+        public Guid BookIdToDelete { get; } = id;
     }
 }

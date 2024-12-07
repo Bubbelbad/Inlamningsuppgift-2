@@ -19,7 +19,7 @@ namespace Application.Queries.UserQueries
             var user = await _userRepository.LogInUser(request.LoginUser.UserName, request.LoginUser.Password);
             //var user = _database.Users.FirstOrDefault(user => user.UserName == request.LoginUser.UserName && user.Password == request.LoginUser.Password);
 
-            if (user == null)
+            if (user is null)
             {
                 throw new UnauthorizedAccessException("Invalid username or password");
             }
