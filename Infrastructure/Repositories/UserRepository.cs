@@ -18,11 +18,11 @@ namespace Infrastructure.Repositories
             return user;
         }
 
-        public async Task<User> AddUser(User user)
+        public Task<User> AddUser(User user)
         {
             _realDatabase.Users.Add(user);
             _realDatabase.SaveChanges();
-            return user;
+            return Task.FromResult(user);
         }
 
         public async Task<User> UpdateUser(User user)
@@ -40,7 +40,7 @@ namespace Infrastructure.Repositories
         public async Task<bool> DeleteUser(Guid id)
         {
             bool actionSuccessful = false;
-            User userToDelete = _realDatabase.Users.FirstOrDefault(obj => obj.Id == id);
+            User? userToDelete = _realDatabase.Users.FirstOrDefault(obj => obj.Id == id);
             if (userToDelete is not null)
             {
                 _realDatabase.Users.Remove(userToDelete);
@@ -54,10 +54,6 @@ namespace Infrastructure.Repositories
         public Task<User> LogInUser(string password, string username)
         {
             User user = _realDatabase.Users.FirstOrDefault(user => user.UserName == username && user.Password == password);
-            if (user is not null)
-            {
-                return Task.FromResult(user);
-            }
             return Task.FromResult(user);
         }
     }

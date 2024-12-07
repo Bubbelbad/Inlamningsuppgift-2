@@ -1,4 +1,4 @@
-﻿using Application.Commands.AddAuthorCommands.AddAuthor;
+﻿using Application.Commands.AuthorCommands.AddAuthor;
 using Application.Commands.AuthorCommands.DeleteAuthor;
 using Application.Commands.AuthorCommands.UpdateAuthor;
 using Application.Dtos;
@@ -31,7 +31,7 @@ namespace API.Controllers
 
             if (!ModelState.IsValid)
             {
-                List<string> errors = new List<string>();
+                var errors = new List<string>();
                 foreach (var value in ModelState.Values)
                 {
                     foreach (var error in value.Errors)

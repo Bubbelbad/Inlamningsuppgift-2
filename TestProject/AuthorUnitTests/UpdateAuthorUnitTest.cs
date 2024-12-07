@@ -45,9 +45,12 @@ namespace TestProject.AuthorUnitTests
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            Assert.That(result, Is.Not.Null);
-            Assert.That(result.Data.FirstName, Is.EqualTo(ExampleAuthorDto.FirstName));
-            Assert.That(result.Data.LastName, Is.EqualTo(ExampleAuthorDto.LastName));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result, Is.Not.Null);
+                Assert.That(result.Data.FirstName, Is.EqualTo(ExampleAuthorDto.FirstName));
+                Assert.That(result.Data.LastName, Is.EqualTo(ExampleAuthorDto.LastName));
+            });
         }
 
         [Test]

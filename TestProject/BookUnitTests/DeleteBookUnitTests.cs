@@ -3,7 +3,7 @@ using Application.Interfaces.RepositoryInterfaces;
 using AutoMapper;
 using Moq;
 
-namespace TestProject
+namespace TestProject.BookUnitTests
 {
     [TestFixture]
     [Category("Book/UnitTests/DeleteBook")]

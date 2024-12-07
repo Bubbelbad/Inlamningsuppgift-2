@@ -47,9 +47,12 @@ namespace TestProject.BookUnitTests
             var result = await _handler.Handle(query, CancellationToken.None);
 
             // Assert
-            Assert.NotNull(result);
-            Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.Data.Id, Is.EqualTo(ExampleBookId));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result, Is.Not.Null);
+                Assert.That(result.Data.Id, Is.EqualTo(ExampleBookId));
+            });
+
         }
 
         [Test]

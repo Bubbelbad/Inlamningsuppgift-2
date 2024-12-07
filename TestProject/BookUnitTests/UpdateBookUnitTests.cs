@@ -5,7 +5,7 @@ using AutoMapper;
 using Domain.Model;
 using Moq;
 
-namespace TestProject
+namespace TestProject.BookUnitTests
 {
     [TestFixture]
     [Category("Book/UnitTests/UpdateBook")]

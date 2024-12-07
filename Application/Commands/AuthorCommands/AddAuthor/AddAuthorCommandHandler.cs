@@ -3,7 +3,7 @@ using AutoMapper;
 using Domain.Model;
 using MediatR;
 
-namespace Application.Commands.AddAuthorCommands.AddAuthor
+namespace Application.Commands.AuthorCommands.AddAuthor
 {
     public class AddAuthorCommandHandler(IAuthorRepository authorRepository, IMapper mapper) : IRequestHandler<AddAuthorCommand, OperationResult<Author>>
     {
