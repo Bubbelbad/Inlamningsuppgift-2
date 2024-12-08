@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Application.Queries.UserQueries.Helpers;
+using Application.Interfaces.ServiceInterfaces;
+using Application.Services.PasswordEncryption;
 namespace Application
 {
     public static class DependencyInjection
@@ -10,6 +12,7 @@ namespace Application
             services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(assembly));
             services.AddAutoMapper(assembly); // Specify the assembly to resolve ambiguity
             services.AddScoped<TokenHelper>();
+            services.AddScoped<IPasswordEncryptionService, PasswordEncryptionService>();
 
             return services;
 

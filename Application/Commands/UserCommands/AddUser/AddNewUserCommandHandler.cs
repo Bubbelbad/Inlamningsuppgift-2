@@ -1,14 +1,16 @@
 ﻿using Application.Interfaces.RepositoryInterfaces;
+using Application.Interfaces.ServiceInterfaces;
 using AutoMapper;
 using Domain.Model;
 using MediatR;
 
 namespace Application.Commands.UserCommands.AddUser
 {
-    public class AddNewUserCommandHandler(IUserRepository userRepository, IMapper mapper) : IRequestHandler<AddNewUserCommand, OperationResult<User>>
+    public class AddNewUserCommandHandler(IUserRepository userRepository, IMapper mapper, IPasswordEncryptionService service) : IRequestHandler<AddNewUserCommand, OperationResult<User>>
     {
         private readonly IUserRepository _userReposiory = userRepository;
         private readonly IMapper _mapper = mapper;
+        private IPasswordEncryptionService _encryptionService = service; 
 
         public async Task<OperationResult<User>> Handle(AddNewUserCommand request, CancellationToken cancellationToken)
         {
@@ -23,7 +25,7 @@ namespace Application.Commands.UserCommands.AddUser
                 {
                     Id = Guid.NewGuid(),
                     UserName = request.NewUser.UserName,
-                    Password = request.NewUser.Password
+                    Password = _encryptionService.HashPassword(request.NewUser.Password)
                 };
 
                 var createdUser = await _userReposiory.AddUser(userToCreate);

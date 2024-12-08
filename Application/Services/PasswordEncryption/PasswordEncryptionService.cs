@@ -1,7 +1,9 @@
 ﻿
+using Application.Interfaces.ServiceInterfaces;
+
 namespace Application.Services.PasswordEncryption
 {
-    public class PasswordEncryptionService
+    public class PasswordEncryptionService : IPasswordEncryptionService
     {
         public string HashPassword(string password)
         {
