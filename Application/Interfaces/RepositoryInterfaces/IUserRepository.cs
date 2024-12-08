@@ -5,6 +5,7 @@ namespace Application.Interfaces.RepositoryInterfaces
     {
         Task<List<User>> GetAllUsers();
         Task<User> GetUserById(Guid id);
+        Task<User> GetUserByUsername(string username);
         Task<User> AddUser(User user);
         Task<User> LogInUser(string username, string password);
         Task<User> UpdateUser(User user);

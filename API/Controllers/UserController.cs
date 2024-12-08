@@ -4,6 +4,7 @@ using Application.Commands.UserCommands.UpdateUser;
 using Application.Dtos;
 using Application.Queries.UserQueries;
 using Application.Queries.UserQueries.GetUserById;
+using Application.Queries.UserQueries.GetUserByUsername;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
@@ -54,6 +55,32 @@ namespace API.Controllers
             {
                 var operationResult = await _mediator.Send(new GetUserByIdQuery(id));
                 _logger.LogInformation("Successfully retrieved all Users");
+                return Ok(operationResult.Data);
+            }
+
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while fetching all Users at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
+        }
+
+        [HttpGet]
+        [Route("GetUserByUsername")]
+        [ResponseCache(CacheProfileName = "DefaultCache")]
+        public async Task<IActionResult> GetUserByUsername(string username)
+        {
+            if (username == string.Empty)
+            {
+                _logger.LogWarning("Invalid username, field cannot be empty");
+                return BadRequest("Invalid input data.");
+            }
+
+            _logger.LogInformation("Fetching User at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
+            try
+            {
+                var operationResult = await _mediator.Send(new GetUserByUsernameQuery(username));
+                _logger.LogInformation("Successfully retrieved User");
                 return Ok(operationResult.Data);
             }
 
