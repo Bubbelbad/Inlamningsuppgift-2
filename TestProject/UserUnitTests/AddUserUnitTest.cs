@@ -4,6 +4,7 @@ using Application.Dtos;
 using Domain.Model;
 using Moq;
 using AutoMapper;
+using Application.Interfaces.ServiceInterfaces;
 
 namespace TestProject.UserUnitTests
 {
@@ -12,6 +13,7 @@ namespace TestProject.UserUnitTests
     public class AddUserUnitTest
     {
         private Mock<IUserRepository> _mockRepository;
+        private Mock<IPasswordEncryptionService> _mockEncryption;
         private AddNewUserCommandHandler _handler;
         private Mock<IMapper> _mockMapper;
 
@@ -20,6 +22,7 @@ namespace TestProject.UserUnitTests
         {
             _mockRepository = new Mock<IUserRepository>();
             _mockMapper = new Mock<IMapper>();
+            _mockEncryption = new Mock<IPasswordEncryptionService>();
 
             var validUserId = new Guid("59ca7b98-b918-4ff1-a7f8-83d2777021e9");
             User user = new() { Id = validUserId, UserName = "Test", Password = "Test" };
@@ -30,7 +33,7 @@ namespace TestProject.UserUnitTests
             _mockRepository.Setup(repo => repo.AddUser(It.Is<User>(user => user.Id != validUserId)))
                            .ReturnsAsync((User)null!);
 
-            _handler = new AddNewUserCommandHandler(_mockRepository.Object, _mockMapper.Object);
+            _handler = new AddNewUserCommandHandler(_mockRepository.Object, _mockMapper.Object, _mockEncryption.Object);
         }
 
         [Test]

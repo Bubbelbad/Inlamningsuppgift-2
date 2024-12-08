@@ -93,10 +93,10 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("Login")]
-        public async Task<IActionResult> Login([FromBody, Required] UserDto userWantingToLogIn)
+        public async Task<IActionResult> Login([Required] string username, string password)
         {
-            _logger.LogInformation("Logging in User {username}", userWantingToLogIn.UserName);
-            if (userWantingToLogIn == null)
+            _logger.LogInformation("Logging in User {username}", username);
+            if (username == null)
             {
                 _logger.LogWarning("Invalid input data");
                 return BadRequest("Invalid input data.");
@@ -104,7 +104,7 @@ namespace API.Controllers
 
             try
             {
-                var loggedInUser = await _mediator.Send(new LoginUserQuery(userWantingToLogIn));
+                var loggedInUser = await _mediator.Send(new LoginUserQuery(username, password));
                 _logger.LogInformation("User {username} logged in successfully", loggedInUser);
                 return Ok(loggedInUser);
             }
