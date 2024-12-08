@@ -18,6 +18,12 @@ namespace Infrastructure.Repositories
             return user;
         }
 
+        public async Task<User> GetUserByUsername(string username)
+        {
+            User user = _realDatabase.Users.FirstOrDefault(user => user.UserName == username);
+            return user;
+        }
+
         public Task<User> AddUser(User user)
         {
             _realDatabase.Users.Add(user);
