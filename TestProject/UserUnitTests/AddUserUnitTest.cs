@@ -1,5 +1,5 @@
 ﻿using Application.Interfaces.RepositoryInterfaces;
-using Application.Commands.UserCommands.AddUser;
+using Application.Commands.UserCommands.Register;
 using Application.Dtos;
 using Domain.Model;
 using Moq;
@@ -9,12 +9,12 @@ using Application.Interfaces.ServiceInterfaces;
 namespace TestProject.UserUnitTests
 {
     [TestFixture]
-    [Category("User/UnitTests/AddUser")]
+    [Category("User/UnitTests/Register")]
     public class AddUserUnitTest
     {
         private Mock<IUserRepository> _mockRepository;
         private Mock<IPasswordEncryptionService> _mockEncryption;
-        private AddNewUserCommandHandler _handler;
+        private RegisterCommandHandler _handler;
         private Mock<IMapper> _mockMapper;
 
         [SetUp]
@@ -33,7 +33,7 @@ namespace TestProject.UserUnitTests
             _mockRepository.Setup(repo => repo.AddUser(It.Is<User>(user => user.Id != validUserId)))
                            .ReturnsAsync((User)null!);
 
-            _handler = new AddNewUserCommandHandler(_mockRepository.Object, _mockMapper.Object, _mockEncryption.Object);
+            _handler = new RegisterCommandHandler(_mockRepository.Object, _mockMapper.Object, _mockEncryption.Object);
         }
 
         [Test]
@@ -43,7 +43,7 @@ namespace TestProject.UserUnitTests
             UserDto userToTest = new() { UserName = "Test", Password = "Test" };
 
             // Act
-            var command = new AddNewUserCommand(userToTest);
+            var command = new RegisterCommand(userToTest);
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert

@@ -4,15 +4,15 @@ using AutoMapper;
 using Domain.Model;
 using MediatR;
 
-namespace Application.Commands.UserCommands.AddUser
+namespace Application.Commands.UserCommands.Register
 {
-    public class AddNewUserCommandHandler(IUserRepository userRepository, IMapper mapper, IPasswordEncryptionService service) : IRequestHandler<AddNewUserCommand, OperationResult<User>>
+    public class RegisterCommandHandler(IUserRepository userRepository, IMapper mapper, IPasswordEncryptionService service) : IRequestHandler<RegisterCommand, OperationResult<User>>
     {
         private readonly IUserRepository _userReposiory = userRepository;
         private readonly IMapper _mapper = mapper;
-        private IPasswordEncryptionService _encryptionService = service; 
+        private IPasswordEncryptionService _encryptionService = service;
 
-        public async Task<OperationResult<User>> Handle(AddNewUserCommand request, CancellationToken cancellationToken)
+        public async Task<OperationResult<User>> Handle(RegisterCommand request, CancellationToken cancellationToken)
         {
             if (request == null)
             {

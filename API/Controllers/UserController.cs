@@ -1,4 +1,4 @@
-﻿using Application.Commands.UserCommands.AddUser;
+﻿using Application.Commands.UserCommands.Register;
 using Application.Commands.UserCommands.DeleteUser;
 using Application.Commands.UserCommands.UpdateUser;
 using Application.Dtos;
@@ -129,7 +129,7 @@ namespace API.Controllers
 
             try
             {
-                var operationResult = await _mediator.Send(new AddNewUserCommand(newUser));
+                var operationResult = await _mediator.Send(new RegisterCommand(newUser));
                 _logger.LogInformation("User {username} added successfully", operationResult.Data.UserName);
                 return Ok(operationResult.Data);
             }
