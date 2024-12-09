@@ -22,7 +22,7 @@ namespace Application.Queries.UserQueries
                 var user = await _userRepository.GetUserByUsername(request.Username);
                 if (_encryptionService.VerifyPassword(request.password, user.Password))
                 {
-                       string token = _tokenHelper.GenerateTwtToken(user);
+                    string token = _tokenHelper.GenerateTwtToken(user);
                     return token;
                 }
                 else
