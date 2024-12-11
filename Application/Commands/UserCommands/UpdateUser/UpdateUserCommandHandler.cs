@@ -22,9 +22,10 @@ namespace Application.Commands.UserCommands.UpdateUser
             {
                 User userToUpdate = new()
                 {
-                    Id = request.UserToUpdate.Id,
-                    UserName = request.UserToUpdate.Username,
-                    Password = request.UserToUpdate.Password
+                    Id = request.UserToUpdate.Id.ToString(),
+                    UserName = request.UserToUpdate.UserName,
+                    // Do I need to hash the password here? Probably.
+                    PasswordHash = request.UserToUpdate.PasswordHash
                 };
 
                 var updatedUser = await _userRepository.UpdateUser(userToUpdate);

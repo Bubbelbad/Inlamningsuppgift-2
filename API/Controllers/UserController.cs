@@ -147,7 +147,7 @@ namespace API.Controllers
         [Route("Update")]
         public async Task<IActionResult> Update([FromBody, Required] UpdateUserDto newUser)
         {
-            _logger.LogInformation("Updating new User {username}", newUser.Username);
+            _logger.LogInformation("Updating new User {username}", newUser.UserName);
             if (!ModelState.IsValid)
             {
                 _logger.LogWarning("Invalid input data");

@@ -14,7 +14,7 @@ namespace Infrastructure.Repositories
         }
         public async Task<User> GetUserById(Guid id)
         {
-            User user = _realDatabase.Users.FirstOrDefault(user => user.Id == id);
+            User user = _realDatabase.Users.FirstOrDefault(user => user.Id == id.ToString());
             return user;
         }
 
@@ -37,7 +37,7 @@ namespace Infrastructure.Repositories
             if (userToUpdate is not null)
             {
                 userToUpdate.UserName = user.UserName;
-                userToUpdate.Password = user.Password;
+                userToUpdate.PasswordHash = user.PasswordHash;
                 _realDatabase.SaveChanges();
             }
             return userToUpdate;
@@ -46,7 +46,7 @@ namespace Infrastructure.Repositories
         public async Task<bool> DeleteUser(Guid id)
         {
             bool actionSuccessful = false;
-            User? userToDelete = _realDatabase.Users.FirstOrDefault(obj => obj.Id == id);
+            User? userToDelete = _realDatabase.Users.FirstOrDefault(obj => obj.Id == id.ToString());
             if (userToDelete is not null)
             {
                 _realDatabase.Users.Remove(userToDelete);
@@ -59,7 +59,7 @@ namespace Infrastructure.Repositories
 
         public Task<User> LogInUser(string password, string username)
         {
-            User user = _realDatabase.Users.FirstOrDefault(user => user.UserName == username && user.Password == password);
+            User user = _realDatabase.Users.FirstOrDefault(user => user.UserName == username && user.PasswordHash == password);
             return Task.FromResult(user);
         }
     }

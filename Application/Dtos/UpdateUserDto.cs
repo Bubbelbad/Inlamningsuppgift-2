@@ -2,10 +2,12 @@
 
 namespace Application.Dtos
 {
-    public class UpdateUserDto(Guid id, string username, string password)
+    public class UpdateUserDto
     {
-        public Guid Id { get; set; } = id;
-        public string Username { get; set; } = username;
-        public string Password { get; set; } = password;
+        public UpdateUserDto() { }
+
+        public string Id { get; set; }
+        public string UserName { get; set; }
+        public string PasswordHash { get; set; }
     }
 }

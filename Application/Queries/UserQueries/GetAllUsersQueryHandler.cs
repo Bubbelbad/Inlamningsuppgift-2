@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.RepositoryInterfaces;
+﻿using Application.Dtos;
+using Application.Interfaces.RepositoryInterfaces;
 using AutoMapper;
 using Domain.Model;
 using MediatR;
@@ -6,14 +7,14 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace Application.Queries.UserQueries
 {
-    internal sealed class GetAllUsersQueryHandler(IUserRepository userRepository, IMemoryCache memoryCache, IMapper mapper) : IRequestHandler<GetAllUsersQuery, OperationResult<List<User>>>
+    internal sealed class GetAllUsersQueryHandler(IUserRepository userRepository, IMemoryCache memoryCache, IMapper mapper) : IRequestHandler<GetAllUsersQuery, OperationResult<List<UpdateUserDto>>>
     {
         private readonly IUserRepository _userRepository = userRepository;
         private readonly IMemoryCache _memoryCache = memoryCache;
         private readonly IMapper _mapper = mapper;
         private const string cacheKey = "allUsers";
 
-        public async Task<OperationResult<List<User>>> Handle(GetAllUsersQuery query, CancellationToken cancellationToken)
+        public async Task<OperationResult<List<UpdateUserDto>>> Handle(GetAllUsersQuery query, CancellationToken cancellationToken)
         {
             if (query == null)
             {
@@ -26,8 +27,9 @@ namespace Application.Queries.UserQueries
                     allUsersFromDatabase = await _userRepository.GetAllUsers();
                     _memoryCache.Set(cacheKey, allUsersFromDatabase, TimeSpan.FromMinutes(5));
                 }
-                var mappedUsersFromDatabase = _mapper.Map<List<User>>(allUsersFromDatabase);
-                return OperationResult<List<User>>.Success(allUsersFromDatabase);
+
+                var mappedUsersFromDatabase = _mapper.Map<List<UpdateUserDto>>(allUsersFromDatabase);
+                return OperationResult<List<UpdateUserDto>>.Success(mappedUsersFromDatabase);
             }
             catch (Exception ex)
             {

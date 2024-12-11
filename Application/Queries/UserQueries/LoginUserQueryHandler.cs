@@ -20,7 +20,7 @@ namespace Application.Queries.UserQueries
             try
             {
                 var user = await _userRepository.GetUserByUsername(request.Username);
-                if (_encryptionService.VerifyPassword(request.password, user.Password))
+                if (_encryptionService.VerifyPassword(request.password, user.PasswordHash))
                 {
                     string token = _tokenHelper.GenerateTwtToken(user);
                     return token;
