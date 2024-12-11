@@ -1,4 +1,4 @@
-﻿using Application.Commands.UpdateBook;
+﻿using Application.Commands.BookCommands.UpdateBook;
 using Application.Interfaces.RepositoryInterfaces;
 using AutoMapper;
 using Domain.Model;

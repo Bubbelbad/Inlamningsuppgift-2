@@ -1,4 +1,4 @@
-﻿using Application.Commands.UpdateBook;
+﻿using Application.Commands.BookCommands.UpdateBook;
 using Application.Dtos;
 using Application.Interfaces.RepositoryInterfaces;
 using AutoMapper;

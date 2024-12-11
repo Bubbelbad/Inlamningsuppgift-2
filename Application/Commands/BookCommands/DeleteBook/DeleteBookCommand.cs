@@ -1,7 +1,7 @@
 ﻿using Domain.Model;
 using MediatR;
 
-namespace Application.Commands.DeleteBook
+namespace Application.Commands.BookCommands.DeleteBook
 {
     public class DeleteBookCommand(Guid id) : IRequest<OperationResult<bool>>
     {

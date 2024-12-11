@@ -2,7 +2,7 @@
 using Domain.Model;
 using MediatR;
 
-namespace Application.Commands.UpdateBook
+namespace Application.Commands.BookCommands.UpdateBook
 {
     public class UpdateBookCommand(BookDto bookToUpdate) : IRequest<OperationResult<Book>>
     {

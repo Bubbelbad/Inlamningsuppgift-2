@@ -4,7 +4,7 @@ using Domain.Model;
 using MediatR;
 
 
-namespace Application.Commands.DeleteBook
+namespace Application.Commands.BookCommands.DeleteBook
 {
     public class DeleteBookCommandHandler(IBookRepository bookRepository, IMapper mapper) : IRequestHandler<DeleteBookCommand, OperationResult<bool>>
     {

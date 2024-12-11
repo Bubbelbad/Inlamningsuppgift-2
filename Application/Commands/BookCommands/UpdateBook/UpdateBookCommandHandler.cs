@@ -3,7 +3,7 @@ using AutoMapper;
 using Domain.Model;
 using MediatR;
 
-namespace Application.Commands.UpdateBook
+namespace Application.Commands.BookCommands.UpdateBook
 {
     public class UpdateBookCommandHandler(IBookRepository bookRepository, IMapper mapper) : IRequestHandler<UpdateBookCommand, OperationResult<Book>>
     {
