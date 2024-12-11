@@ -1,6 +1,6 @@
-﻿using Application.Commands.AddBook;
-using Application.Commands.DeleteBook;
-using Application.Commands.UpdateBook;
+﻿using Application.Commands.BookCommands.AddBook;
+using Application.Commands.BookCommands.DeleteBook;
+using Application.Commands.BookCommands.UpdateBook;
 using Application.Queries.BookQueries;
 using Application.Dtos;
 using MediatR;

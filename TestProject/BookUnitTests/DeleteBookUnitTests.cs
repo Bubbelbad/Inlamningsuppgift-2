@@ -1,4 +1,4 @@
-﻿using Application.Commands.DeleteBook;
+﻿using Application.Commands.BookCommands.DeleteBook;
 using Application.Interfaces.RepositoryInterfaces;
 using AutoMapper;
 using Moq;

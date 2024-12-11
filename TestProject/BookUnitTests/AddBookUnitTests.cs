@@ -1,4 +1,4 @@
-﻿using Application.Commands.AddBook;
+﻿using Application.Commands.BookCommands.AddBook;
 using Application.Dtos;
 using Application.Interfaces.RepositoryInterfaces;
 using AutoMapper;

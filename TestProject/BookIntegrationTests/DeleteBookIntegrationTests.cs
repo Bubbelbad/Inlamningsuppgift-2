@@ -1,5 +1,4 @@
-﻿using Application.Commands.AddBook;
-using Application.Commands.DeleteBook;
+﻿using Application.Commands.BookCommands.DeleteBook;
 using Application.Dtos;
 using Application.Interfaces.RepositoryInterfaces;
 using AutoMapper;
@@ -7,11 +6,7 @@ using Domain.Model;
 using Infrastructure.Database;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace TestProject.BookIntegrationTests
 {

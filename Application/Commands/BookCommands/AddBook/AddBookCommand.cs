@@ -2,7 +2,7 @@
 using Domain.Model;
 using MediatR;
 
-namespace Application.Commands.AddBook
+namespace Application.Commands.BookCommands.AddBook
 {
     public class AddBookCommand(AddBookDto bookToCreate) : IRequest<OperationResult<Book>>
     {
