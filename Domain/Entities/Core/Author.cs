@@ -15,8 +15,8 @@ namespace Domain.Entities.Core
         [Required(ErrorMessage = "{0} is required")]
         [StringLength(100, ErrorMessage = "Name cant be longer than 100 characters")]
         public string LastName { get; set; }
-        public DateTime DateOfBirth { get; set; }
-        public string Biography { get; set; }
+        public DateTime? DateOfBirth { get; set; }
+        public string? Biography { get; set; }
 
         // Navigation property
         public ICollection<Book> Books { get; set; }

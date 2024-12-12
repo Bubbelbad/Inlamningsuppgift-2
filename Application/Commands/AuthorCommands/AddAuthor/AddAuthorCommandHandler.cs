@@ -25,7 +25,10 @@ namespace Application.Commands.AuthorCommands.AddAuthor
                     AuthorId = Guid.NewGuid(),
                     FirstName = request.NewAuthor.FirstName,
                     LastName = request.NewAuthor.LastName,
+                    DateOfBirth = request.NewAuthor.DateOfBirth,
+                    Biography = request.NewAuthor.Biography
                 };
+
                 var createdAutor = await _authorRepository.AddAuthor(authorToCreate);
                 var mappedAuthor = _mapper.Map<Author>(createdAutor);
                 return OperationResult<Author>.Success(mappedAuthor);

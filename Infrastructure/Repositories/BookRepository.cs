@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces.RepositoryInterfaces;
 using Domain.Entities.Core;
 using Infrastructure.Database;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
@@ -16,7 +17,9 @@ namespace Infrastructure.Repositories
 
         public async Task<Book> GetBookById(Guid id)
         {
-            Book book = _realDatabase.Books.FirstOrDefault(book => book.BookId == id);
+            Book book = _realDatabase.Books
+                .Include(b => b.Author)
+                .FirstOrDefault(book => book.BookId == id);
             return book;
         }
 

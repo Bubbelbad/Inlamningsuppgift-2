@@ -9,7 +9,7 @@ namespace Domain.Entities.Locations
         public int BranchId { get; set; }
         public string Name { get; set; }
         public string Location { get; set; }
-        public string ContactInfo { get; set; }
+        public string? ContactInfo { get; set; }
 
         // Navigation property
         public ICollection<BookCopy> BookCopies { get; set; }

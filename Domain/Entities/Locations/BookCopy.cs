@@ -10,7 +10,7 @@ namespace Domain.Entities.Locations
         public Guid CopyId { get; set; }
         public Guid BookId { get; set; }
         public int BranchId { get; set; }
-        public string Status { get; set; }
+        public string? Status { get; set; }
 
         // Navigation properties
         public Book Book { get; set; }

@@ -14,11 +14,11 @@ namespace Domain.Entities.Core
         [StringLength(100, ErrorMessage = "Title cant be longer than 150 characters")]
         public string Title { get; set; }
 
-        public DateTime PublicationDate { get; set; }
-        public Guid AuthorId { get; set; }
-        public string Genre { get; set; }
-        public string Description { get; set; }
-        public int PublisherId { get; set; }
+        public DateTime? PublicationDate { get; set; }
+        public Guid? AuthorId { get; set; }
+        public string? Genre { get; set; }
+        public string? Description { get; set; }
+        public int? PublisherId { get; set; }
 
 
         // Navigation properties

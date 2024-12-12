@@ -104,7 +104,7 @@ namespace API.Controllers
         [SwaggerOperation(Description = "Adds a new AuthorId to library")]
         [SwaggerResponse(200, "Successfully added AuthorId.")]
         [SwaggerResponse(400, "Invalid input data")]
-        public async Task<IActionResult> AddAuthor([FromBody, Required] AddAuthorDto authorToAdd)
+        public async Task<IActionResult> AddAuthor([FromBody] AddAuthorDto authorToAdd)
         {
             if (!ModelState.IsValid)
             {
