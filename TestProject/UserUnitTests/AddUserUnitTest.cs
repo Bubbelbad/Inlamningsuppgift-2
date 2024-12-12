@@ -24,8 +24,8 @@ namespace TestProject.UserUnitTests
             _mockMapper = new Mock<IMapper>();
             _mockEncryption = new Mock<IPasswordEncryptionService>();
 
-            var validUserId = new Guid("59ca7b98-b918-4ff1-a7f8-83d2777021e9");
-            User user = new() { Id = validUserId, UserName = "Test", Password = "Test" };
+            var validUserId = new Guid("59ca7b98-b918-4ff1-a7f8-83d2777021e9").ToString();
+            User user = new() { Id = validUserId, UserName = "Test", PasswordHash = "Test" };
 
             _mockRepository.Setup(repo => repo.AddUser(It.Is<User>(user => user.Id == validUserId)))
                            .ReturnsAsync(user);

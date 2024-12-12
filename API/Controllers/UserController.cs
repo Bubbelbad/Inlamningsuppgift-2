@@ -8,6 +8,8 @@ using Application.Queries.UserQueries.GetUserByUsername;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
+using Application.Queries.UserQueries.GetDetailedUserById;
 
 namespace API.Controllers
 {
@@ -91,6 +93,33 @@ namespace API.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        [Route("GetDetailedUserById")]
+        [ResponseCache(CacheProfileName = "DefaultCache")]
+        public async Task<IActionResult> GetDetailedUserById(Guid id)
+        {
+            if (id == Guid.Empty)
+            {
+                _logger.LogWarning("Invalid Guid, field cannot be empty");
+                return BadRequest("Invalid input data.");
+            }
+
+            _logger.LogInformation("Fetching User at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
+            try
+            {
+                var operationResult = await _mediator.Send(new GetDetailedUserByIdQuery(id));
+                _logger.LogInformation("Successfully retrieved User");
+                return Ok(operationResult.Data);
+            }
+
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while fetching all Users at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
+        }
+
         [HttpGet]
         [Route("Login")]
         public async Task<IActionResult> Login([Required] string username, string password)
@@ -147,7 +176,7 @@ namespace API.Controllers
         [Route("Update")]
         public async Task<IActionResult> Update([FromBody, Required] UpdateUserDto newUser)
         {
-            _logger.LogInformation("Updating new User {username}", newUser.Username);
+            _logger.LogInformation("Updating new User {username}", newUser.UserName);
             if (!ModelState.IsValid)
             {
                 _logger.LogWarning("Invalid input data");

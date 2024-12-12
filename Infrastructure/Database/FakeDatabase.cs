@@ -30,10 +30,10 @@ namespace Infrastructure.Database
 
         private static List<User> allUsersFromDB = new()
         {
-            new User { Id = Guid.NewGuid(), UserName = "Victor"},
-            new User { Id = Guid.NewGuid(), UserName = "Bjarne"},
-            new User { Id = Guid.NewGuid(), UserName = "Svinto"},
-            new User { Id = new Guid("f2062082-d361-4826-8980-5241d1e4384a"), UserName = "TestUserForUnitTests"},
+            new User { Id = Guid.NewGuid().ToString(), UserName = "Victor"},
+            new User { Id = Guid.NewGuid().ToString(), UserName = "Bjarne"},
+            new User { Id = Guid.NewGuid().ToString(), UserName = "Svinto"},
+            new User { Id = new Guid("f2062082-d361-4826-8980-5241d1e4384a").ToString(), UserName = "TestUserForUnitTests"},
         };
 
 
