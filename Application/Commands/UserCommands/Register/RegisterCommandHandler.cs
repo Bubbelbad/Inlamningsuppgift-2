@@ -25,7 +25,8 @@ namespace Application.Commands.UserCommands.Register
                 {
                     Id = Guid.NewGuid().ToString(),
                     UserName = request.NewUser.UserName,
-                    PasswordHash = _encryptionService.HashPassword(request.NewUser.Password)
+                    PasswordHash = _encryptionService.HashPassword(request.NewUser.Password),
+                    Role = "User"
                 };
 
                 var createdUser = await _userReposiory.AddUser(userToCreate);

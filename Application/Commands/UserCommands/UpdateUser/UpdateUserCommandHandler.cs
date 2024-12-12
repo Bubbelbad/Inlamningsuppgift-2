@@ -25,7 +25,7 @@ namespace Application.Commands.UserCommands.UpdateUser
                     Id = request.UserToUpdate.Id.ToString(),
                     UserName = request.UserToUpdate.UserName,
                     // Do I need to hash the password here? Probably.
-                    PasswordHash = request.UserToUpdate.PasswordHash
+                    PasswordHash = request.UserToUpdate.Password
                 };
 
                 var updatedUser = await _userRepository.UpdateUser(userToUpdate);

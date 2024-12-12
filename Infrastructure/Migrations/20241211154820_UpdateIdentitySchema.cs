@@ -20,7 +20,7 @@ namespace Infrastructure.Migrations
                 newName: "AspNetUsers");
 
             migrationBuilder.RenameColumn(
-                name: "PasswordHash",
+                name: "Password",
                 table: "AspNetUsers",
                 newName: "Role");
 
@@ -148,7 +148,7 @@ namespace Infrastructure.Migrations
                 nullable: true);
 
             migrationBuilder.AddColumn<string>(
-                name: "PasswordHash",
+                name: "Password",
                 table: "AspNetUsers",
                 type: "nvarchar(max)",
                 nullable: true);
@@ -414,7 +414,7 @@ namespace Infrastructure.Migrations
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
-                name: "PasswordHash",
+                name: "Password",
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
@@ -440,7 +440,7 @@ namespace Infrastructure.Migrations
             migrationBuilder.RenameColumn(
                 name: "Role",
                 table: "Users",
-                newName: "PasswordHash");
+                newName: "Password");
 
             migrationBuilder.AlterColumn<string>(
                 name: "Title",

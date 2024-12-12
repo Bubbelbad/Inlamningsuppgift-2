@@ -8,6 +8,8 @@ using Application.Queries.UserQueries.GetUserByUsername;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
+using Application.Queries.UserQueries.GetDetailedUserById;
 
 namespace API.Controllers
 {
@@ -80,6 +82,33 @@ namespace API.Controllers
             try
             {
                 var operationResult = await _mediator.Send(new GetUserByUsernameQuery(username));
+                _logger.LogInformation("Successfully retrieved User");
+                return Ok(operationResult.Data);
+            }
+
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while fetching all Users at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        [Route("GetDetailedUserById")]
+        [ResponseCache(CacheProfileName = "DefaultCache")]
+        public async Task<IActionResult> GetDetailedUserById(Guid id)
+        {
+            if (id == Guid.Empty)
+            {
+                _logger.LogWarning("Invalid Guid, field cannot be empty");
+                return BadRequest("Invalid input data.");
+            }
+
+            _logger.LogInformation("Fetching User at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
+            try
+            {
+                var operationResult = await _mediator.Send(new GetDetailedUserByIdQuery(id));
                 _logger.LogInformation("Successfully retrieved User");
                 return Ok(operationResult.Data);
             }
