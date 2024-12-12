@@ -1,8 +1,8 @@
 ﻿using Application.Queries.BookQueries;
 using Application.Interfaces.RepositoryInterfaces;
 using Moq;
-using Domain.Model;
 using AutoMapper;
+using Domain.Entities.Core;
 
 namespace TestProject.BookUnitTests
 {
@@ -15,7 +15,7 @@ namespace TestProject.BookUnitTests
         private Mock<IMapper> _mockMapper;
 
         private static readonly Guid ExampleBookId = Guid.Parse("2bfaf5e9-d978-464c-b778-7567ef2dde29");
-        private static readonly Book ExampleBook = new(ExampleBookId, "Test", "Test", "Test");
+        private static readonly Book ExampleBook = new() { BookId = ExampleBookId, Title = "Test", AuthorId = Guid.NewGuid(), Description = "Description" };
 
         [SetUp]
         public void SetUp()
@@ -50,7 +50,7 @@ namespace TestProject.BookUnitTests
             Assert.Multiple(() =>
             {
                 Assert.That(result, Is.Not.Null);
-                Assert.That(result.Data.Id, Is.EqualTo(ExampleBookId));
+                Assert.That(result.Data.BookId, Is.EqualTo(ExampleBookId));
             });
 
         }

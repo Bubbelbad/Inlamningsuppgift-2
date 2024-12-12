@@ -1,7 +1,8 @@
 ﻿using Application.Interfaces.RepositoryInterfaces;
 using Application.Interfaces.ServiceInterfaces;
+using Application.Models;
 using AutoMapper;
-using Domain.Model;
+using Domain.Entities.Core;
 using MediatR;
 
 namespace Application.Commands.UserCommands.Register

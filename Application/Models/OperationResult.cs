@@ -1,4 +1,4 @@
-﻿namespace Domain.Model
+﻿namespace Application.Models
 {
     public class OperationResult<T>
     {

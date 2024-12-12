@@ -1,7 +1,7 @@
-﻿
-using Application.Interfaces.RepositoryInterfaces;
+﻿using Application.Interfaces.RepositoryInterfaces;
+using Application.Models;
 using AutoMapper;
-using Domain.Model;
+using Domain.Entities.Core;
 using MediatR;
 
 namespace Application.Queries.UserQueries.GetUserByUsername

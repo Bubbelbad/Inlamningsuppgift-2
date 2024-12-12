@@ -1,5 +1,5 @@
 ﻿using Application.Dtos.UserDtos;
-using Domain.Model;
+using Application.Models;
 using MediatR;
 
 namespace Application.Queries.UserQueries.GetUserById

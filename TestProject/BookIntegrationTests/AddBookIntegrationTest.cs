@@ -2,7 +2,7 @@
 using Application.Dtos;
 using Application.Interfaces.RepositoryInterfaces;
 using AutoMapper;
-using Domain.Model;
+using Domain.Entities.Core;
 using Infrastructure.Database;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +20,7 @@ namespace TestProject.BookIntegrationTests
         private IBookRepository _repository;
 
         private static readonly Guid ExampleBookId = new Guid("12345678-1234-1234-1234-1234567890ab");
-        private static readonly AddBookDto ExampleBookDto = new("Test", "Testsson", "An example book for Testing");
+        private static readonly AddBookDto ExampleBookDto = new("Test", Guid.NewGuid(), "An example book for Testing");
 
         [SetUp]
         public void Setup()
@@ -38,7 +38,7 @@ namespace TestProject.BookIntegrationTests
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<AddAuthorDto, Author>()
-                   .ForMember(dest => dest.Id, opt => opt.MapFrom(src => ExampleBookId));
+                   .ForMember(dest => dest.AuthorId, opt => opt.MapFrom(src => ExampleBookId));
             });
             _mapper = config.CreateMapper();
 
@@ -86,7 +86,7 @@ namespace TestProject.BookIntegrationTests
         public async Task Handle_MissingTitle_ReturnsNull()
         {
             // Arrange
-            AddBookDto bookToTest = new(null!, "Test Testsson", "An example book for Testing"); // Use null-forgiving operator to explicitly indicate null
+            AddBookDto bookToTest = new(null!, Guid.NewGuid(), "An example book for Testing"); // Use null-forgiving operator to explicitly indicate null
             var command = new AddBookCommand(bookToTest);
 
             // Act

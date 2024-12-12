@@ -2,7 +2,7 @@
 using Application.Dtos;
 using Application.Interfaces.RepositoryInterfaces;
 using AutoMapper;
-using Domain.Model;
+using Domain.Entities.Core;
 using Infrastructure.Database;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +19,7 @@ namespace TestProject.BookIntegrationTests
         private IMapper _mapper;
 
         private static readonly Guid ExampleBookId = new Guid("12345678-1234-1234-1234-1234567890ab");
-        private static readonly BookDto ExampleBookDto = new(ExampleBookId, "Test", "Testsson", "Description");
+        private static readonly BookDto ExampleBookDto = new(ExampleBookId, "Test", Guid.NewGuid(), "Description");
 
         [SetUp]
         public void Setup()
@@ -37,11 +37,18 @@ namespace TestProject.BookIntegrationTests
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<BookDto, Book>()
-                   .ForMember(dest => dest.Id, opt => opt.MapFrom(src => ExampleBookId));
+                   .ForMember(dest => dest.BookId, opt => opt.MapFrom(src => ExampleBookId));
             });
             _mapper = config.CreateMapper();
 
-            Book book = new(ExampleBookId, "Test", "Testsson", "Desctiption");
+            Book book = new()
+            {
+                BookId = ExampleBookId,
+                Title = "Test",
+                AuthorId = Guid.NewGuid(),
+                Description = "Description"
+            };
+
             _database.Books.Add(book);
             _database.SaveChanges();
 
@@ -61,7 +68,7 @@ namespace TestProject.BookIntegrationTests
         public async Task Handle_ValidInput_ReturnsBook()
         {
             // Arrange
-            BookDto bookToTest = new(ExampleBookId, "Test", "Testsson", "New Description");
+            BookDto bookToTest = new(ExampleBookId, "Test", Guid.NewGuid(), "New Description");
             var command = new UpdateBookCommand(bookToTest);
 
             // Act
@@ -92,7 +99,7 @@ namespace TestProject.BookIntegrationTests
         public async Task Handle_MissingTitle_ReturnsNull()
         {
             // Arrange
-            BookDto bookToTest = new(new Guid("12345678-1234-5678-1234-567812345678"), null!, "Victor", "BookService for Testing"); // Use null-forgiving operator to explicitly indicate null
+            BookDto bookToTest = new(new Guid("12345678-1234-5678-1234-567812345678"), null!, Guid.NewGuid(), "BookService for Testing"); // Use null-forgiving operator to explicitly indicate null
             var command = new UpdateBookCommand(bookToTest);
 
             // Act

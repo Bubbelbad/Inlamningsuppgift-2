@@ -6,7 +6,7 @@ using Moq;
 namespace TestProject.AuthorUnitTests
 {
     [TestFixture]
-    [Category("Author/UnitTests/DeleteAuthor")]
+    [Category("AuthorId/UnitTests/DeleteAuthor")]
     public class DeleteAuthorUnitTest
     {
         private DeleteAuthorCommandHandler _handler;

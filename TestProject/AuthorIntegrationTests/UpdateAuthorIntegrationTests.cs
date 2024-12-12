@@ -2,7 +2,7 @@
 using Application.Dtos;
 using Application.Interfaces.RepositoryInterfaces;
 using AutoMapper;
-using Domain.Model;
+using Domain.Entities.Core;
 using Infrastructure.Database;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace TestProject.AuthorIntegrationTests
 {
     [TestFixture]
-    [Category("Author/Integration/UpdateAuthor")]
+    [Category("AuthorId/Integration/UpdateAuthor")]
     public class UpdateAuthorIntegrationTests
     {
         private UpdateAuthorCommandHandler _handler;
@@ -19,7 +19,12 @@ namespace TestProject.AuthorIntegrationTests
         private IMapper _mapper;
 
         private static readonly Guid ExampleAuthorId = new Guid("12345678-1234-1234-1234-1234567890ab");
-        private static readonly Author ExampleAuthorDto = new(ExampleAuthorId, "Test", "Testsson");
+        private static readonly Author ExampleAuthorDto = new Author
+        {
+            AuthorId = ExampleAuthorId,
+            FirstName = "Test",
+            LastName = "Testsson"
+        };
 
         [SetUp]
         public void Setup()
@@ -37,11 +42,11 @@ namespace TestProject.AuthorIntegrationTests
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<AuthorDto, Author>()
-                   .ForMember(dest => dest.Id, opt => opt.MapFrom(src => ExampleAuthorId));
+                   .ForMember(dest => dest.AuthorId, opt => opt.MapFrom(src => ExampleAuthorId));
             });
             _mapper = config.CreateMapper();
 
-            Author author = new(ExampleAuthorId, "Test", "Testsson");
+            Author author = new Author { AuthorId = ExampleAuthorId, FirstName = "Test", LastName = "Testsson" };
             _database.Authors.Add(author);
             _database.SaveChanges();
 

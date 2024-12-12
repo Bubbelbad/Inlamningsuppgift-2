@@ -1,5 +1,6 @@
 ﻿using Application.Dtos;
-using Domain.Model;
+using Application.Models;
+using Domain.Entities.Core;
 using MediatR;
 
 namespace Application.Commands.BookCommands.AddBook

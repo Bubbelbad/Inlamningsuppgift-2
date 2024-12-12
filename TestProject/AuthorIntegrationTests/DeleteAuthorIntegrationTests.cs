@@ -2,7 +2,7 @@
 using Application.Dtos;
 using Application.Interfaces.RepositoryInterfaces;
 using AutoMapper;
-using Domain.Model;
+using Domain.Entities.Core;
 using Infrastructure.Database;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace TestProject.AuthorIntegrationTests
 {
     [TestFixture]
-    [Category("Author/Integration/DeleteAuthor")]
+    [Category("AuthorId/Integration/DeleteAuthor")]
     public class DeleteAuthorIntegrationTests
     {
         private DeleteAuthorCommandHandler _handler;
@@ -36,12 +36,18 @@ namespace TestProject.AuthorIntegrationTests
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<AddAuthorDto, Author>()
-                   .ForMember(dest => dest.Id, opt => opt.MapFrom(src => ExampleAuthorId));
+                   .ForMember(dest => dest.AuthorId, opt => opt.MapFrom(src => ExampleAuthorId));
             });
             _mapper = config.CreateMapper();
 
             // Add an author with ExampleAuthorId to the database
-            var author = new Author(ExampleAuthorId, "Test", "Author");
+            var author = new Author
+            {
+                AuthorId = ExampleAuthorId,
+                FirstName = "Test",
+                LastName = "AuthorId"
+            };
+
             _database.Authors.Add(author);
             _database.SaveChanges();
 

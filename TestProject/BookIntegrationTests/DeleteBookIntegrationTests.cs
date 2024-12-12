@@ -2,7 +2,7 @@
 using Application.Dtos;
 using Application.Interfaces.RepositoryInterfaces;
 using AutoMapper;
-using Domain.Model;
+using Domain.Entities.Core;
 using Infrastructure.Database;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -37,11 +37,17 @@ namespace TestProject.BookIntegrationTests
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<BookDto, Book>()
-                   .ForMember(dest => dest.Id, opt => opt.MapFrom(src => ExampleBookId));
+                   .ForMember(dest => dest.BookId, opt => opt.MapFrom(src => ExampleBookId));
             });
             _mapper = config.CreateMapper();
 
-            var book = new Book(ExampleBookId, "Test", "Testsson", "An example book for Testing");
+            var book = new Book
+            {
+                BookId = ExampleBookId,
+                Title = "Test",
+                Description = "An example book for Testing"
+            };
+
             _database.Books.Add(book);
             _database.SaveChanges();
 

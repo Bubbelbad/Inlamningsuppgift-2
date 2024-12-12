@@ -2,7 +2,7 @@
 using Application.Interfaces.RepositoryInterfaces;
 using Application.Queries.BookQueries;
 using AutoMapper;
-using Domain.Model;
+using Domain.Entities.Core;
 using Infrastructure.Database;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -36,12 +36,18 @@ namespace TestProject.BookIntegrationTests
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<BookDto, Book>()
-                   .ForMember(dest => dest.Id, opt => opt.MapFrom(src => ExampleBookId));
+                   .ForMember(dest => dest.BookId, opt => opt.MapFrom(src => ExampleBookId));
             });
             _mapper = config.CreateMapper();
 
             // Add an author with ExampleAuthorId to the database
-            var book = new Book(ExampleBookId, "Test", "Testsson", "Descriptive indeed");
+            var book = new Book
+            {
+                BookId = ExampleBookId,
+                Title = "Test",
+                Description = "Descriptive indeed"
+            };
+
             _database.Books.Add(book);
             _database.SaveChanges();
 
@@ -69,7 +75,7 @@ namespace TestProject.BookIntegrationTests
             // Assert
             Assert.NotNull(result);
             Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.Data.Id, Is.EqualTo(ExampleBookId));
+            Assert.That(result.Data.BookId, Is.EqualTo(ExampleBookId));
         }
 
         [Test]

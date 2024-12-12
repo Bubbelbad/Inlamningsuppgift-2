@@ -1,4 +1,4 @@
-﻿using Domain.Model;
+﻿using Application.Models;
 using MediatR;
 
 namespace Application.Commands.UserCommands.DeleteUser

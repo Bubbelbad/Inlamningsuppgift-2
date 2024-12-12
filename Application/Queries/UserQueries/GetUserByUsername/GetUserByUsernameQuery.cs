@@ -1,4 +1,5 @@
-﻿using Domain.Model;
+﻿using Application.Models;
+using Domain.Entities.Core;
 using MediatR;
 
 namespace Application.Queries.UserQueries.GetUserByUsername
