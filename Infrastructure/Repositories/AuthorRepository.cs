@@ -1,5 +1,5 @@
 ﻿using Application.Interfaces.RepositoryInterfaces;
-using Domain.Model;
+using Domain.Entities.Core;
 using Infrastructure.Database;
 
 namespace Infrastructure.Repositories
@@ -15,7 +15,7 @@ namespace Infrastructure.Repositories
 
         public async Task<Author> GetAuthorById(Guid id)
         {
-            Author author = _realDatabase.Authors.FirstOrDefault(author => author.Id == id);
+            Author author = _realDatabase.Authors.FirstOrDefault(author => author.AuthorId == id);
             return author;
         }
 
@@ -28,7 +28,7 @@ namespace Infrastructure.Repositories
 
         public async Task<Author> UpdateAuthor(Author author)
         {
-            Author authorToUpdate = _realDatabase.Authors.FirstOrDefault(obj => obj.Id == author.Id);
+            Author authorToUpdate = _realDatabase.Authors.FirstOrDefault(obj => obj.AuthorId == author.AuthorId);
             if (authorToUpdate is not null)
             {
                 author.FirstName = authorToUpdate.FirstName;
@@ -41,10 +41,10 @@ namespace Infrastructure.Repositories
         public async Task<bool> DeleteAuthor(Guid id)
         {
             bool actionSuccessful = false;
-            var authorToDelete = _realDatabase.Authors.Where(author => author.Id == id).First();
+            var authorToDelete = _realDatabase.Authors.Where(author => author.AuthorId == id);
             if (authorToDelete is not null)
             {
-                _realDatabase.Authors.Remove(authorToDelete);
+                _realDatabase.Authors.Remove((Author)authorToDelete);
                 _realDatabase.SaveChanges();
                 actionSuccessful = true;
             }

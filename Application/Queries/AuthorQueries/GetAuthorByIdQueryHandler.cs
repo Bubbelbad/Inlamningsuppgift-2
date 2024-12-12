@@ -1,7 +1,8 @@
 ﻿using MediatR;
-using Domain.Model;
 using Application.Interfaces.RepositoryInterfaces;
 using AutoMapper;
+using Domain.Entities.Core;
+using Application.Models;
 
 namespace Application.Queries.AuthorQueries
 {
@@ -22,7 +23,7 @@ namespace Application.Queries.AuthorQueries
                 var author = await _authorRepository.GetAuthorById(query.Id);
                 if (author == null)
                 {
-                    return OperationResult<Author>.Failure("Author not found");
+                    return OperationResult<Author>.Failure("AuthorId not found");
                 }
                 var mappedAuthor = _mapper.Map<Author>(author);
                 return OperationResult<Author>.Success(mappedAuthor);

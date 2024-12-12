@@ -1,6 +1,6 @@
 ﻿using Application.Interfaces.RepositoryInterfaces;
+using Application.Models;
 using AutoMapper;
-using Domain.Model;
 using MediatR;
 
 namespace Application.Commands.AuthorCommands.DeleteAuthor

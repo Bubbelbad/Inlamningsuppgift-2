@@ -1,7 +1,7 @@
 ﻿using Application.Dtos;
 using Application.Dtos.UserDtos;
 using AutoMapper;
-using Domain.Model;
+using Domain.Entities.Core;
 
 namespace Application.Mappings
 {

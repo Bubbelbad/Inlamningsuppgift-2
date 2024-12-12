@@ -1,10 +1,10 @@
 ﻿using Application.Interfaces.RepositoryInterfaces;
 using Application.Commands.UserCommands.Register;
 using Application.Dtos;
-using Domain.Model;
 using Moq;
 using AutoMapper;
 using Application.Interfaces.ServiceInterfaces;
+using Domain.Entities.Core;
 
 namespace TestProject.UserUnitTests
 {

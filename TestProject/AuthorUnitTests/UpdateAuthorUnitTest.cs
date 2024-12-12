@@ -2,13 +2,13 @@
 using Application.Dtos;
 using Application.Interfaces.RepositoryInterfaces;
 using AutoMapper;
-using Domain.Model;
+using Domain.Entities.Core;
 using Moq;
 
 namespace TestProject.AuthorUnitTests
 {
     [TestFixture]
-    [Category("Author/UnitTests/UpdateAuthor")]
+    [Category("AuthorId/UnitTests/UpdateAuthor")]
     public class UpdateAuthorUnitTest
     {
         private UpdateAuthorCommandHandler _handler;
@@ -24,12 +24,18 @@ namespace TestProject.AuthorUnitTests
             _mockRepository = new Mock<IAuthorRepository>();
             _mockMapper = new Mock<IMapper>();
 
-            // Set up the mock repository to handle any Author object with the same Id
-            _mockRepository.Setup(repo => repo.UpdateAuthor(It.Is<Author>(obj => obj.Id == ExampleAuthorId)))
+            // Set up the mock repository to handle any AuthorId object with the same Id
+            _mockRepository.Setup(repo => repo.UpdateAuthor(It.Is<Author>(obj => obj.AuthorId == ExampleAuthorId)))
                            .ReturnsAsync((Author updatedAuthor) => updatedAuthor);
 
+            _mockMapper.Setup(mapper => mapper.Map<Author>(It.IsAny<Author>()));
             _mockMapper.Setup(mapper => mapper.Map<Author>(It.IsAny<Author>()))
-                       .Returns((Author author) => new Author(ExampleAuthorId, author.FirstName, author.LastName));
+                       .Returns((Author author) => new Author
+                       {
+                           AuthorId = ExampleAuthorId,
+                           FirstName = author.FirstName,
+                           LastName = author.LastName
+                       });
 
 
             _handler = new UpdateAuthorCommandHandler(_mockRepository.Object, _mockMapper.Object);

@@ -1,5 +1,6 @@
 ﻿using MediatR;
-using Domain.Model;
+using Domain.Entities.Core;
+using Application.Models;
 
 namespace Application.Queries.BookQueries
 {

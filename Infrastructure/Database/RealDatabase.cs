@@ -1,4 +1,7 @@
-﻿using Domain.Model;
+﻿using Domain.Entities.Core;
+using Domain.Entities.Locations;
+using Domain.Entities.Metadata;
+using Domain.Entities.Transactions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +16,14 @@ namespace Infrastructure.Database
         public DbSet<Book> Books { get; set; }
         public DbSet<User> Users { get; set; }
 
+        public DbSet<Borrowing> Borrowings { get; set; }
+        public DbSet<Reservation> Reservations { get; set; }
+        public DbSet<Genre> Genres { get; set; }
+        public DbSet<Publisher> Publishers { get; set; }
+        public DbSet<Review> Reviews { get; set; }
+        public DbSet<LibraryBranch> LibraryBranches { get; set; }
+        public DbSet<BookCopy> BookCopies { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -21,9 +32,49 @@ namespace Infrastructure.Database
             }
         }
 
-        protected override void OnModelCreating(ModelBuilder builder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(builder);
+            base.OnModelCreating(modelBuilder);
+
+            // Configure Review relationships
+            modelBuilder.Entity<Review>()
+                .HasOne(r => r.User)
+                .WithMany(u => u.Reviews)
+                .HasForeignKey(r => r.Id)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Review>()
+                .HasOne(r => r.Book)
+                .WithMany(b => b.Reviews)
+                .HasForeignKey(r => r.BookId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Configure Borrowing relationships
+            modelBuilder.Entity<Borrowing>()
+                .HasOne(b => b.User)
+                .WithMany(u => u.Borrowings)
+                .HasForeignKey(b => b.Id)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Borrowing>()
+                .HasOne(b => b.BookCopy)
+                .WithMany(bc => bc.Borrowings)
+                .HasForeignKey(b => b.CopyId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Configure Reservation relationships
+            modelBuilder.Entity<Reservation>()
+                .HasOne(r => r.User)
+                .WithMany(u => u.Reservations)
+                .HasForeignKey(r => r.Id)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Reservation>()
+                .HasOne(r => r.BookCopy)
+                .WithMany(bc => bc.Reservations)
+                .HasForeignKey(r => r.CopyId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
+
     }
 }

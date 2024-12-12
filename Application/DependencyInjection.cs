@@ -15,13 +15,11 @@ namespace Application
             services.AddScoped<TokenHelper>();
             services.AddScoped<IPasswordEncryptionService, PasswordEncryptionService>();
 
-            // Add AutoMapper
             services.AddAutoMapper(typeof(UserMappingProfile).Assembly);
 
             return services;
 
             // services.AddValidatorsFromAssembly(assembly);
-            // services.AddSungelton(FakeDatabase)
         }
     }
 }

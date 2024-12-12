@@ -2,13 +2,13 @@
 using Application.Dtos;
 using Application.Interfaces.RepositoryInterfaces;
 using AutoMapper;
-using Domain.Model;
+using Domain.Entities.Core;
 using Moq;
 
 namespace TestProject.AuthorUnitTests
 {
     [TestFixture]
-    [Category("Author/UnitTests/AddAuthor")]
+    [Category("AuthorId/UnitTests/AddAuthor")]
     public class AddAuthorUnitTest
     {
         private AddAuthorCommandHandler _handler;
@@ -24,12 +24,19 @@ namespace TestProject.AuthorUnitTests
             _mockRepository = new Mock<IAuthorRepository>();
             _mockMapper = new Mock<IMapper>();
 
-            // Set up the mock repository to return a new Author when AddAuthor is called
+            // Set up the mock repository to return a new AuthorId when AddAuthor is called
             _mockRepository.Setup(repo => repo.AddAuthor(It.IsAny<Author>()))
                            .ReturnsAsync((Author author) => author);
 
+            _mockMapper.Setup(mapper => mapper.Map<Author>(It.IsAny<Author>()));
             _mockMapper.Setup(mapper => mapper.Map<Author>(It.IsAny<Author>()))
-                   .Returns((Author author) => new Author(ExampleAuthorId, author.FirstName, author.LastName));
+                       .Returns((Author author) =>
+                           new Author
+                           {
+                               AuthorId = ExampleAuthorId,
+                               FirstName = author.FirstName,
+                               LastName = author.LastName
+                           });
 
             // Initialize the handler with the mock repository
             _handler = new AddAuthorCommandHandler(_mockRepository.Object, _mockMapper.Object);

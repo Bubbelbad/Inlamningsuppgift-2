@@ -2,7 +2,7 @@
 using Application.Interfaces.RepositoryInterfaces;
 using Application.Queries.AuthorQueries;
 using AutoMapper;
-using Domain.Model;
+using Domain.Entities.Core;
 using Infrastructure.Database;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace TestProject.AuthorIntegrationTests
 {
     [TestFixture]
-    [Category("Author/Integration/GetAuthor")]
+    [Category("AuthorId/Integration/GetAuthor")]
     public class GetAuthorIntegrationTests
     {
         private GetAuthorByIdQueryHandler _handler;
@@ -36,12 +36,17 @@ namespace TestProject.AuthorIntegrationTests
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<AuthorDto, Author>()
-                   .ForMember(dest => dest.Id, opt => opt.MapFrom(src => ExampleAuthorId));
+                   .ForMember(dest => dest.AuthorId, opt => opt.MapFrom(src => ExampleAuthorId));
             });
             _mapper = config.CreateMapper();
 
             // Add an author with ExampleAuthorId to the database
-            var author = new Author(ExampleAuthorId, "Test", "Author");
+            var author = new Author
+            {
+                AuthorId = ExampleAuthorId,
+                FirstName = "Test",
+                LastName = "AuthorId"
+            };
             _database.Authors.Add(author);
             _database.SaveChanges();
 
@@ -68,7 +73,7 @@ namespace TestProject.AuthorIntegrationTests
 
             // Assert
             Assert.NotNull(result);
-            Assert.That(result.Data.Id, Is.EqualTo(ExampleAuthorId));
+            Assert.That(result.Data.AuthorId, Is.EqualTo(ExampleAuthorId));
         }
 
         [Test]

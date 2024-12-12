@@ -1,7 +1,7 @@
-﻿using Application.Commands.BookCommands.UpdateBook;
-using Application.Interfaces.RepositoryInterfaces;
+﻿using Application.Interfaces.RepositoryInterfaces;
+using Application.Models;
 using AutoMapper;
-using Domain.Model;
+using Domain.Entities.Core;
 using MediatR;
 
 namespace Application.Commands.AuthorCommands.UpdateAuthor
@@ -20,7 +20,13 @@ namespace Application.Commands.AuthorCommands.UpdateAuthor
 
             try
             {
-                var authorToUpdate = new Author(request.NewAuthor.Id, request.NewAuthor.FirstName, request.NewAuthor.LastName);
+                Author authorToUpdate = new()
+                {
+                    AuthorId = request.NewAuthor.Id,
+                    FirstName = request.NewAuthor.FirstName,
+                    LastName = request.NewAuthor.LastName,
+                };
+
                 var updatedAuthor = await _authorRepository.UpdateAuthor(authorToUpdate);
                 var mappedAuthor = _mapper.Map<Author>(updatedAuthor);
 

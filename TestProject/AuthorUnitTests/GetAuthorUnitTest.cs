@@ -1,13 +1,13 @@
 ﻿using Application.Interfaces.RepositoryInterfaces;
 using Application.Queries.AuthorQueries;
 using AutoMapper;
-using Domain.Model;
+using Domain.Entities.Core;
 using Moq;
 
 namespace TestProject.AuthorUnitTests
 {
     [TestFixture]
-    [Category("Author/UnitTests/GetAuthorById")]
+    [Category("AuthorId/UnitTests/GetAuthorById")]
     public class GetAuthorUnitTest
     {
         private Mock<IAuthorRepository> _mockRepository;
@@ -15,7 +15,7 @@ namespace TestProject.AuthorUnitTests
         private Mock<IMapper> _mockMapper;
 
         private static readonly Guid ExampleAuthorId = Guid.Parse("fc22325e-0fa3-4615-aa6c-c7fe459a2735");
-        private static readonly Author ExampleAuthor = new(ExampleAuthorId, "Test", "Author");
+        private static readonly Author ExampleAuthor = new Author { AuthorId = ExampleAuthorId, FirstName = "Test", LastName = "AuthorId" };
 
         [SetUp]
         public void Setup()
@@ -47,7 +47,7 @@ namespace TestProject.AuthorUnitTests
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Data.Id, Is.EqualTo(ExampleAuthorId));
+            Assert.That(result.Data.AuthorId, Is.EqualTo(ExampleAuthorId));
         }
 
         [Test]

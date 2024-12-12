@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces.RepositoryInterfaces;
+using Application.Models;
 using AutoMapper;
-using Domain.Model;
+using Domain.Entities.Core;
 using MediatR;
 
 namespace Application.Commands.AuthorCommands.AddAuthor
@@ -19,14 +20,19 @@ namespace Application.Commands.AuthorCommands.AddAuthor
 
             try
             {
-                var authorToCreate = new Author(Guid.NewGuid(), request.NewAuthor.FirstName, request.NewAuthor.LastName);
+                Author authorToCreate = new()
+                {
+                    AuthorId = Guid.NewGuid(),
+                    FirstName = request.NewAuthor.FirstName,
+                    LastName = request.NewAuthor.LastName,
+                };
                 var createdAutor = await _authorRepository.AddAuthor(authorToCreate);
                 var mappedAuthor = _mapper.Map<Author>(createdAutor);
                 return OperationResult<Author>.Success(mappedAuthor);
             }
             catch
             {
-                throw new Exception("Author not added");
+                throw new Exception("AuthorId not added");
             }
         }
     }

@@ -1,8 +1,8 @@
-﻿using Application.Dtos;
-using Application.Dtos.UserDtos;
+﻿using Application.Dtos.UserDtos;
 using Application.Interfaces.RepositoryInterfaces;
+using Application.Models;
 using AutoMapper;
-using Domain.Model;
+using Domain.Entities.Core;
 using MediatR;
 using Microsoft.Extensions.Caching.Memory;
 

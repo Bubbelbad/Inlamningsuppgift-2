@@ -1,7 +1,8 @@
 ﻿using MediatR;
-using Domain.Model;
 using Application.Interfaces.RepositoryInterfaces;
 using AutoMapper;
+using Domain.Entities.Core;
+using Application.Models;
 
 namespace Application.Queries.BookQueries
 {

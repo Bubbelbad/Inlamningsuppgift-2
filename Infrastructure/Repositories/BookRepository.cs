@@ -1,5 +1,5 @@
 ﻿using Application.Interfaces.RepositoryInterfaces;
-using Domain.Model;
+using Domain.Entities.Core;
 using Infrastructure.Database;
 
 namespace Infrastructure.Repositories
@@ -16,7 +16,7 @@ namespace Infrastructure.Repositories
 
         public async Task<Book> GetBookById(Guid id)
         {
-            Book book = _realDatabase.Books.FirstOrDefault(book => book.Id == id);
+            Book book = _realDatabase.Books.FirstOrDefault(book => book.BookId == id);
             return book;
         }
 
@@ -29,7 +29,7 @@ namespace Infrastructure.Repositories
 
         public async Task<Book> UpdateBook(Book book)
         {
-            Book bookToUpdate = _realDatabase.Books.FirstOrDefault(obj => obj.Id == book.Id);
+            Book bookToUpdate = _realDatabase.Books.FirstOrDefault(obj => obj.BookId == book.BookId);
             if (bookToUpdate is not null)
             {
                 bookToUpdate.Author = book.Author;
@@ -43,7 +43,7 @@ namespace Infrastructure.Repositories
         public async Task<bool> DeleteBook(Guid id)
         {
             bool actionSuccessful = false;
-            Book bookToDelete = _realDatabase.Books.FirstOrDefault(obj => obj.Id == id);
+            Book bookToDelete = _realDatabase.Books.FirstOrDefault(obj => obj.BookId == id);
             if (bookToDelete is not null)
             {
                 _realDatabase.Books.Remove(bookToDelete);

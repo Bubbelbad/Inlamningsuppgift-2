@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces.RepositoryInterfaces;
+using Application.Models;
 using AutoMapper;
-using Domain.Model;
+using Domain.Entities.Core;
 using MediatR;
 
 namespace Application.Commands.BookCommands.UpdateBook
@@ -19,7 +20,13 @@ namespace Application.Commands.BookCommands.UpdateBook
 
             try
             {
-                var bookToUpdate = new Book(request.NewBook.Id, request.NewBook.Title, request.NewBook.Author, request.NewBook.Description);
+                Book bookToUpdate = new()
+                {
+                    BookId = request.NewBook.Id,
+                    Title = request.NewBook.Title,
+                    AuthorId = request.NewBook.AuthorId,
+                    Description = request.NewBook.Description
+                };
 
                 var updatedBook = await _bookRepository.UpdateBook(bookToUpdate);
 
