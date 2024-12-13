@@ -5,7 +5,7 @@ using Domain.Entities.Core;
 using MediatR;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace Application.Queries.AuthorQueries
+namespace Application.Queries.AuthorQueries.GetAllAuthors
 {
     internal class GetAllAuthorsQueryHandler(IMemoryCache memoryCache, IAuthorRepository repository, IMapper mapper) : IRequestHandler<GetAllAuthorsQuery, OperationResult<List<Author>>>
     {

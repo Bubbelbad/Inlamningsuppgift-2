@@ -2,7 +2,10 @@
 using Application.Commands.AuthorCommands.DeleteAuthor;
 using Application.Commands.AuthorCommands.UpdateAuthor;
 using Application.Dtos;
+using Application.Dtos.AuthorDtos;
 using Application.Queries.AuthorQueries;
+using Application.Queries.AuthorQueries.GetAllAuthors;
+using Application.Queries.AuthorQueries.GetAuthorById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 //using Microsoft.AspNetCore.Authorization;
@@ -138,7 +141,7 @@ namespace API.Controllers
         [SwaggerResponse(200, "Successfully Updated AuthorId.")]
         [SwaggerResponse(400, "Invalid input data")]
         [SwaggerResponse(404, "AuthorId not found")]
-        public async Task<IActionResult> UpdateAuthor([FromBody, Required] AuthorDto authorToUpdate)
+        public async Task<IActionResult> UpdateAuthor([FromBody, Required] UpdateAuthorDto authorToUpdate)
         {
             _logger.LogInformation("Updating AuthorId at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
             if (!ModelState.IsValid)

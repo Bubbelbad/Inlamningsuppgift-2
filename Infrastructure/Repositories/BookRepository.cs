@@ -20,6 +20,7 @@ namespace Infrastructure.Repositories
             Book book = _realDatabase.Books
                 .Include(b => b.Author)
                 .FirstOrDefault(book => book.BookId == id);
+
             return book;
         }
 

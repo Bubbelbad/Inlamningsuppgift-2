@@ -1,28 +1,28 @@
-﻿using Application.Interfaces.RepositoryInterfaces;
+﻿using Application.Dtos.UserDtos;
+using Application.Interfaces.RepositoryInterfaces;
 using Application.Models;
 using AutoMapper;
-using Domain.Entities.Core;
 using MediatR;
 
 namespace Application.Queries.UserQueries.GetUserByUsername
 {
-    public class GetUserByUsernameQueryHandler(IUserRepository repotisory, IMapper mapper) : IRequestHandler<GetUserByUsernameQuery, OperationResult<User>>
+    public class GetUserByUsernameQueryHandler(IUserRepository repotisory, IMapper mapper) : IRequestHandler<GetUserByUsernameQuery, OperationResult<GetUserByUserNameDto>>
     {
         private readonly IUserRepository _userRepository = repotisory;
         private readonly IMapper _mapper = mapper;
 
-        public async Task<OperationResult<User>> Handle(GetUserByUsernameQuery request, CancellationToken cancellationToken)
+        public async Task<OperationResult<GetUserByUserNameDto>> Handle(GetUserByUsernameQuery request, CancellationToken cancellationToken)
         {
             if (request == null || string.IsNullOrEmpty(request.Username))
             {
-                return OperationResult<User>.Failure("Invalid input");
+                return OperationResult<GetUserByUserNameDto>.Failure("Invalid input");
             }
 
             try
             {
                 var user = await _userRepository.GetUserByUsername(request.Username);
-                var mappedUser = _mapper.Map<User>(user);
-                return OperationResult<User>.Success(mappedUser);
+                var mappedUser = _mapper.Map<GetUserByUserNameDto>(user);
+                return OperationResult<GetUserByUserNameDto>.Success(mappedUser);
             }
             catch
             {

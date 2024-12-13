@@ -4,7 +4,7 @@ using AutoMapper;
 using Domain.Entities.Core;
 using Application.Models;
 
-namespace Application.Queries.AuthorQueries
+namespace Application.Queries.AuthorQueries.GetAuthorById
 {
     public class GetAuthorByIdQueryHandler(IAuthorRepository repository, IMapper mapper) : IRequestHandler<GetAuthorByIdQuery, OperationResult<Author>>
     {

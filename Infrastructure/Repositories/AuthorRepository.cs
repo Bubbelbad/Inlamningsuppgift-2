@@ -22,7 +22,7 @@ namespace Infrastructure.Repositories
         public async Task<Author> AddAuthor(Author author)
         {
             _realDatabase.Authors.Add(author);
-            _realDatabase.SaveChanges();
+            await _realDatabase.SaveChangesAsync();
             return author;
         }
 
@@ -31,8 +31,12 @@ namespace Infrastructure.Repositories
             Author authorToUpdate = _realDatabase.Authors.FirstOrDefault(obj => obj.AuthorId == author.AuthorId);
             if (authorToUpdate is not null)
             {
-                author.FirstName = authorToUpdate.FirstName;
-                author.LastName = authorToUpdate.LastName;
+                authorToUpdate.AuthorId = author.AuthorId;
+                authorToUpdate.FirstName = author.FirstName;
+                authorToUpdate.LastName = author.LastName;
+                authorToUpdate.DateOfBirth = author.DateOfBirth;
+                authorToUpdate.Biography = author.Biography;
+                _realDatabase.Update(authorToUpdate);
                 _realDatabase.SaveChanges();
             }
             return authorToUpdate;
@@ -41,7 +45,7 @@ namespace Infrastructure.Repositories
         public async Task<bool> DeleteAuthor(Guid id)
         {
             bool actionSuccessful = false;
-            var authorToDelete = _realDatabase.Authors.Where(author => author.AuthorId == id);
+            var authorToDelete = _realDatabase.Authors.FirstOrDefault(author => author.AuthorId == id);
             if (authorToDelete is not null)
             {
                 _realDatabase.Authors.Remove((Author)authorToDelete);

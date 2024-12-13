@@ -1,10 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Domain.Entities.Core
+namespace Application.Dtos.AuthorDtos
 {
-    public class Author()
+    public class UpdateAuthorDto
     {
-
         [Required(ErrorMessage = "{0} is required")]
         public required Guid AuthorId { get; set; }
 
@@ -17,8 +16,5 @@ namespace Domain.Entities.Core
         public required string LastName { get; set; }
         public DateTime? DateOfBirth { get; set; }
         public string? Biography { get; set; }
-
-        // Navigation property
-        public ICollection<Book> Books { get; set; }
     }
 }

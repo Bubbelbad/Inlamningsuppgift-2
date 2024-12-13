@@ -25,7 +25,7 @@ namespace Application.Commands.UserCommands.UpdateUser
                 {
                     Id = request.UserToUpdate.Id.ToString(),
                     UserName = request.UserToUpdate.UserName,
-                    // Do I need to hash the password here? Probably.
+                    // Do I need to hash the PasswordHash here? Probably.
                     PasswordHash = request.UserToUpdate.Password
                 };
 

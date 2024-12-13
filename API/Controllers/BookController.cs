@@ -1,13 +1,13 @@
 ﻿using Application.Commands.BookCommands.AddBook;
 using Application.Commands.BookCommands.DeleteBook;
 using Application.Commands.BookCommands.UpdateBook;
-using Application.Queries.BookQueries;
 using Application.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
-using Domain.Entities.Core;
+using Application.Queries.BookQueries.GetBookById;
+using Application.Queries.BookQueries.GetAllBooks;
 
 namespace API.Controllers
 {
