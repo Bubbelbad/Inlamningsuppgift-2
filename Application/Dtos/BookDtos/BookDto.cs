@@ -1,4 +1,4 @@
-﻿namespace Application.Dtos
+﻿namespace Application.Dtos.BookDtos
 {
     public class BookDto(Guid id, string title, Guid authorId, string description)
     {

@@ -1,4 +1,4 @@
-﻿using Application.Dtos;
+﻿using Application.Dtos.BookDtos;
 using Application.Models;
 using Domain.Entities.Core;
 using MediatR;

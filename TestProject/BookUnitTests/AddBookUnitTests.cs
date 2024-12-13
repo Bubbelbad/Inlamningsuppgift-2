@@ -1,5 +1,5 @@
 ﻿using Application.Commands.BookCommands.AddBook;
-using Application.Dtos;
+using Application.Dtos.BookDtos;
 using Application.Interfaces.RepositoryInterfaces;
 using AutoMapper;
 using Domain.Entities.Core;
@@ -16,7 +16,13 @@ namespace TestProject.BookUnitTests
         private Mock<IMapper> _mockMapper;
 
         private static readonly Guid ExampleBookId = Guid.Parse("12345678-1234-1234-1234-1234567890ab");
-        private static readonly AddBookDto ExampleBookDto = new("Test", Guid.NewGuid(), "An example book for Testing");
+        private static readonly AddBookDto ExampleBookDto = new()
+        {
+            Title = "Test",
+            Genre = "Fantasy",
+            Description = "An example book for Testing",
+            AuthorId = Guid.Parse("12345678-1234-1234-1234-1234567890ab")
+        };
 
         [SetUp]
         public void SetUp()
@@ -25,18 +31,29 @@ namespace TestProject.BookUnitTests
             _mockRepository = new Mock<IBookRepository>();
             _mockMapper = new Mock<IMapper>();
 
-            //Set up mock to return a new Book when AddBook is called
+            // Set up mock to return a new Book when AddBook is called
             _mockRepository.Setup(repo => repo.AddBook(It.IsAny<Book>()))
                 .ReturnsAsync((Book book) => book);
 
-            _mockMapper.Setup(mapper => mapper.Map<Book>(It.IsAny<Book>()));
-            _mockMapper.Setup(mapper => mapper.Map<Book>(It.IsAny<Book>()))
-                .Returns((Book book) => new Book
+            // Set up mock to map from AddBookDto to Book
+            _mockMapper.Setup(mapper => mapper.Map<Book>(It.IsAny<AddBookDto>()))
+                .Returns((AddBookDto dto) => new Book
                 {
                     BookId = ExampleBookId,
+                    Title = dto.Title,
+                    Genre = dto.Genre,
+                    Description = dto.Description,
+                    AuthorId = dto.AuthorId
+                });
+
+            // Set up mock to map from Book to AddBookDto
+            _mockMapper.Setup(mapper => mapper.Map<AddBookDto>(It.IsAny<Book>()))
+                .Returns((Book book) => new AddBookDto
+                {
                     Title = book.Title,
-                    Author = book.Author,
-                    Description = book.Description
+                    Genre = book.Genre,
+                    Description = book.Description,
+                    AuthorId = (Guid)book.AuthorId
                 });
 
             _handler = new AddBookCommandHandler(_mockRepository.Object, _mockMapper.Object);
@@ -55,6 +72,7 @@ namespace TestProject.BookUnitTests
             Assert.That(result, Is.Not.Null);
             Assert.That(result.Data.Description, Is.EqualTo(ExampleBookDto.Description));
         }
+
 
         [Test]
         public async Task Handle_NullInput_ReturnsNull()
@@ -75,7 +93,13 @@ namespace TestProject.BookUnitTests
         public async Task Handle_MissingTitle_ReturnsNull()
         {
             // Arrange
-            AddBookDto bookToTest = new(null!, Guid.NewGuid(), "An example book for Testing"); // Use null-forgiving operator to explicitly indicate null
+            AddBookDto bookToTest = new()
+            {
+                Title = null!,
+                Genre = "Fantasy",
+                AuthorId = Guid.NewGuid(),
+                Description = "An example book for Testing"
+            };
             var command = new AddBookCommand(bookToTest);
 
             // Act

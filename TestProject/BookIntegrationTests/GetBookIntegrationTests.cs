@@ -1,4 +1,5 @@
 ﻿using Application.Dtos;
+using Application.Dtos.BookDtos;
 using Application.Interfaces.RepositoryInterfaces;
 using Application.Queries.BookQueries.GetBookById;
 using AutoMapper;
@@ -35,17 +36,19 @@ namespace TestProject.BookIntegrationTests
             // Set up AutoMapper with actual configuration
             var config = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<BookDto, Book>()
+                cfg.CreateMap<Book, GetBookDto>()
                    .ForMember(dest => dest.BookId, opt => opt.MapFrom(src => ExampleBookId));
             });
             _mapper = config.CreateMapper();
 
-            // Add an author with ExampleAuthorId to the database
+            // Add a book with ExampleBookId to the database
             var book = new Book
             {
                 BookId = ExampleBookId,
                 Title = "Test",
-                Description = "Descriptive indeed"
+                Genre = "Fantasy",
+                Description = "Descriptive indeed",
+                AuthorId = new Guid("8e0feced-361a-4c63-8009-67b9b467d130")
             };
 
             _database.Books.Add(book);
