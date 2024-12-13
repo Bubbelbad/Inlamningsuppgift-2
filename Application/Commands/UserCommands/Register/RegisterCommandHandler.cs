@@ -11,7 +11,7 @@ namespace Application.Commands.UserCommands.Register
     {
         private readonly IUserRepository _userReposiory = userRepository;
         private readonly IMapper _mapper = mapper;
-        private IPasswordEncryptionService _encryptionService = service;
+        private readonly IPasswordEncryptionService _encryptionService = service;
 
         public async Task<OperationResult<User>> Handle(RegisterCommand request, CancellationToken cancellationToken)
         {

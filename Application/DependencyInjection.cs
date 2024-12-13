@@ -15,7 +15,7 @@ namespace Application
             services.AddScoped<TokenHelper>();
             services.AddScoped<IPasswordEncryptionService, PasswordEncryptionService>();
 
-            services.AddAutoMapper(typeof(UserMappingProfile).Assembly);
+            services.AddAutoMapper(typeof(UserMappingProfiles).Assembly);
 
             return services;
 

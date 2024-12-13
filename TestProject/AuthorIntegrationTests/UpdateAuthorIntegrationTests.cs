@@ -19,8 +19,8 @@ namespace TestProject.AuthorIntegrationTests
         private IAuthorRepository _repository;
         private IMapper _mapper;
 
-        private static readonly Guid ExampleAuthorId = new Guid("12345678-1234-1234-1234-1234567890ab");
-        private static readonly Author ExampleAuthorDto = new Author
+        private static readonly Guid ExampleAuthorId = new("12345678-1234-1234-1234-1234567890ab");
+        private static readonly Author ExampleAuthorDto = new()
         {
             AuthorId = ExampleAuthorId,
             FirstName = "Test",
@@ -47,7 +47,7 @@ namespace TestProject.AuthorIntegrationTests
             });
             _mapper = config.CreateMapper();
 
-            Author author = new Author { AuthorId = ExampleAuthorId, FirstName = "Test", LastName = "Testsson" };
+            Author author = new() { AuthorId = ExampleAuthorId, FirstName = "Test", LastName = "Testsson" };
             _database.Authors.Add(author);
             _database.SaveChanges();
 

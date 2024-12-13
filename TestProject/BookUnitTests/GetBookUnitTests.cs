@@ -1,8 +1,8 @@
-﻿using Application.Queries.BookQueries;
-using Application.Interfaces.RepositoryInterfaces;
+﻿using Application.Interfaces.RepositoryInterfaces;
 using Moq;
 using AutoMapper;
 using Domain.Entities.Core;
+using Application.Queries.BookQueries.GetBookById;
 
 namespace TestProject.BookUnitTests
 {

@@ -1,6 +1,6 @@
 ﻿using Application.Dtos;
 using Application.Interfaces.RepositoryInterfaces;
-using Application.Queries.BookQueries;
+using Application.Queries.BookQueries.GetBookById;
 using AutoMapper;
 using Domain.Entities.Core;
 using Infrastructure.Database;

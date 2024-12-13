@@ -17,7 +17,7 @@ namespace TestProject.AuthorUnitTests
         private Mock<IMapper> _mockMapper;
 
         private static readonly Guid ExampleAuthorId = Guid.Parse("12345678-1234-1234-1234-1234567890ab");
-        private static readonly UpdateAuthorDto ExampleAuthorDto = new UpdateAuthorDto
+        private static readonly UpdateAuthorDto ExampleAuthorDto = new()
         {
             AuthorId = ExampleAuthorId,
             FirstName = "Test",

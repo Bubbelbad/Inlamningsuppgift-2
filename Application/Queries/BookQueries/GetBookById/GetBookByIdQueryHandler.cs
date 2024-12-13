@@ -4,7 +4,7 @@ using AutoMapper;
 using Domain.Entities.Core;
 using Application.Models;
 
-namespace Application.Queries.BookQueries
+namespace Application.Queries.BookQueries.GetBookById
 {
     public class GetBookByIdQueryHandler(IBookRepository repository, IMapper mapper) : IRequestHandler<GetBookByIdQuery, OperationResult<Book>>
     {

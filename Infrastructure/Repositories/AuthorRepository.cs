@@ -22,7 +22,7 @@ namespace Infrastructure.Repositories
         public async Task<Author> AddAuthor(Author author)
         {
             _realDatabase.Authors.Add(author);
-            _realDatabase.SaveChanges();
+            await _realDatabase.SaveChangesAsync();
             return author;
         }
 
