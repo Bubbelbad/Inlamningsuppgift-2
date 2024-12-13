@@ -4,6 +4,8 @@ using Application.Commands.AuthorCommands.UpdateAuthor;
 using Application.Dtos;
 using Application.Dtos.AuthorDtos;
 using Application.Queries.AuthorQueries;
+using Application.Queries.AuthorQueries.GetAllAuthors;
+using Application.Queries.AuthorQueries.GetAuthorById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 //using Microsoft.AspNetCore.Authorization;

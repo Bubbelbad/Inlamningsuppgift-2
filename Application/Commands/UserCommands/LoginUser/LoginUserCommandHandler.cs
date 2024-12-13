@@ -27,7 +27,7 @@ namespace Application.Commands.UserCommands.LoginUser
                 }
                 else
                 {
-                    throw new ApplicationException("Invalid Password.");
+                    throw new ApplicationException("Invalid PasswordHash.");
                 }
             }
             catch (Exception ex)
