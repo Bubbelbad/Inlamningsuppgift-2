@@ -1,5 +1,5 @@
 
-# Library Management - Clean Architecture ✨
+# Library Management - Clean Architecture 📚
 
 This is a project for a library management application. 
 
