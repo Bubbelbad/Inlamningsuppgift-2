@@ -38,6 +38,7 @@ namespace TestProject.BookIntegrationTests
             {
                 cfg.CreateMap<BookDto, Book>()
                    .ForMember(dest => dest.BookId, opt => opt.MapFrom(src => ExampleBookId));
+                cfg.CreateMap<Book, GetBookDto>();
             });
             _mapper = config.CreateMapper();
 
@@ -45,6 +46,7 @@ namespace TestProject.BookIntegrationTests
             {
                 BookId = ExampleBookId,
                 Title = "Test",
+                Genre = "Fantasy",
                 AuthorId = Guid.NewGuid(),
                 Description = "Description"
             };
@@ -68,7 +70,14 @@ namespace TestProject.BookIntegrationTests
         public async Task Handle_ValidInput_ReturnsBook()
         {
             // Arrange
-            BookDto bookToTest = new(ExampleBookId, "Test", Guid.NewGuid(), "New Description");
+            UpdateBookDto bookToTest = new UpdateBookDto
+            {
+                Id = ExampleBookId,
+                Title = "Test",
+                Description = "New Description",
+                Genre = "Fantasy",
+                AuthorId = Guid.NewGuid()
+            };
             var command = new UpdateBookCommand(bookToTest);
 
             // Act
@@ -84,7 +93,7 @@ namespace TestProject.BookIntegrationTests
         public async Task Handle_NullInput_ReturnsNull()
         {
             // Arrange
-            BookDto bookToTest = null!; // Use null-forgiving operator to explicitly indicate null
+            UpdateBookDto bookToTest = null!; // Use null-forgiving operator to explicitly indicate null
             var command = new UpdateBookCommand(bookToTest);
 
             // Act
@@ -99,7 +108,14 @@ namespace TestProject.BookIntegrationTests
         public async Task Handle_MissingTitle_ReturnsNull()
         {
             // Arrange
-            BookDto bookToTest = new(new Guid("12345678-1234-5678-1234-567812345678"), null!, Guid.NewGuid(), "BookService for Testing"); // Use null-forgiving operator to explicitly indicate null
+            UpdateBookDto bookToTest = new UpdateBookDto
+            {
+                Id = new Guid("12345678-1234-5678-1234-567812345678"),
+                Title = null!,
+                Genre = "Fantasy",
+                Description = "BookService for Testing",
+                AuthorId = Guid.NewGuid()
+            };
             var command = new UpdateBookCommand(bookToTest);
 
             // Act

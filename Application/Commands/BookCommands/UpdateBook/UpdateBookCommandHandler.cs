@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.RepositoryInterfaces;
+﻿using Application.Dtos.BookDtos;
+using Application.Interfaces.RepositoryInterfaces;
 using Application.Models;
 using AutoMapper;
 using Domain.Entities.Core;
@@ -6,16 +7,16 @@ using MediatR;
 
 namespace Application.Commands.BookCommands.UpdateBook
 {
-    public class UpdateBookCommandHandler(IBookRepository bookRepository, IMapper mapper) : IRequestHandler<UpdateBookCommand, OperationResult<Book>>
+    public class UpdateBookCommandHandler(IBookRepository bookRepository, IMapper mapper) : IRequestHandler<UpdateBookCommand, OperationResult<GetBookDto>>
     {
         private readonly IBookRepository _bookRepository = bookRepository;
         public IMapper _mapper = mapper;
 
-        public async Task<OperationResult<Book>> Handle(UpdateBookCommand request, CancellationToken cancellationToken)
+        public async Task<OperationResult<GetBookDto>> Handle(UpdateBookCommand request, CancellationToken cancellationToken)
         {
             if (request == null || request.NewBook == null || string.IsNullOrEmpty(request.NewBook.Title))
             {
-                return OperationResult<Book>.Failure("Invalid input");
+                return OperationResult<GetBookDto>.Failure("Invalid input");
             }
 
             try
@@ -24,15 +25,16 @@ namespace Application.Commands.BookCommands.UpdateBook
                 {
                     BookId = request.NewBook.Id,
                     Title = request.NewBook.Title,
+                    Genre = request.NewBook.Genre,
+                    Description = request.NewBook.Description,
                     AuthorId = request.NewBook.AuthorId,
-                    Description = request.NewBook.Description
                 };
 
                 var updatedBook = await _bookRepository.UpdateBook(bookToUpdate);
 
-                var mappedBook = _mapper.Map<Book>(updatedBook);
+                var mappedBook = _mapper.Map<GetBookDto>(updatedBook);
 
-                return OperationResult<Book>.Success(mappedBook);
+                return OperationResult<GetBookDto>.Success(mappedBook);
             }
 
             catch (Exception ex)

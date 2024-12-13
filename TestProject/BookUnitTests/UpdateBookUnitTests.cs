@@ -1,5 +1,4 @@
 ﻿using Application.Commands.BookCommands.UpdateBook;
-using Application.Dtos;
 using Application.Dtos.BookDtos;
 using Application.Interfaces.RepositoryInterfaces;
 using AutoMapper;
@@ -21,8 +20,9 @@ namespace TestProject.BookUnitTests
         {
             BookId = ExampleBookId,
             Title = "Test",
+            Genre = "Fantasy",
+            Description = "Test",
             AuthorId = Guid.NewGuid(),
-            Description = "Test"
         };
 
         [SetUp]
@@ -34,28 +34,44 @@ namespace TestProject.BookUnitTests
             _mockRepository.Setup(repo => repo.UpdateBook(It.Is<Book>(obj => obj.BookId == ExampleBookId)))
                            .ReturnsAsync(ExampleBook);
 
-            _mockRepository.Setup(repo => repo.GetBookById(It.Is<Guid>(id => id != ExampleBookId)))
-                           .ReturnsAsync((Book)null!);
+            _mockRepository.Setup(repo => repo.GetBookById(It.Is<Guid>(id => id == ExampleBookId)))
+                           .ReturnsAsync(ExampleBook);
 
-            _mockMapper.Setup(mapper => mapper.Map<Book>(It.IsAny<Book>()));
-            _mockMapper.Setup(mapper => mapper.Map<Book>(It.IsAny<Book>()))
-                       .Returns((Book book) => new Book
+            _mockMapper.Setup(mapper => mapper.Map<Book>(It.IsAny<UpdateBookDto>()))
+                       .Returns((UpdateBookDto dto) => new Book
                        {
-                           BookId = ExampleBookId,
+                           BookId = dto.Id,
+                           Title = dto.Title,
+                           Genre = dto.Genre,
+                           Description = dto.Description,
+                           AuthorId = dto.AuthorId
+                       });
+
+            _mockMapper.Setup(mapper => mapper.Map<GetBookDto>(It.IsAny<Book>()))
+                       .Returns((Book book) => new GetBookDto
+                       {
+                           BookId = book.BookId,
                            Title = book.Title,
-                           AuthorId = book.AuthorId,
-                           Description = book.Description
+                           Genre = book.Genre,
+                           Description = book.Description,
+                           AuthorId = (Guid)book.AuthorId
                        });
 
             _handler = new UpdateBookCommandHandler(_mockRepository.Object, _mockMapper.Object);
         }
 
-
         [Test]
         public async Task Handle_ValidInput_ReturnsBook()
         {
             // Arrange
-            BookDto bookToTest = new(new Guid("3e2e66cf-5ba6-4cd0-88a1-c37b71cca899"), "Test", Guid.NewGuid(), "Test");
+            UpdateBookDto bookToTest = new UpdateBookDto
+            {
+                Id = ExampleBookId,
+                Title = "Test",
+                Genre = "Fantasy",
+                Description = "Test",
+                AuthorId = Guid.NewGuid(),
+            };
             var command = new UpdateBookCommand(bookToTest);
 
             // Act
@@ -67,11 +83,14 @@ namespace TestProject.BookUnitTests
         }
 
 
+
+
+
         [Test]
         public async Task Handle_NullInput_ReturnsNull()
         {
             // Arrange
-            BookDto bookToTest = null!; // Use null-forgiving operator to explicitly indicate null
+            UpdateBookDto bookToTest = null!; // Use null-forgiving operator to explicitly indicate null
             var command = new UpdateBookCommand(bookToTest);
 
             // Act
@@ -86,7 +105,13 @@ namespace TestProject.BookUnitTests
         public async Task Handle_MissingTitle_ReturnsNull()
         {
             // Arrange
-            BookDto bookToTest = new(new Guid("12345678-1234-5678-1234-567812345678"), null!, Guid.NewGuid(), "BookService for Testing"); // Use null-forgiving operator to explicitly indicate null
+            UpdateBookDto bookToTest = new UpdateBookDto
+            {
+                Id = new Guid("12345678-1234-5678-1234-567812345678"),
+                Title = null!,
+                AuthorId = Guid.NewGuid(),
+                Description = "BookService for Testing"
+            };
             var command = new UpdateBookCommand(bookToTest);
 
             // Act

@@ -121,7 +121,7 @@ namespace API.Controllers
         [SwaggerResponse(200, "Successfully Updated Book.", typeof(BookDto))]
         [SwaggerResponse(400, "Invalid input data.")]
         [SwaggerResponse(404, "Book not found.")]
-        public async Task<IActionResult> UpdateBook([FromBody, Required] BookDto book)
+        public async Task<IActionResult> UpdateBook([FromBody, Required] UpdateBookDto book)
         {
             if (!ModelState.IsValid)
             {

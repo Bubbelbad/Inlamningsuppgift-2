@@ -14,6 +14,7 @@ namespace Application.Mappings
             CreateMap<BookDto, Book>();
             CreateMap<GetBookDto, Book>();
             CreateMap<Book, GetBookDto>();
+            CreateMap<Book, UpdateBookDto>();
 
 
             // For Testing:
