@@ -1,5 +1,6 @@
 ﻿using Application.Commands.AuthorCommands.UpdateAuthor;
 using Application.Dtos;
+using Application.Dtos.AuthorDtos;
 using Application.Interfaces.RepositoryInterfaces;
 using AutoMapper;
 using Domain.Entities.Core;
@@ -16,7 +17,12 @@ namespace TestProject.AuthorUnitTests
         private Mock<IMapper> _mockMapper;
 
         private static readonly Guid ExampleAuthorId = Guid.Parse("12345678-1234-1234-1234-1234567890ab");
-        private static readonly AuthorDto ExampleAuthorDto = new(ExampleAuthorId, "Test", "Testsson");
+        private static readonly UpdateAuthorDto ExampleAuthorDto = new UpdateAuthorDto
+        {
+            AuthorId = ExampleAuthorId,
+            FirstName = "Test",
+            LastName = "Testsson"
+        };
 
         [SetUp]
         public void Setup()
@@ -63,7 +69,7 @@ namespace TestProject.AuthorUnitTests
         public async Task Handle_NullInput_ReturnsNull()
         {
             // Arrange
-            AuthorDto authorToTest = null!;
+            UpdateAuthorDto authorToTest = null!;
             var command = new UpdateAuthorCommand(authorToTest);
 
             // Act
@@ -78,7 +84,13 @@ namespace TestProject.AuthorUnitTests
         public async Task Handle_MissingFirstName_ReturnsNull()
         {
             // Arrange
-            AuthorDto invalidAuthorDto = new(Guid.NewGuid(), null!, "Testsson");
+            var invalidAuthorDto = new UpdateAuthorDto
+            {
+                AuthorId = Guid.NewGuid(),
+                FirstName = null!,
+                LastName = "Testsson"
+            };
+
             var command = new UpdateAuthorCommand(invalidAuthorDto);
 
             // Act

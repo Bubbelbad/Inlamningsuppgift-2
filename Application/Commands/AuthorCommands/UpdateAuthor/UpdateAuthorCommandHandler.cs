@@ -22,9 +22,11 @@ namespace Application.Commands.AuthorCommands.UpdateAuthor
             {
                 Author authorToUpdate = new()
                 {
-                    AuthorId = request.NewAuthor.Id,
+                    AuthorId = request.NewAuthor.AuthorId,
                     FirstName = request.NewAuthor.FirstName,
                     LastName = request.NewAuthor.LastName,
+                    DateOfBirth = request.NewAuthor.DateOfBirth,
+                    Biography = request.NewAuthor.Biography
                 };
 
                 var updatedAuthor = await _authorRepository.UpdateAuthor(authorToUpdate);

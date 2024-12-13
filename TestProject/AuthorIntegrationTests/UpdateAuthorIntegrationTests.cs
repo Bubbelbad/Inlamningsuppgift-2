@@ -1,5 +1,6 @@
 ﻿using Application.Commands.AuthorCommands.UpdateAuthor;
 using Application.Dtos;
+using Application.Dtos.AuthorDtos;
 using Application.Interfaces.RepositoryInterfaces;
 using AutoMapper;
 using Domain.Entities.Core;
@@ -66,10 +67,17 @@ namespace TestProject.AuthorIntegrationTests
         public async Task Handle_ValidInput_ResurnsTrue()
         {
             // Arrange
-            var updatedBook = new AuthorDto(ExampleAuthorId, "Updated", "Updatedsson");
+            var updatedAuthor = new UpdateAuthorDto
+            {
+                AuthorId = ExampleAuthorId,
+                FirstName = "Test",
+                LastName = "Testsson",
+                DateOfBirth = DateTime.Now,
+                Biography = "Biography"
+            };
 
             // Act
-            var result = await _handler.Handle(new UpdateAuthorCommand(updatedBook), CancellationToken.None);
+            var result = await _handler.Handle(new UpdateAuthorCommand(updatedAuthor), CancellationToken.None);
 
             // Assert
             Assert.That(result, Is.Not.Null);
@@ -81,7 +89,7 @@ namespace TestProject.AuthorIntegrationTests
         public async Task Handle_NullInput_ReturnsNull()
         {
             // Arrange
-            AuthorDto authorToTest = null!;
+            UpdateAuthorDto authorToTest = null!;
             var command = new UpdateAuthorCommand(authorToTest);
 
             // Act
@@ -95,7 +103,15 @@ namespace TestProject.AuthorIntegrationTests
         public async Task Handle_MissingFirstName_ReturnsNull()
         {
             // Arrange
-            AuthorDto invalidAuthorDto = new(Guid.NewGuid(), null!, "Testsson");
+            var invalidAuthorDto = new UpdateAuthorDto
+            {
+                AuthorId = Guid.NewGuid(),
+                FirstName = null!,
+                LastName = "Updatedsson",
+                DateOfBirth = DateTime.Now,
+                Biography = "Biography"
+            };
+
             var command = new UpdateAuthorCommand(invalidAuthorDto);
 
             // Act
