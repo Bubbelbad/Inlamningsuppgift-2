@@ -2,7 +2,6 @@
 using Application.Commands.UserCommands.DeleteUser;
 using Application.Commands.UserCommands.UpdateUser;
 using Application.Dtos;
-using Application.Queries.UserQueries;
 using Application.Queries.UserQueries.GetUserById;
 using Application.Queries.UserQueries.GetUserByUsername;
 using MediatR;
@@ -10,6 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authorization;
 using Application.Queries.UserQueries.GetDetailedUserById;
+using Application.Queries.UserQueries.GetAllUsers;
+using Application.Dtos.UserDtos;
+using Application.Commands.UserCommands.LoginUser;
 
 namespace API.Controllers
 {
@@ -120,12 +122,12 @@ namespace API.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("Login")]
-        public async Task<IActionResult> Login([Required] string username, string password)
+        public async Task<IActionResult> Login([Required][FromForm] LoginUserDto userDto)
         {
-            _logger.LogInformation("Logging in User {username}", username);
-            if (username == null)
+            _logger.LogInformation("Logging in User {username}", userDto.UserName);
+            if (userDto.UserName == null)
             {
                 _logger.LogWarning("Invalid input data");
                 return BadRequest("Invalid input data.");
@@ -133,7 +135,7 @@ namespace API.Controllers
 
             try
             {
-                var loggedInUser = await _mediator.Send(new LoginUserQuery(username, password));
+                var loggedInUser = await _mediator.Send(new LoginUserCommand(userDto));
                 _logger.LogInformation("User {username} logged in successfully", loggedInUser);
                 return Ok(loggedInUser);
             }

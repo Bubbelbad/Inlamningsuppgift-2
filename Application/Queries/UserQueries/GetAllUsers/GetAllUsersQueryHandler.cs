@@ -6,7 +6,7 @@ using Domain.Entities.Core;
 using MediatR;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace Application.Queries.UserQueries
+namespace Application.Queries.UserQueries.GetAllUsers
 {
     internal sealed class GetAllUsersQueryHandler(IUserRepository userRepository, IMemoryCache memoryCache, IMapper mapper) : IRequestHandler<GetAllUsersQuery, OperationResult<List<GetUserDto>>>
     {
@@ -25,10 +25,10 @@ namespace Application.Queries.UserQueries
             {
                 if (!_memoryCache.TryGetValue(cacheKey, out List<User> allUsersFromDatabase))
                 {
-                    allUsersFromDatabase = await _userRepository.GetAllUsers();
-                    _memoryCache.Set(cacheKey, allUsersFromDatabase, TimeSpan.FromMinutes(5));
+                    // _memoryCache.Set(cacheKey, allUsersFromDatabase, TimeSpan.FromMinutes(5));
                 }
 
+                allUsersFromDatabase = await _userRepository.GetAllUsers();
                 var mappedUsersFromDatabase = _mapper.Map<List<GetUserDto>>(allUsersFromDatabase);
                 return OperationResult<List<GetUserDto>>.Success(mappedUsersFromDatabase);
             }

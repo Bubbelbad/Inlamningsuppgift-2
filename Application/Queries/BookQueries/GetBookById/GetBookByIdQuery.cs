@@ -1,10 +1,10 @@
 ﻿using MediatR;
-using Domain.Entities.Core;
 using Application.Models;
+using Application.Dtos.BookDtos;
 
 namespace Application.Queries.BookQueries.GetBookById
 {
-    public class GetBookByIdQuery(Guid bookId) : IRequest<OperationResult<Book>>
+    public class GetBookByIdQuery(Guid bookId) : IRequest<OperationResult<GetBookDto>>
     {
         public Guid Id { get; } = bookId;
     }
