@@ -3,6 +3,11 @@ using Application.Queries.UserQueries.Helpers;
 using Application.Interfaces.ServiceInterfaces;
 using Application.Services.PasswordEncryption;
 using Application.Mappings;
+using MediatR;
+using FluentValidation.AspNetCore;
+using Application.Commands.AuthorCommands.AddAuthor;
+using FluentValidation;
+
 namespace Application
 {
     public static class DependencyInjection
@@ -14,13 +19,16 @@ namespace Application
             services.AddAutoMapper(assembly); // Specify the assembly to resolve ambiguity
             services.AddScoped<TokenHelper>();
             services.AddScoped<IPasswordEncryptionService, PasswordEncryptionService>();
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
             services.AddAutoMapper(typeof(UserMappingProfiles).Assembly);
             services.AddAutoMapper(typeof(BookMappingProfiles).Assembly);
 
-            return services;
+            // Register validators
+            services.AddValidatorsFromAssemblyContaining<AddAuthorCommandValidator>();
+            services.AddFluentValidationAutoValidation();
 
-            // services.AddValidatorsFromAssembly(assembly);
+            return services;
         }
     }
 }

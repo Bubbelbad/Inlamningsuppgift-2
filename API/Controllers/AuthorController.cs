@@ -131,7 +131,7 @@ namespace API.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred while adding new AuthorId at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
-                return StatusCode(500, "An error occurred while processing your request.");
+                return StatusCode(500, ex.Message);
             }
         }
 
