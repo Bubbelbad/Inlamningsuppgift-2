@@ -7,19 +7,19 @@ using MediatR;
 
 namespace Application.Commands.BookCommands.AddBook
 {
-    public class AddBookCommandHandler(IBookRepository bookRepository, IMapper mapper) : IRequestHandler<AddBookCommand, OperationResult<AddBookDto>>
+    public class AddBookCommandHandler(IBookRepository bookRepository, IMapper mapper) : IRequestHandler<AddBookCommand, OperationResult<GetBookDto>>
     {
         private readonly IBookRepository _bookRepository = bookRepository;
         public readonly IMapper _mapper = mapper;
 
-        public async Task<OperationResult<AddBookDto>> Handle(AddBookCommand request, CancellationToken cancellationToken)
+        public async Task<OperationResult<GetBookDto>> Handle(AddBookCommand request, CancellationToken cancellationToken)
         {
             // var existingAuthor = _database.Authors.Where(author => author.Id == request.NewBook.AuthorId.Id);
             // Kolla om det finns existerande author eller om en ny ska läggas till
 
             if (request == null || request.NewBook == null || string.IsNullOrEmpty(request.NewBook.Title))
             {
-                return OperationResult<AddBookDto>.Failure("Not valid input"); //Is this if-statement really needed with my ModelState now ? 
+                return OperationResult<GetBookDto>.Failure("Not valid input"); //Is this if-statement really needed with my ModelState now ? 
             }
             try
             {
@@ -33,9 +33,9 @@ namespace Application.Commands.BookCommands.AddBook
                 };
 
                 var createdBook = await _bookRepository.AddBook(bookToCreate);
-                var mappedBook = _mapper.Map<AddBookDto>(createdBook);
+                var mappedBook = _mapper.Map<GetBookDto>(createdBook);
 
-                return OperationResult<AddBookDto>.Success(mappedBook);
+                return OperationResult<GetBookDto>.Success(mappedBook);
             }
             catch
             {

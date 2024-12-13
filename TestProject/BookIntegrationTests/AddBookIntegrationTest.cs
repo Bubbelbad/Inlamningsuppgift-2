@@ -43,7 +43,7 @@ namespace TestProject.BookIntegrationTests
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<AddBookDto, Book>();
-                cfg.CreateMap<Book, AddBookDto>();
+                cfg.CreateMap<Book, GetBookDto>();
             });
             _mapper = config.CreateMapper();
 
