@@ -1,5 +1,5 @@
 ﻿using Application.Commands.BookCommands.UpdateBook;
-using Application.Dtos;
+using Application.Dtos.BookDtos;
 using Application.Interfaces.RepositoryInterfaces;
 using AutoMapper;
 using Domain.Entities.Core;

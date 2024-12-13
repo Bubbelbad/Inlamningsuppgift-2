@@ -1,12 +1,11 @@
 ﻿using Application.Commands.BookCommands.AddBook;
-using Application.Dtos;
+using Application.Dtos.BookDtos;
 using Application.Interfaces.RepositoryInterfaces;
 using AutoMapper;
 using Domain.Entities.Core;
 using Infrastructure.Database;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
-
 
 namespace TestProject.BookIntegrationTests
 {
@@ -20,7 +19,13 @@ namespace TestProject.BookIntegrationTests
         private IBookRepository _repository;
 
         private static readonly Guid ExampleBookId = new Guid("12345678-1234-1234-1234-1234567890ab");
-        private static readonly AddBookDto ExampleBookDto = new("Test", Guid.NewGuid(), "An example book for Testing");
+        private static readonly AddBookDto ExampleBookDto = new AddBookDto
+        {
+            Title = "Test",
+            AuthorId = Guid.NewGuid(),
+            Genre = "Fantasy",
+            Description = "An example book for Testing"
+        };
 
         [SetUp]
         public void Setup()
@@ -37,8 +42,8 @@ namespace TestProject.BookIntegrationTests
             // Set up AutoMapper with actual configuration
             var config = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<AddAuthorDto, Author>()
-                   .ForMember(dest => dest.AuthorId, opt => opt.MapFrom(src => ExampleBookId));
+                cfg.CreateMap<AddBookDto, Book>();
+                cfg.CreateMap<Book, AddBookDto>();
             });
             _mapper = config.CreateMapper();
 
@@ -67,6 +72,8 @@ namespace TestProject.BookIntegrationTests
             Assert.That(result.Data.Description, Is.EqualTo(ExampleBookDto.Description));
         }
 
+
+
         [Test]
         public async Task Handle_NullInput_ReturnsNull()
         {
@@ -86,7 +93,13 @@ namespace TestProject.BookIntegrationTests
         public async Task Handle_MissingTitle_ReturnsNull()
         {
             // Arrange
-            AddBookDto bookToTest = new(null!, Guid.NewGuid(), "An example book for Testing"); // Use null-forgiving operator to explicitly indicate null
+            AddBookDto bookToTest = new()
+            {
+                Title = null!,
+                Genre = "Fantasy",
+                AuthorId = Guid.NewGuid(),
+                Description = "An example book for Testing"
+            }; // Use null-forgiving operator to explicitly indicate null
             var command = new AddBookCommand(bookToTest);
 
             // Act

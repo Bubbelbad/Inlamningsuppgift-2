@@ -16,6 +16,7 @@ namespace Application
             services.AddScoped<IPasswordEncryptionService, PasswordEncryptionService>();
 
             services.AddAutoMapper(typeof(UserMappingProfiles).Assembly);
+            services.AddAutoMapper(typeof(BookMappingProfiles).Assembly);
 
             return services;
 
