@@ -4,7 +4,7 @@
     {
         public Guid Id { get; set; } = id;
         public string Title { get; set; } = title;
-        public Guid AuthorId { get; set; } = authorId;
         public string Description { get; set; } = description;
+        public Guid AuthorId { get; set; } = authorId;
     }
 }

@@ -46,9 +46,9 @@ namespace TestProject.BookUnitTests
                     AuthorId = dto.AuthorId
                 });
 
-            // Set up mock to map from Book to AddBookDto
-            _mockMapper.Setup(mapper => mapper.Map<AddBookDto>(It.IsAny<Book>()))
-                .Returns((Book book) => new AddBookDto
+            // Set up mock to map from Book to GetBookDto
+            _mockMapper.Setup(mapper => mapper.Map<GetBookDto>(It.IsAny<Book>()))
+                .Returns((Book book) => new GetBookDto
                 {
                     Title = book.Title,
                     Genre = book.Genre,
