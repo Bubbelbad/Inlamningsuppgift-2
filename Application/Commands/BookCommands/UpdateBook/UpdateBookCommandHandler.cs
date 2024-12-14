@@ -14,11 +14,6 @@ namespace Application.Commands.BookCommands.UpdateBook
 
         public async Task<OperationResult<GetBookDto>> Handle(UpdateBookCommand request, CancellationToken cancellationToken)
         {
-            if (request == null || request.NewBook == null || string.IsNullOrEmpty(request.NewBook.Title))
-            {
-                return OperationResult<GetBookDto>.Failure("Invalid input");
-            }
-
             try
             {
                 Book bookToUpdate = new()
@@ -31,7 +26,6 @@ namespace Application.Commands.BookCommands.UpdateBook
                 };
 
                 var updatedBook = await _bookRepository.UpdateBook(bookToUpdate);
-
                 var mappedBook = _mapper.Map<GetBookDto>(updatedBook);
 
                 return OperationResult<GetBookDto>.Success(mappedBook);

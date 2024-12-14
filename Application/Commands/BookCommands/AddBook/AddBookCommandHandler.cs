@@ -14,13 +14,6 @@ namespace Application.Commands.BookCommands.AddBook
 
         public async Task<OperationResult<GetBookDto>> Handle(AddBookCommand request, CancellationToken cancellationToken)
         {
-            // var existingAuthor = _database.Authors.Where(author => author.Id == request.NewBook.AuthorId.Id);
-            // Kolla om det finns existerande author eller om en ny ska läggas till
-
-            if (request == null || request.NewBook == null || string.IsNullOrEmpty(request.NewBook.Title))
-            {
-                return OperationResult<GetBookDto>.Failure("Not valid input"); //Is this if-statement really needed with my ModelState now ? 
-            }
             try
             {
                 Book bookToCreate = new()
