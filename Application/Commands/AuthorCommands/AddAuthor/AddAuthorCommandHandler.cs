@@ -13,11 +13,6 @@ namespace Application.Commands.AuthorCommands.AddAuthor
 
         public async Task<OperationResult<Author>> Handle(AddAuthorCommand request, CancellationToken cancellationToken)
         {
-            if (request == null || request.NewAuthor == null || string.IsNullOrEmpty(request.NewAuthor.FirstName))
-            {
-                return OperationResult<Author>.Failure("Invalid input");
-            }
-
             try
             {
                 Author authorToCreate = new()

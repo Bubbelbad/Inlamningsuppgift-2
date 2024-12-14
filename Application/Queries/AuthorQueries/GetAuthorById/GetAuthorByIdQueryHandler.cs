@@ -13,18 +13,15 @@ namespace Application.Queries.AuthorQueries.GetAuthorById
 
         public async Task<OperationResult<Author>> Handle(GetAuthorByIdQuery query, CancellationToken cancellationToken)
         {
-            if (query.Id.Equals(Guid.Empty))
-            {
-                return OperationResult<Author>.Failure("Id can not be empty");
-            }
-
             try
             {
                 var author = await _authorRepository.GetAuthorById(query.Id);
+
                 if (author == null)
                 {
                     return OperationResult<Author>.Failure("AuthorId not found");
                 }
+
                 var mappedAuthor = _mapper.Map<Author>(author);
                 return OperationResult<Author>.Success(mappedAuthor);
             }

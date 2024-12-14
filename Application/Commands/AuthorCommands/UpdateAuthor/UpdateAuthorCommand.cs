@@ -1,5 +1,4 @@
-﻿using Application.Dtos;
-using Application.Dtos.AuthorDtos;
+﻿using Application.Dtos.AuthorDtos;
 using Application.Models;
 using Domain.Entities.Core;
 using MediatR;
