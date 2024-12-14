@@ -13,11 +13,6 @@ namespace Application.Commands.AuthorCommands.UpdateAuthor
 
         public async Task<OperationResult<Author>> Handle(UpdateAuthorCommand request, CancellationToken cancellationToken)
         {
-            if (request == null || request.NewAuthor == null || string.IsNullOrEmpty(request.NewAuthor.FirstName))
-            {
-                return OperationResult<Author>.Failure("Not valid input");
-            }
-
             try
             {
                 Author authorToUpdate = new()
@@ -31,7 +26,6 @@ namespace Application.Commands.AuthorCommands.UpdateAuthor
 
                 var updatedAuthor = await _authorRepository.UpdateAuthor(authorToUpdate);
                 var mappedAuthor = _mapper.Map<Author>(updatedAuthor);
-
                 return OperationResult<Author>.Success(mappedAuthor);
             }
             catch (Exception ex)

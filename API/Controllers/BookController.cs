@@ -1,7 +1,6 @@
 ﻿using Application.Commands.BookCommands.AddBook;
 using Application.Commands.BookCommands.DeleteBook;
 using Application.Commands.BookCommands.UpdateBook;
-using Application.Dtos;
 using Application.Dtos.BookDtos;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -49,6 +48,7 @@ namespace API.Controllers
             }
         }
 
+
         [Route("GetBookById/{bookId}")]
         [HttpGet]
         [SwaggerOperation(Description = "Gets a book by Id")]
@@ -57,22 +57,13 @@ namespace API.Controllers
         [SwaggerResponse(404, "Book not found")]
         public async Task<IActionResult> GetBook([FromRoute] Guid bookId)
         {
-            if (!ModelState.IsValid)
-            {
-                _logger.LogWarning("Invalid ID: {id}", bookId);
-                return BadRequest(ModelState);
-            }
-
             try
             {
                 var operationResult = await _mediator.Send(new GetBookByIdQuery(bookId));
                 if (operationResult.IsSuccess)
                 {
-                    _logger.LogInformation("Successfully retrieved Book with ID: {id}", bookId);
                     return Ok(operationResult.Data);
-
                 }
-                _logger.LogWarning("Book with ID: {id} not found", bookId);
                 return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage });
             }
 
@@ -83,6 +74,7 @@ namespace API.Controllers
             }
         }
 
+
         [Route("Create")]
         [HttpPost]
         [SwaggerOperation(Description = "Adds a new Book to library")]
@@ -90,12 +82,6 @@ namespace API.Controllers
         [SwaggerResponse(400, "Invalid input data.")]
         public async Task<IActionResult> AddBook([FromBody, Required] AddBookDto bookToAdd)
         {
-            if (!ModelState.IsValid)
-            {
-                _logger.LogWarning($"Invalid Book data: {ModelState}");
-                return BadRequest(ModelState);
-            }
-
             try
             {
                 var operationResult = await _mediator.Send(new AddBookCommand(bookToAdd));
@@ -115,6 +101,7 @@ namespace API.Controllers
             }
         }
 
+
         [Route("Update")]
         [HttpPut]
         [SwaggerOperation(Description = "Updates an existing Book in collection")]
@@ -123,18 +110,11 @@ namespace API.Controllers
         [SwaggerResponse(404, "Book not found.")]
         public async Task<IActionResult> UpdateBook([FromBody, Required] UpdateBookDto book)
         {
-            if (!ModelState.IsValid)
-            {
-                _logger.LogWarning($"Invalid Book data: {ModelState}");
-                return BadRequest(ModelState);
-            }
-
             try
             {
                 var operationResult = await _mediator.Send(new UpdateBookCommand(book));
                 if (operationResult.IsSuccess)
                 {
-                    _logger.LogInformation("Book updated successfully");
                     return Ok(operationResult.Data);
                 }
 
@@ -148,6 +128,7 @@ namespace API.Controllers
             }
         }
 
+
         [Route("Delete/{id}")]
         [HttpDelete]
         [SwaggerOperation(Description = "Deletes a Book from collection")]
@@ -155,21 +136,14 @@ namespace API.Controllers
         [SwaggerResponse(404, "Book not found.")]
         public async Task<IActionResult> DeleteBook([FromRoute] Guid id)
         {
-            if (!ModelState.IsValid)
-            {
-                _logger.LogWarning($"Invalid ID: {id}");
-                return BadRequest(ModelState);
-            }
-
             try
             {
                 var operationResult = await _mediator.Send(new DeleteBookCommand(id));
+
                 if (operationResult.IsSuccess)
                 {
-                    _logger.LogInformation("Book deleted successfully");
                     return Ok(operationResult.Message);
                 }
-
                 return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage });
             }
             catch (Exception ex)

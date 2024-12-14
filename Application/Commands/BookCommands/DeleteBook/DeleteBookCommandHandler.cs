@@ -13,11 +13,6 @@ namespace Application.Commands.BookCommands.DeleteBook
 
         public async Task<OperationResult<bool>> Handle(DeleteBookCommand request, CancellationToken cancellationToken)
         {
-            if (request.BookIdToDelete.Equals(Guid.Empty))
-            {
-                throw new ArgumentNullException(nameof(request), "Guid cannot be empty.");
-            }
-
             try
             {
                 bool successfulDeletion = await _bookRepository.DeleteBook(request.BookIdToDelete);

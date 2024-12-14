@@ -14,11 +14,6 @@ namespace Application.Queries.BookQueries.GetBookById
 
         public async Task<OperationResult<GetBookDto>> Handle(GetBookByIdQuery query, CancellationToken cancellationToken)
         {
-            if (query.Id.Equals(Guid.Empty))
-            {
-                return OperationResult<GetBookDto>.Failure("The book Id was an empty Guid");
-            }
-
             try
             {
                 Book book = await _bookRepository.GetBookById(query.Id);
