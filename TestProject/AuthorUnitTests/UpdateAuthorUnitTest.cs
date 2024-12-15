@@ -13,7 +13,7 @@ namespace TestProject.AuthorUnitTests
     public class UpdateAuthorUnitTest
     {
         private UpdateAuthorCommandHandler _handler;
-        private Mock<IAuthorRepository> _mockRepository;
+        private Mock<IGenericRepository<Author, Guid>> _mockRepository;
         private Mock<IMapper> _mockMapper;
 
         private static readonly Guid ExampleAuthorId = Guid.Parse("12345678-1234-1234-1234-1234567890ab");
@@ -27,11 +27,11 @@ namespace TestProject.AuthorUnitTests
         [SetUp]
         public void Setup()
         {
-            _mockRepository = new Mock<IAuthorRepository>();
+            _mockRepository = new Mock<IGenericRepository<Author, Guid>>();
             _mockMapper = new Mock<IMapper>();
 
             // Set up the mock repository to handle any AuthorId object with the same Id
-            _mockRepository.Setup(repo => repo.UpdateAuthor(It.Is<Author>(obj => obj.AuthorId == ExampleAuthorId)))
+            _mockRepository.Setup(repo => repo.UpdateAsync(It.Is<Author>(obj => obj.AuthorId == ExampleAuthorId)))
                            .ReturnsAsync((Author updatedAuthor) => updatedAuthor);
 
             _mockMapper.Setup(mapper => mapper.Map<Author>(It.IsAny<Author>()));

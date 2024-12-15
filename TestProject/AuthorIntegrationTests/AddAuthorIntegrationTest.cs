@@ -15,7 +15,7 @@ namespace TestProject.AuthorIntegrationTests
     {
         private AddAuthorCommandHandler _handler;
         private RealDatabase _database;
-        private IAuthorRepository _repository;
+        private IGenericRepository<Author, Guid> _repository;
         private IMapper _mapper;
 
         private static readonly Guid ExampleAuthorId = new Guid("12345678-1234-1234-1234-1234567890ab");
@@ -30,7 +30,7 @@ namespace TestProject.AuthorIntegrationTests
             _database = new RealDatabase(options);
 
             // Initialize the repository with the in-memory database
-            _repository = new AuthorRepository(_database);
+            _repository = new GenericRepository<Author, Guid>(_database);
 
             // Set up AutoMapper with actual configuration
             var config = new MapperConfiguration(cfg =>
@@ -41,7 +41,7 @@ namespace TestProject.AuthorIntegrationTests
             _mapper = config.CreateMapper();
 
             // Initialize the handler with the actual repository and mapper
-            // _handler = new AddAuthorCommandHandler(_repository, _mapper);
+            _handler = new AddAuthorCommandHandler(_repository, _mapper);
         }
 
         [TearDown]

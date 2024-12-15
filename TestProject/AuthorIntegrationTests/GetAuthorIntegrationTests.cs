@@ -15,7 +15,7 @@ namespace TestProject.AuthorIntegrationTests
     {
         private GetAuthorByIdQueryHandler _handler;
         private RealDatabase _database;
-        private IAuthorRepository _repository;
+        private IGenericRepository<Author, Guid> _repository;
         private IMapper _mapper;
 
         private static readonly Guid ExampleAuthorId = new Guid("12345678-1234-1234-1234-1234567890ab");
