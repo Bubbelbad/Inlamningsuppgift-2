@@ -7,9 +7,9 @@ using MediatR;
 
 namespace Application.Commands.UserCommands.Register
 {
-    public class RegisterCommandHandler(IUserRepository userRepository, IMapper mapper, IPasswordEncryptionService service) : IRequestHandler<RegisterCommand, OperationResult<User>>
+    public class RegisterCommandHandler(IGenericRepository<User, string> repository, IMapper mapper, IPasswordEncryptionService service) : IRequestHandler<RegisterCommand, OperationResult<User>>
     {
-        private readonly IUserRepository _userReposiory = userRepository;
+        private readonly IGenericRepository<User, string> _repository = repository;
         private readonly IMapper _mapper = mapper;
         private readonly IPasswordEncryptionService _encryptionService = service;
 
@@ -25,7 +25,7 @@ namespace Application.Commands.UserCommands.Register
                     Role = "User"
                 };
 
-                var createdUser = await _userReposiory.AddUser(userToCreate);
+                var createdUser = await _repository.AddAsync(userToCreate);
                 var mappedUser = _mapper.Map<User>(createdUser);
                 return OperationResult<User>.Success(mappedUser);
             }

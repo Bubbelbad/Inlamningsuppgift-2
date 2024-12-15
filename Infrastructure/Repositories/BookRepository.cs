@@ -5,14 +5,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
-    public class BookRepository(RealDatabase database) : IBookRepository
+    public class BookRepository : GenericRepository<Book, Guid>, IBookRepository
     {
-        private readonly RealDatabase _realDatabase = database;
+        private readonly RealDatabase _realDatabase;
 
-        public async Task<List<Book>> GetAllBooks()
+        public BookRepository(RealDatabase database) : base(database)
         {
-            List<Book> allBooksFromDatabase = _realDatabase.Books.ToList();
-            return allBooksFromDatabase;
+            _realDatabase = database;
         }
     }
 }

@@ -16,7 +16,7 @@ namespace Application.Queries.UserQueries.GetDetailedUserById
         {
             try
             {
-                var user = await _userRepository.GetUserById(request.Id);
+                var user = await _userRepository.GetDetailedUserById(request.Id);
                 var mappedUser = _mapper.Map<User>(user);
                 return OperationResult<User>.Success(mappedUser);
             }

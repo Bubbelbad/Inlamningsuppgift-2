@@ -90,7 +90,7 @@ namespace API.Controllers
         [HttpGet]
         [Route("GetDetailedUserById")]
         [ResponseCache(CacheProfileName = "DefaultCache")]
-        public async Task<IActionResult> GetDetailedUserById(Guid id)
+        public async Task<IActionResult> GetDetailedUserById(string id)
         {
             _logger.LogInformation("Fetching User at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
             try

@@ -6,9 +6,9 @@ using MediatR;
 
 namespace Application.Commands.UserCommands.UpdateUser
 {
-    public class UpdateUserCommandHandler(IUserRepository repository, IMapper mapper) : IRequestHandler<UpdateUserCommand, OperationResult<User>>
+    public class UpdateUserCommandHandler(IGenericRepository<User, string> repository, IMapper mapper) : IRequestHandler<UpdateUserCommand, OperationResult<User>>
     {
-        private readonly IUserRepository _userRepository = repository;
+        private readonly IGenericRepository<User, string> _repository = repository;
         private readonly IMapper _mapper = mapper;
 
 
@@ -18,13 +18,13 @@ namespace Application.Commands.UserCommands.UpdateUser
             {
                 User userToUpdate = new()
                 {
-                    Id = request.UserToUpdate.Id.ToString(),
+                    Id = request.UserToUpdate.Id,
                     UserName = request.UserToUpdate.UserName,
                     // Do I need to hash the PasswordHash here? Probably.
                     PasswordHash = request.UserToUpdate.Password
                 };
 
-                var updatedUser = await _userRepository.UpdateUser(userToUpdate);
+                var updatedUser = await _repository.UpdateAsync(userToUpdate);
                 var mappedUser = _mapper.Map<User>(updatedUser);
                 return OperationResult<User>.Success(mappedUser);
             }
