@@ -146,11 +146,6 @@ namespace API.Controllers
         public async Task<IActionResult> Register([FromBody, Required] UserDto newUser)
         {
             _logger.LogInformation("Adding new User {username}", newUser.UserName);
-            if (!ModelState.IsValid)
-            {
-                _logger.LogWarning("Invalid input data");
-                return BadRequest(ModelState);
-            }
 
             try
             {

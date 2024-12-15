@@ -15,11 +15,6 @@ namespace Application.Commands.UserCommands.Register
 
         public async Task<OperationResult<User>> Handle(RegisterCommand request, CancellationToken cancellationToken)
         {
-            if (request == null)
-            {
-                throw new ArgumentNullException(nameof(request), "Request or LoginUser cannot be null.");
-            }
-
             try
             {
                 User userToCreate = new()
