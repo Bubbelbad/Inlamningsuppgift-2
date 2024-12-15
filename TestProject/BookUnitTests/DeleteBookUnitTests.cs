@@ -1,6 +1,7 @@
 ﻿using Application.Commands.BookCommands.DeleteBook;
 using Application.Interfaces.RepositoryInterfaces;
 using AutoMapper;
+using Domain.Entities.Core;
 using Moq;
 
 namespace TestProject.BookUnitTests
@@ -10,7 +11,7 @@ namespace TestProject.BookUnitTests
     public class DeleteBookUnitTest
     {
         private DeleteBookCommandHandler _handler;
-        private Mock<IBookRepository> _mockRepository;
+        private Mock<IGenericRepository<Book, Guid>> _mockRepository;
         private Mock<IMapper> _mockMapper;
 
         private static readonly Guid ExampleBookId = Guid.Parse("783307e1-ea3b-400b-919d-0c40b2bbae78");
@@ -18,14 +19,14 @@ namespace TestProject.BookUnitTests
         [SetUp]
         public void Setup()
         {
-            _mockRepository = new Mock<IBookRepository>();
+            _mockRepository = new Mock<IGenericRepository<Book, Guid>>();
             _mockMapper = new Mock<IMapper>();
 
             // Setup mock.DeleteBook returns true when valid ID
-            _mockRepository.Setup(repo => repo.DeleteBook(It.Is<Guid>(id => id == new Guid("783307e1-ea3b-400b-919d-0c40b2bbae78"))))
+            _mockRepository.Setup(repo => repo.DeleteAsync(It.Is<Guid>(id => id == new Guid("783307e1-ea3b-400b-919d-0c40b2bbae78"))))
                            .ReturnsAsync(true);
 
-            _mockRepository.Setup(repo => repo.DeleteBook(It.Is<Guid>(id => id != new Guid("783307e1-ea3b-400b-919d-0c40b2bbae78"))))
+            _mockRepository.Setup(repo => repo.DeleteAsync(It.Is<Guid>(id => id != new Guid("783307e1-ea3b-400b-919d-0c40b2bbae78"))))
                            .ReturnsAsync(false);
 
             _handler = new DeleteBookCommandHandler(_mockRepository.Object, _mockMapper.Object);

@@ -15,7 +15,7 @@ namespace TestProject.BookIntegrationTests
     {
         private UpdateBookCommandHandler _handler;
         private RealDatabase _database;
-        private IBookRepository _repository;
+        private IGenericRepository<Book, Guid> _repository;
         private IMapper _mapper;
 
         private static readonly Guid ExampleBookId = new Guid("12345678-1234-1234-1234-1234567890ab");
@@ -31,7 +31,7 @@ namespace TestProject.BookIntegrationTests
             _database = new RealDatabase(options);
 
             // Initialize the repository with the in-memory database
-            _repository = new BookRepository(_database);
+            _repository = new GenericRepository<Book, Guid>(_database);
 
             // Set up AutoMapper with actual configuration
             var config = new MapperConfiguration(cfg =>

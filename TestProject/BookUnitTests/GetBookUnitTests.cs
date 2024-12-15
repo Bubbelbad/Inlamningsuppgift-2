@@ -12,7 +12,7 @@ namespace TestProject.BookUnitTests
     public class GetBookUnitTests
     {
         private GetBookByIdQueryHandler _handler;
-        private Mock<IBookRepository> _mockRepository;
+        private Mock<IGenericRepository<Book, Guid>> _mockRepository;
         private Mock<IMapper> _mockMapper;
 
         private static readonly Guid ExampleBookId = Guid.Parse("2bfaf5e9-d978-464c-b778-7567ef2dde29");
@@ -28,14 +28,14 @@ namespace TestProject.BookUnitTests
         [SetUp]
         public void SetUp()
         {
-            _mockRepository = new Mock<IBookRepository>();
+            _mockRepository = new Mock<IGenericRepository<Book, Guid>>();
             _mockMapper = new Mock<IMapper>();
 
             // Setup the mock repository to return the same book object
-            _mockRepository.Setup(repo => repo.GetBookById(It.Is<Guid>(id => id == ExampleBookId)))
+            _mockRepository.Setup(repo => repo.GetByIdAsync(It.Is<Guid>(id => id == ExampleBookId)))
                            .ReturnsAsync(ExampleBook);
 
-            _mockRepository.Setup(repo => repo.GetBookById(It.Is<Guid>(id => id != ExampleBookId)))
+            _mockRepository.Setup(repo => repo.GetByIdAsync(It.Is<Guid>(id => id != ExampleBookId)))
                            .ReturnsAsync((Book)null!);
 
             // Setup the mock mapper to return the same book object
@@ -45,23 +45,23 @@ namespace TestProject.BookUnitTests
             _handler = new GetBookByIdQueryHandler(_mockRepository.Object, _mockMapper.Object);
         }
 
-        //[Test]
-        //public async Task Handle_ValidId_ReturnsCorrectBook()
-        //{
-        //    // Arrange
-        //    var query = new GetBookByIdQuery(ExampleBookId);
+        [Test]
+        public async Task Handle_ValidId_ReturnsCorrectBook()
+        {
+            // Arrange
+            var query = new GetBookByIdQuery(ExampleBookId);
 
-        //    // Act
-        //    var result = await _handler.Handle(query, CancellationToken.None);
+            // Act
+            var result = await _handler.Handle(query, CancellationToken.None);
 
-        //    // Assert
-        //    Assert.Multiple(() =>
-        //    {
-        //        Assert.That(result, Is.Not.Null);
-        //        Assert.That(result.Data.BookId, Is.EqualTo(ExampleBookId));
-        //    });
+            // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(result, Is.Not.Null);
+                Assert.That(result.Data.BookId, Is.EqualTo(ExampleBookId));
+            });
 
-        //}
+        }
 
         [Test]
         public async Task Handle_NonExisitingId_ReturnsNull()
