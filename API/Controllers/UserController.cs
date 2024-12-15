@@ -127,12 +127,6 @@ namespace API.Controllers
         public async Task<IActionResult> Login([Required][FromForm] LoginUserDto userDto)
         {
             _logger.LogInformation("Logging in User {username}", userDto.UserName);
-            if (userDto.UserName == null)
-            {
-                _logger.LogWarning("Invalid input data");
-                return BadRequest("Invalid input data.");
-            }
-
             try
             {
                 var loggedInUser = await _mediator.Send(new LoginUserCommand(userDto));
