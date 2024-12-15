@@ -12,7 +12,7 @@ namespace TestProject.BookUnitTests
     public class AddBookUnitTest
     {
         private AddBookCommandHandler _handler;
-        private Mock<IBookRepository> _mockRepository;
+        private Mock<IGenericRepository<Book, Guid>> _mockRepository;
         private Mock<IMapper> _mockMapper;
 
         private static readonly Guid ExampleBookId = Guid.Parse("12345678-1234-1234-1234-1234567890ab");
@@ -28,11 +28,11 @@ namespace TestProject.BookUnitTests
         public void SetUp()
         {
             // Initialize the handler and mock database before each test
-            _mockRepository = new Mock<IBookRepository>();
+            _mockRepository = new Mock<IGenericRepository<Book, Guid>>();
             _mockMapper = new Mock<IMapper>();
 
             // Set up mock to return a new Book when AddBook is called
-            _mockRepository.Setup(repo => repo.AddBook(It.IsAny<Book>()))
+            _mockRepository.Setup(repo => repo.AddAsync(It.IsAny<Book>()))
                 .ReturnsAsync((Book book) => book);
 
             // Set up mock to map from AddBookDto to Book

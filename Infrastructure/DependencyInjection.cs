@@ -21,6 +21,7 @@ namespace Infrastructure
             services.AddScoped<IAuthorRepository, AuthorRepository>();
             services.AddScoped<IBookRepository, BookRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped(typeof(IGenericRepository<,>), typeof(GenericRepository<,>));
 
             services.AddIdentityCore<User>()
                     .AddRoles<IdentityRole>()

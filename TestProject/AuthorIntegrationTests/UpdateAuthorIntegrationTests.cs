@@ -16,7 +16,7 @@ namespace TestProject.AuthorIntegrationTests
     {
         private UpdateAuthorCommandHandler _handler;
         private RealDatabase _database;
-        private IAuthorRepository _repository;
+        private IGenericRepository<Author, Guid> _repository;
         private IMapper _mapper;
 
         private static readonly Guid ExampleAuthorId = new("12345678-1234-1234-1234-1234567890ab");

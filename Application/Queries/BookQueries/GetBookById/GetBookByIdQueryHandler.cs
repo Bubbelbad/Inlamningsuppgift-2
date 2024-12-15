@@ -7,16 +7,16 @@ using Application.Dtos.BookDtos;
 
 namespace Application.Queries.BookQueries.GetBookById
 {
-    public class GetBookByIdQueryHandler(IBookRepository repository, IMapper mapper) : IRequestHandler<GetBookByIdQuery, OperationResult<GetBookDto>>
+    public class GetBookByIdQueryHandler(IGenericRepository<Book, Guid> repository, IMapper mapper) : IRequestHandler<GetBookByIdQuery, OperationResult<GetBookDto>>
     {
-        private readonly IBookRepository _bookRepository = repository;
+        private readonly IGenericRepository<Book, Guid> _repository = repository;
         public IMapper _mapper = mapper;
 
         public async Task<OperationResult<GetBookDto>> Handle(GetBookByIdQuery query, CancellationToken cancellationToken)
         {
             try
             {
-                Book book = await _bookRepository.GetBookById(query.Id);
+                Book book = await _repository.GetByIdAsync(query.Id);
                 if (book is null)
                 {
                     return OperationResult<GetBookDto>.Failure("The book was not found in the collection");

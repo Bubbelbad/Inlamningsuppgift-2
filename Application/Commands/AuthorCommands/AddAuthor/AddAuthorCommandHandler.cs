@@ -6,9 +6,9 @@ using MediatR;
 
 namespace Application.Commands.AuthorCommands.AddAuthor
 {
-    public class AddAuthorCommandHandler(IAuthorRepository authorRepository, IMapper mapper) : IRequestHandler<AddAuthorCommand, OperationResult<Author>>
+    public class AddAuthorCommandHandler(IGenericRepository<Author, Guid> repository, IMapper mapper) : IRequestHandler<AddAuthorCommand, OperationResult<Author>>
     {
-        private readonly IAuthorRepository _authorRepository = authorRepository;
+        private readonly IGenericRepository<Author, Guid> _repository = repository;
         public IMapper _mapper = mapper;
 
         public async Task<OperationResult<Author>> Handle(AddAuthorCommand request, CancellationToken cancellationToken)
@@ -24,7 +24,7 @@ namespace Application.Commands.AuthorCommands.AddAuthor
                     Biography = request.NewAuthor.Biography
                 };
 
-                var createdAutor = await _authorRepository.AddAuthor(authorToCreate);
+                var createdAutor = await _repository.AddAsync(authorToCreate);
                 var mappedAuthor = _mapper.Map<Author>(createdAutor);
                 return OperationResult<Author>.Success(mappedAuthor);
             }

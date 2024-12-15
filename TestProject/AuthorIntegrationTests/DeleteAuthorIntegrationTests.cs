@@ -15,7 +15,7 @@ namespace TestProject.AuthorIntegrationTests
     {
         private DeleteAuthorCommandHandler _handler;
         private RealDatabase _database;
-        private IAuthorRepository _repository;
+        private IGenericRepository<Author, Guid> _repository;
         private IMapper _mapper;
 
         private static readonly Guid ExampleAuthorId = new("12345678-1234-1234-1234-1234567890ab");
@@ -30,7 +30,7 @@ namespace TestProject.AuthorIntegrationTests
             _database = new RealDatabase(options);
 
             // Initialize the repository with the in-memory database
-            _repository = new AuthorRepository(_database);
+            _repository = new GenericRepository<Author, Guid>(_database);
 
             // Set up AutoMapper with actual configuration
             var config = new MapperConfiguration(cfg =>

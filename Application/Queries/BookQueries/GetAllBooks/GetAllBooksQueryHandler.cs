@@ -8,24 +8,26 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace Application.Queries.BookQueries.GetAllBooks
 {
-    internal class GetAllBooksQueryHandler(IMemoryCache memoryCache, IBookRepository repository, IMapper mapper) : IRequestHandler<GetAllBooksQuery, OperationResult<List<GetBookDto>>>
+    internal class GetAllBooksQueryHandler(IMemoryCache memoryCache, IGenericRepository<Book, Guid> repository, IMapper mapper) : IRequestHandler<GetAllBooksQuery, OperationResult<List<GetBookDto>>>
     {
-        private readonly IBookRepository _bookRepository = repository;
+        private readonly IGenericRepository<Book, Guid> _repository = repository;
         private readonly IMemoryCache _memoryCache = memoryCache;
         private const string cacheKey = "allBooks";
-        public IMapper _mapper = mapper;
+        public readonly IMapper _mapper = mapper;
 
         public async Task<OperationResult<List<GetBookDto>>> Handle(GetAllBooksQuery request, CancellationToken cancellationToken)
         {
             try
             {
-                if (!_memoryCache.TryGetValue(cacheKey, out List<Book> allBooksFromDatabase))
+                if (!_memoryCache.TryGetValue(cacheKey, out List<GetBookDto> mappedBooksFromDatabase))
                 {
-                    allBooksFromDatabase = await _bookRepository.GetAllBooks();
-                    _memoryCache.Set(cacheKey, allBooksFromDatabase, TimeSpan.FromMinutes(5));
+                    var allBooksFromDatabase = await _repository.GetAllAsync();
+
+                    mappedBooksFromDatabase = _mapper.Map<List<GetBookDto>>(allBooksFromDatabase);
+
+                    _memoryCache.Set(cacheKey, mappedBooksFromDatabase, TimeSpan.FromMinutes(5));
                 }
 
-                var mappedBooksFromDatabase = _mapper.Map<List<GetBookDto>>(allBooksFromDatabase);
                 return OperationResult<List<GetBookDto>>.Success(mappedBooksFromDatabase);
             }
             catch

@@ -7,9 +7,9 @@ using MediatR;
 
 namespace Application.Commands.BookCommands.UpdateBook
 {
-    public class UpdateBookCommandHandler(IBookRepository bookRepository, IMapper mapper) : IRequestHandler<UpdateBookCommand, OperationResult<GetBookDto>>
+    public class UpdateBookCommandHandler(IGenericRepository<Book, Guid> repository, IMapper mapper) : IRequestHandler<UpdateBookCommand, OperationResult<GetBookDto>>
     {
-        private readonly IBookRepository _bookRepository = bookRepository;
+        private readonly IGenericRepository<Book, Guid> _repository = repository;
         public IMapper _mapper = mapper;
 
         public async Task<OperationResult<GetBookDto>> Handle(UpdateBookCommand request, CancellationToken cancellationToken)
@@ -25,7 +25,7 @@ namespace Application.Commands.BookCommands.UpdateBook
                     AuthorId = request.NewBook.AuthorId,
                 };
 
-                var updatedBook = await _bookRepository.UpdateBook(bookToUpdate);
+                var updatedBook = await _repository.UpdateAsync(bookToUpdate);
                 var mappedBook = _mapper.Map<GetBookDto>(updatedBook);
 
                 return OperationResult<GetBookDto>.Success(mappedBook);

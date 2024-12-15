@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Domain.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities.Core
 {
-    public class Author()
+    public class Author() : IEntity<Guid>
     {
 
         [Required(ErrorMessage = "{0} is required")]
@@ -18,7 +19,16 @@ namespace Domain.Entities.Core
         public DateTime? DateOfBirth { get; set; }
         public string? Biography { get; set; }
 
+
         // Navigation property
         public ICollection<Book> Books { get; set; }
+
+
+        // Explicit impelementation of IEntity<Guid>
+        Guid IEntity<Guid>.Id
+        {
+            get => AuthorId;
+            set => AuthorId = value;
+        }
     }
 }
