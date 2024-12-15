@@ -41,7 +41,7 @@ namespace TestProject.AuthorIntegrationTests
             _mapper = config.CreateMapper();
 
             // Initialize the handler with the actual repository and mapper
-            _handler = new AddAuthorCommandHandler(_repository, _mapper);
+            // _handler = new AddAuthorCommandHandler(_repository, _mapper);
         }
 
         [TearDown]

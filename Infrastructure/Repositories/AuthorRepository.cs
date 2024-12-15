@@ -4,9 +4,14 @@ using Infrastructure.Database;
 
 namespace Infrastructure.Repositories
 {
-    public class AuthorRepository(RealDatabase database) : IAuthorRepository
+    public class AuthorRepository : GenericRepository<Author, Guid>, IAuthorRepository
     {
-        private readonly RealDatabase _realDatabase = database;
+        private readonly RealDatabase _realDatabase;
+
+        public AuthorRepository(RealDatabase database) : base(database)
+        {
+            _realDatabase = database;
+        }
 
         public async Task<List<Author>> GetAllAuthors()
         {
@@ -42,17 +47,17 @@ namespace Infrastructure.Repositories
             return authorToUpdate;
         }
 
-        public async Task<bool> DeleteAuthor(Guid id)
-        {
-            bool actionSuccessful = false;
-            var authorToDelete = _realDatabase.Authors.FirstOrDefault(author => author.AuthorId == id);
-            if (authorToDelete is not null)
-            {
-                _realDatabase.Authors.Remove((Author)authorToDelete);
-                _realDatabase.SaveChanges();
-                actionSuccessful = true;
-            }
-            return await Task.FromResult(actionSuccessful);
-        }
+        //public async Task<bool> DeleteAuthor(Guid id)
+        //{
+        //    bool actionSuccessful = false;
+        //    var authorToDelete = _realDatabase.Authors.FirstOrDefault(author => author.AuthorId == id);
+        //    if (authorToDelete is not null)
+        //    {
+        //        _realDatabase.Authors.Remove((Author)authorToDelete);
+        //        _realDatabase.SaveChanges();
+        //        actionSuccessful = true;
+        //    }
+        //    return await Task.FromResult(actionSuccessful);
+        //}
     }
 }

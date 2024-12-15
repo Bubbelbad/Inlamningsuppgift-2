@@ -1,11 +1,12 @@
 ﻿using Domain.Entities.Locations;
 using Domain.Entities.Metadata;
 using Domain.Entities.Transactions;
+using Domain.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities.Core
 {
-    public class Book()
+    public class Book() : IEntity<Guid>
     {
         [Required(ErrorMessage = "Id is required")]
         public Guid BookId { get; set; }
@@ -27,5 +28,13 @@ namespace Domain.Entities.Core
         public ICollection<BookCopy> Copies { get; set; }
         public ICollection<Review> Reviews { get; set; }
         public ICollection<Reservation> Reservations { get; set; }
+
+
+        // Explicit implementation of IEntity<Guid>
+        Guid IEntity<Guid>.Id
+        {
+            get => BookId;
+            set => BookId = value;
+        }
     }
 }

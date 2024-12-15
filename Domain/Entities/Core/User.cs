@@ -1,11 +1,12 @@
 ﻿using Domain.Entities.Metadata;
 using Domain.Entities.Transactions;
+using Domain.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities.Core
 {
-    public class User() : IdentityUser
+    public class User() : IdentityUser, IEntity<string>
     {
         public string? Role { get; set; }
 
