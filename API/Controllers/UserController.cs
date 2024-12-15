@@ -204,16 +204,10 @@ namespace API.Controllers
         public async Task<IActionResult> DeleteUser([Required] Guid id)
         {
             _logger.LogInformation("Deleting user with ID: {id}", id);
-            if (id == Guid.Empty)
-            {
-                _logger.LogWarning("Invalid input data");
-                return BadRequest("Guid can not be empty");
-            }
 
             try
             {
                 var operationResult = await _mediator.Send(new DeleteUserCommand(id));
-                _logger.LogInformation("User deleted successfully");
                 return Ok(operationResult.Data);
             }
 
