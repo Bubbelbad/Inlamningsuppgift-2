@@ -14,11 +14,6 @@ namespace Application.Queries.UserQueries.GetUserById
 
         public async Task<OperationResult<GetUserDto>> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
         {
-            if (request == null || request.Id == Guid.Empty)
-            {
-                return OperationResult<GetUserDto>.Failure("Invalid input");
-            }
-
             try
             {
                 var user = await _userRepository.GetUserById(request.Id);

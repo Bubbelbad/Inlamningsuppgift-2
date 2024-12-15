@@ -13,11 +13,6 @@ namespace Application.Queries.UserQueries.GetUserByUsername
 
         public async Task<OperationResult<GetUserByUserNameDto>> Handle(GetUserByUsernameQuery request, CancellationToken cancellationToken)
         {
-            if (request == null || string.IsNullOrEmpty(request.Username))
-            {
-                return OperationResult<GetUserByUserNameDto>.Failure("Invalid input");
-            }
-
             try
             {
                 var user = await _userRepository.GetUserByUsername(request.Username);

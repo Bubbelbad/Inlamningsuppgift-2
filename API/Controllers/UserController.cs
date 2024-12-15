@@ -49,12 +49,6 @@ namespace API.Controllers
         [ResponseCache(CacheProfileName = "DefaultCache")]
         public async Task<IActionResult> GetUserById(Guid id)
         {
-            if (id == Guid.Empty)
-            {
-                _logger.LogWarning("Invalid input data");
-                return BadRequest("Invalid input data.");
-            }
-
             _logger.LogInformation("Fetching Users at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
             try
             {
@@ -76,12 +70,6 @@ namespace API.Controllers
         [ResponseCache(CacheProfileName = "DefaultCache")]
         public async Task<IActionResult> GetUserByUsername(string username)
         {
-            if (username == string.Empty)
-            {
-                _logger.LogWarning("Invalid username, field cannot be empty");
-                return BadRequest("Invalid input data.");
-            }
-
             _logger.LogInformation("Fetching User at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
             try
             {
@@ -104,12 +92,6 @@ namespace API.Controllers
         [ResponseCache(CacheProfileName = "DefaultCache")]
         public async Task<IActionResult> GetDetailedUserById(Guid id)
         {
-            if (id == Guid.Empty)
-            {
-                _logger.LogWarning("Invalid Guid, field cannot be empty");
-                return BadRequest("Invalid input data.");
-            }
-
             _logger.LogInformation("Fetching User at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
             try
             {

@@ -14,11 +14,6 @@ namespace Application.Queries.UserQueries.GetDetailedUserById
 
         public async Task<OperationResult<User>> Handle(GetDetailedUserByIdQuery request, CancellationToken cancellationToken)
         {
-            if (request == null || request.Id == Guid.Empty)
-            {
-                return OperationResult<User>.Failure("Invalid input");
-            }
-
             try
             {
                 var user = await _userRepository.GetUserById(request.Id);
