@@ -12,11 +12,6 @@ namespace Application.Commands.UserCommands.DeleteUser
 
         public async Task<OperationResult<bool>> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         {
-            if (request.Id == Guid.Empty)
-            {
-                return OperationResult<bool>.Failure("User Id is required");
-            }
-
             try
             {
                 bool userToDelete = await _repository.DeleteUser(request.Id);

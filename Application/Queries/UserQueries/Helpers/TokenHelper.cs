@@ -11,7 +11,7 @@ namespace Application.Queries.UserQueries.Helpers
     {
         private readonly IConfiguration _configuration = configuration;
 
-        public string GenerateTwtToken(User user)
+        public string GenerateJwtToken(User user)
         {
             var key = Encoding.ASCII.GetBytes(_configuration["JwtSettings:SecretKey"]!);
 

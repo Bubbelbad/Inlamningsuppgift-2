@@ -14,11 +14,6 @@ namespace Application.Commands.UserCommands.UpdateUser
 
         public async Task<OperationResult<User>> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
-            if (request == null || request.UserToUpdate == null)
-            {
-                throw new ArgumentException("Request or LoginUser cannot be null.");
-            }
-
             try
             {
                 User userToUpdate = new()

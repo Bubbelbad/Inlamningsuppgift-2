@@ -43,17 +43,12 @@ namespace API.Controllers
             }
         }
 
+
         [HttpGet]
         [Route("GetUserById")]
         [ResponseCache(CacheProfileName = "DefaultCache")]
         public async Task<IActionResult> GetUserById(Guid id)
         {
-            if (id == Guid.Empty)
-            {
-                _logger.LogWarning("Invalid input data");
-                return BadRequest("Invalid input data.");
-            }
-
             _logger.LogInformation("Fetching Users at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
             try
             {
@@ -69,17 +64,12 @@ namespace API.Controllers
             }
         }
 
+
         [HttpGet]
         [Route("GetUserByUsername")]
         [ResponseCache(CacheProfileName = "DefaultCache")]
         public async Task<IActionResult> GetUserByUsername(string username)
         {
-            if (username == string.Empty)
-            {
-                _logger.LogWarning("Invalid username, field cannot be empty");
-                return BadRequest("Invalid input data.");
-            }
-
             _logger.LogInformation("Fetching User at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
             try
             {
@@ -95,18 +85,13 @@ namespace API.Controllers
             }
         }
 
+
         [Authorize(Roles = "Admin")]
         [HttpGet]
         [Route("GetDetailedUserById")]
         [ResponseCache(CacheProfileName = "DefaultCache")]
         public async Task<IActionResult> GetDetailedUserById(Guid id)
         {
-            if (id == Guid.Empty)
-            {
-                _logger.LogWarning("Invalid Guid, field cannot be empty");
-                return BadRequest("Invalid input data.");
-            }
-
             _logger.LogInformation("Fetching User at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
             try
             {
@@ -122,17 +107,12 @@ namespace API.Controllers
             }
         }
 
+
         [HttpPost]
         [Route("Login")]
         public async Task<IActionResult> Login([Required][FromForm] LoginUserDto userDto)
         {
             _logger.LogInformation("Logging in User {username}", userDto.UserName);
-            if (userDto.UserName == null)
-            {
-                _logger.LogWarning("Invalid input data");
-                return BadRequest("Invalid input data.");
-            }
-
             try
             {
                 var loggedInUser = await _mediator.Send(new LoginUserCommand(userDto));
@@ -147,17 +127,12 @@ namespace API.Controllers
             }
         }
 
+
         [HttpPost]
         [Route("Register")]
         public async Task<IActionResult> Register([FromBody, Required] UserDto newUser)
         {
             _logger.LogInformation("Adding new User {username}", newUser.UserName);
-            if (!ModelState.IsValid)
-            {
-                _logger.LogWarning("Invalid input data");
-                return BadRequest(ModelState);
-            }
-
             try
             {
                 var operationResult = await _mediator.Send(new RegisterCommand(newUser));
@@ -173,18 +148,11 @@ namespace API.Controllers
         }
 
 
-
         [HttpPut]
         [Route("Update")]
         public async Task<IActionResult> Update([FromBody, Required] UpdateUserDto newUser)
         {
             _logger.LogInformation("Updating new User {username}", newUser.UserName);
-            if (!ModelState.IsValid)
-            {
-                _logger.LogWarning("Invalid input data");
-                return BadRequest(ModelState);
-            }
-
             try
             {
                 var operationResult = await _mediator.Send(new UpdateUserCommand(newUser));
@@ -199,21 +167,15 @@ namespace API.Controllers
             }
         }
 
+
         [HttpDelete]
         [Route("DeleteUser{id}")]
         public async Task<IActionResult> DeleteUser([Required] Guid id)
         {
             _logger.LogInformation("Deleting user with ID: {id}", id);
-            if (id == Guid.Empty)
-            {
-                _logger.LogWarning("Invalid input data");
-                return BadRequest("Guid can not be empty");
-            }
-
             try
             {
                 var operationResult = await _mediator.Send(new DeleteUserCommand(id));
-                _logger.LogInformation("User deleted successfully");
                 return Ok(operationResult.Data);
             }
 

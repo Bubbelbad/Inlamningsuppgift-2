@@ -13,16 +13,12 @@ namespace Application.Commands.UserCommands.LoginUser
 
         public async Task<string> Handle(LoginUserCommand request, CancellationToken cancellationToken)
         {
-            if (request.UserDto.Password == null || request.UserDto.UserName == null)
-            {
-                throw new ArgumentNullException(nameof(request), "Request or LoginUser cannot be null.");
-            }
             try
             {
                 var user = await _userRepository.GetUserByUsername(request.UserDto.UserName);
                 if (_encryptionService.VerifyPassword(request.UserDto.Password, user.PasswordHash))
                 {
-                    string token = _tokenHelper.GenerateTwtToken(user);
+                    string token = _tokenHelper.GenerateJwtToken(user);
                     return token;
                 }
                 else
