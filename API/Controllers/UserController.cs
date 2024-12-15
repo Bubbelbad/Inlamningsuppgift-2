@@ -43,6 +43,7 @@ namespace API.Controllers
             }
         }
 
+
         [HttpGet]
         [Route("GetUserById")]
         [ResponseCache(CacheProfileName = "DefaultCache")]
@@ -69,6 +70,7 @@ namespace API.Controllers
             }
         }
 
+
         [HttpGet]
         [Route("GetUserByUsername")]
         [ResponseCache(CacheProfileName = "DefaultCache")]
@@ -94,6 +96,7 @@ namespace API.Controllers
                 return StatusCode(500, "An error occurred while processing your request.");
             }
         }
+
 
         [Authorize(Roles = "Admin")]
         [HttpGet]
@@ -122,6 +125,7 @@ namespace API.Controllers
             }
         }
 
+
         [HttpPost]
         [Route("Login")]
         public async Task<IActionResult> Login([Required][FromForm] LoginUserDto userDto)
@@ -141,12 +145,12 @@ namespace API.Controllers
             }
         }
 
+
         [HttpPost]
         [Route("Register")]
         public async Task<IActionResult> Register([FromBody, Required] UserDto newUser)
         {
             _logger.LogInformation("Adding new User {username}", newUser.UserName);
-
             try
             {
                 var operationResult = await _mediator.Send(new RegisterCommand(newUser));
@@ -162,18 +166,11 @@ namespace API.Controllers
         }
 
 
-
         [HttpPut]
         [Route("Update")]
         public async Task<IActionResult> Update([FromBody, Required] UpdateUserDto newUser)
         {
             _logger.LogInformation("Updating new User {username}", newUser.UserName);
-            if (!ModelState.IsValid)
-            {
-                _logger.LogWarning("Invalid input data");
-                return BadRequest(ModelState);
-            }
-
             try
             {
                 var operationResult = await _mediator.Send(new UpdateUserCommand(newUser));
@@ -188,12 +185,12 @@ namespace API.Controllers
             }
         }
 
+
         [HttpDelete]
         [Route("DeleteUser{id}")]
         public async Task<IActionResult> DeleteUser([Required] Guid id)
         {
             _logger.LogInformation("Deleting user with ID: {id}", id);
-
             try
             {
                 var operationResult = await _mediator.Send(new DeleteUserCommand(id));
