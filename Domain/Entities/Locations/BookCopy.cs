@@ -1,10 +1,11 @@
 ﻿using Domain.Entities.Core;
 using Domain.Entities.Transactions;
+using Domain.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities.Locations
 {
-    public class BookCopy
+    public class BookCopy : IEntity<Guid>
     {
         [Key]
         public Guid CopyId { get; set; }
@@ -17,6 +18,11 @@ namespace Domain.Entities.Locations
         public LibraryBranch Branch { get; set; }
         public ICollection<Borrowing> Borrowings { get; set; }
         public ICollection<Reservation> Reservations { get; set; }
-    }
 
+        Guid IEntity<Guid>.Id
+        {
+            get => CopyId;
+            set => CopyId = value;
+        }
+    }
 }
