@@ -16,6 +16,15 @@ namespace API
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(
+                    name: "LocalHostReactApp",
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod();
+                    });
+            });
 
             var jwtSettings = builder.Configuration.GetSection("JwtSettings");
             byte[] secretKey = Encoding.ASCII.GetBytes(jwtSettings["SecretKey"]!);
@@ -105,7 +114,7 @@ namespace API
                     c.RoutePrefix = "swagger";  // Set Swagger UI at the app's root
                 });
             }
-
+            app.UseCors("LocalHostReactApp");
             app.UseHttpsRedirection();
 
             app.UseAuthentication(); // Ensure this is added before UseAuthorization
