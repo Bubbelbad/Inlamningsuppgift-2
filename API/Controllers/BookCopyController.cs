@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Application.Queries.BookQueries.GetBookCopyById;
+using Application.Dtos.BookCopyDtos;
+using Application.Commands.BookCopyCommands.AddBookCopy;
 
 namespace API.Controllers
 {
@@ -48,12 +50,25 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        [Route("CreateBookCopy")]
+        [Route("AddBookCopy")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateBookCopy()
+        public async Task<IActionResult> AddBookCopy([FromBody] AddBookCopyDto dto)
         {
-            return Ok();
+            try
+            {
+                var operationResult = await _mediator.Send(new AddBookCopyCommand(dto));
+                if (operationResult.IsSuccess)
+                {
+                    return Ok(operationResult.Data);
+                }
+                return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while creating a new BookCopy at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
         }
 
         [HttpPut]
