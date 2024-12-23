@@ -4,6 +4,7 @@ using Application.Commands.LibraryBranchCommands.UpdateLibraryBranch;
 using Application.Dtos.LibraryBranchDtos;
 using Application.Interfaces.RepositoryInterfaces;
 using Application.Queries.LibraryBranchQueries.GetAllLibraryBranches;
+using Application.Queries.LibraryBranchQueries.GetLibraryBranchById;
 using Domain.Entities.Locations;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -24,6 +25,18 @@ namespace API.Controllers
         public async Task<IActionResult> GetAllLibraryBranches()
         {
             var operationResult = await _mediator.Send(new GetAllLibraryBranchesQuery());
+            if (operationResult.IsSuccess)
+            {
+                return Ok(operationResult.Data);
+            }
+            return BadRequest();
+        }
+
+        [Route("GetById")]
+        [HttpGet]
+        public async Task<IActionResult> GetLibraryBranchById(int id)
+        {
+            var operationResult = await _mediator.Send(new GetLibraryBranchByIdQuery(id));
             if (operationResult.IsSuccess)
             {
                 return Ok(operationResult.Data);
