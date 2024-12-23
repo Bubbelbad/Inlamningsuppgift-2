@@ -3,6 +3,7 @@ using Application.Commands.LibraryBranchCommands.AddLibraryBranch;
 using Application.Commands.LibraryBranchCommands.UpdateLibraryBranch;
 using Application.Dtos.LibraryBranchDtos;
 using Application.Interfaces.RepositoryInterfaces;
+using Application.Queries.LibraryBranchQueries.GetAllLibraryBranches;
 using Domain.Entities.Locations;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -17,6 +18,18 @@ namespace API.Controllers
     {
         private readonly IMediator _mediator = mediator;
         private readonly ILogger<LibraryBranchController> _logger = logger;
+
+        [Route("GetAll")]
+        [HttpGet]
+        public async Task<IActionResult> GetAllLibraryBranches()
+        {
+            var operationResult = await _mediator.Send(new GetAllLibraryBranchesQuery());
+            if (operationResult.IsSuccess)
+            {
+                return Ok(operationResult.Data);
+            }
+            return BadRequest();
+        }
 
         [Route("Add")]
         [HttpPost]
@@ -41,5 +54,17 @@ namespace API.Controllers
             }
             return BadRequest();
         }
+
+        //[Route("Delete")]
+        //[HttpDelete]
+        //public async Task<IActionResult> DeleteLibraryBranch(UpdateLibraryBranchDto dto)
+        //{
+        //    var operationResult = await _mediator.Send(new UpdateLibraryBranchCommand(dto));
+        //    if (operationResult.IsSuccess)
+        //    {
+        //        return Ok(operationResult.Data);
+        //    }
+        //    return BadRequest();
+        //}
     }
 }
