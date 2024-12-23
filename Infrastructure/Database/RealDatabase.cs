@@ -74,6 +74,25 @@ namespace Infrastructure.Database
                 .WithMany(bc => bc.Reservations)
                 .HasForeignKey(r => r.CopyId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // Configure automatic Id for branches with Id : int
+            modelBuilder.Entity<LibraryBranch>()
+                .HasKey(lb => lb.BranchId);
+            modelBuilder.Entity<LibraryBranch>()
+                .Property(lb => lb.BranchId)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<Genre>()
+                .HasKey(g => g.Id);
+            modelBuilder.Entity<Genre>()
+                .Property(g => g.Id)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<Publisher>()
+                .HasKey(g => g.PublisherId);
+            modelBuilder.Entity<Publisher>()
+                .Property(g => g.PublisherId)
+                .ValueGeneratedOnAdd();
         }
 
     }

@@ -1,9 +1,10 @@
 ﻿
+using Domain.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities.Locations
 {
-    public class LibraryBranch
+    public class LibraryBranch : IEntity<int>
     {
         [Key]
         public int BranchId { get; set; }
@@ -13,6 +14,12 @@ namespace Domain.Entities.Locations
 
         // Navigation property
         public ICollection<BookCopy> BookCopies { get; set; }
+
+        int IEntity<int>.Id
+        {
+            get => BranchId;
+            set => BranchId = value;
+        }
     }
 
 }

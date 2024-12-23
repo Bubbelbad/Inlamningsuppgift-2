@@ -27,6 +27,7 @@ namespace Application
             services.AddAutoMapper(typeof(UserMappingProfiles).Assembly);
             services.AddAutoMapper(typeof(BookMappingProfiles).Assembly);
             services.AddAutoMapper(typeof(BookCopyMappingProfiles).Assembly);
+            services.AddAutoMapper(typeof(LibraryBranchMappingProfiles).Assembly);
 
             // Register validators
             services.AddValidatorsFromAssemblyContaining<AddAuthorCommandValidator>();

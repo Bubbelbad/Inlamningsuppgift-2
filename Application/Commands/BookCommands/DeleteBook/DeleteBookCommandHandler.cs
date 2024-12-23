@@ -17,10 +17,9 @@ namespace Application.Commands.BookCommands.DeleteBook
             try
             {
                 bool successfulDeletion = await _repository.DeleteAsync(request.BookIdToDelete);
-                var mappedBool = _mapper.Map<bool>(successfulDeletion);
                 if (successfulDeletion)
                 {
-                    return OperationResult<bool>.Success(mappedBool);
+                    return OperationResult<bool>.Success(successfulDeletion);
                 }
 
                 return OperationResult<bool>.Failure("Operation failed");
