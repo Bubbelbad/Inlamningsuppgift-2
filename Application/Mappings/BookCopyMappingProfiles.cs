@@ -1,6 +1,6 @@
 ﻿using Application.Dtos.BookCopyDtos;
 using AutoMapper;
-using Domain.Entities.Core;
+using Domain.Entities.Locations;
 
 namespace Application.Mappings
 {
@@ -8,7 +8,7 @@ namespace Application.Mappings
     {
         public BookCopyMappingProfiles()
         {
-            CreateMap<Book, GetBookCopyDto>();
+            CreateMap<BookCopy, GetBookCopyDto>();
         }
     }
 }

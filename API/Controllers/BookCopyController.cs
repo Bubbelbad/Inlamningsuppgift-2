@@ -4,6 +4,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using Application.Queries.BookQueries.GetBookCopyById;
 using Application.Dtos.BookCopyDtos;
 using Application.Commands.BookCopyCommands.AddBookCopy;
+using Application.Queries.BookCopyQueries.GetAllBookCopies;
 
 namespace API.Controllers
 {
@@ -15,22 +16,27 @@ namespace API.Controllers
         private readonly ILogger<BookController> _logger = logger;
 
         [HttpGet]
-        [Route("GetAllBookCopies")]
+        [Route("GetAll")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetAllBookCopies()
         {
-            return Ok();
+            var operationResult = await _mediator.Send(new GetAllBookCopiesQuery());
+            if (operationResult.IsSuccess)
+            {
+                return Ok(operationResult.Data);
+            }
+            return BadRequest();
         }
 
-        [Route("GetBookCopyById/{bookId}")]
+        [Route("GetById/{bookId}")]
         [HttpGet]
         [SwaggerOperation(Description = "Gets a book by Id")]
         [SwaggerResponse(200, "Successfully retrieved Book.")]
         [SwaggerResponse(400, "Invalid input data")]
         [SwaggerResponse(404, "Book not found")]
-        public async Task<IActionResult> GetBook([FromRoute] Guid bookId)
+        public async Task<IActionResult> GetBookCopy([FromRoute] Guid bookId)
         {
             try
             {
@@ -50,7 +56,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        [Route("AddBookCopy")]
+        [Route("Create")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> AddBookCopy([FromBody] AddBookCopyDto dto)
@@ -72,23 +78,31 @@ namespace API.Controllers
         }
 
         [HttpPut]
-        [Route("UpdateBookCopy")]
+        [Route("Update")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> UpdateBookCopy()
         {
-            return Ok();
+            try
+            {
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while updating BookCopy at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
         }
 
         [HttpDelete]
-        [Route("DeleteBookCopy")]
+        [Route("Delete")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteBookCopy(Guid id)
         {
-            return Ok();
+            return BadRequest();
         }
     }
 }
