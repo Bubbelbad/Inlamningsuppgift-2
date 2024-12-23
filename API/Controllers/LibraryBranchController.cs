@@ -1,5 +1,6 @@
 ﻿using Application.Commands.AuthorCommands.AddAuthor;
 using Application.Commands.LibraryBranchCommands.AddLibraryBranch;
+using Application.Commands.LibraryBranchCommands.DeleteLibraryBranch;
 using Application.Commands.LibraryBranchCommands.UpdateLibraryBranch;
 using Application.Dtos.LibraryBranchDtos;
 using Application.Interfaces.RepositoryInterfaces;
@@ -57,7 +58,7 @@ namespace API.Controllers
         }
 
         [Route("Update")]
-        [HttpPost]
+        [HttpPut]
         public async Task<IActionResult> UpdateLibraryBranch(UpdateLibraryBranchDto dto)
         {
             var operationResult = await _mediator.Send(new UpdateLibraryBranchCommand(dto));
@@ -68,16 +69,16 @@ namespace API.Controllers
             return BadRequest();
         }
 
-        //[Route("Delete")]
-        //[HttpDelete]
-        //public async Task<IActionResult> DeleteLibraryBranch(UpdateLibraryBranchDto dto)
-        //{
-        //    var operationResult = await _mediator.Send(new UpdateLibraryBranchCommand(dto));
-        //    if (operationResult.IsSuccess)
-        //    {
-        //        return Ok(operationResult.Data);
-        //    }
-        //    return BadRequest();
-        //}
+        [Route("Delete")]
+        [HttpDelete]
+        public async Task<IActionResult> DeleteLibraryBranch(int id)
+        {
+            var operationResult = await _mediator.Send(new DeleteLibraryBranchCommand(id));
+            if (operationResult.IsSuccess)
+            {
+                return Ok(operationResult.Data);
+            }
+            return BadRequest();
+        }
     }
 }
