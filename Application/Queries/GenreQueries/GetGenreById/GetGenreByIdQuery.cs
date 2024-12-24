@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Application.Models;
+using Domain.Entities.Metadata;
+using MediatR;
 
 namespace Application.Queries.GenreQueries.GetGenreById
 {
-    internal class GetGenreByIdQuery
+    public class GetGenreByIdQuery(int id) : IRequest<OperationResult<Genre>>
     {
+        public int Id { get; set; } = id;
     }
 }

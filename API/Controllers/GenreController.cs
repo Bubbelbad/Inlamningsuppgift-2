@@ -1,4 +1,5 @@
 ﻿using Application.Queries.GenreQueries.GetAllGenres;
+using Application.Queries.GenreQueries.GetGenreById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,11 +31,22 @@ namespace API.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("GetById{id}")]
         public async Task<ActionResult> GetGenre(int id)
         {
-            //var operationResult = await _mediator.Send()
-            return BadRequest();
+            try
+            {
+                var operationResult = await _mediator.Send(new GetGenreByIdQuery(id));
+                if (operationResult.IsSuccess)
+                {
+                    return Ok(operationResult.Data);
+                }
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         //[HttpPost]
