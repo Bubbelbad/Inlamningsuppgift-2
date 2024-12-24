@@ -6,6 +6,7 @@ using Application.Dtos.BookCopyDtos;
 using Application.Commands.BookCopyCommands.AddBookCopy;
 using Application.Queries.BookCopyQueries.GetAllBookCopies;
 using Application.Commands.BookCopyCommands.DeleteBookCopy;
+using Application.Commands.BookCopyCommands.UpdateBookCopy;
 
 namespace API.Controllers
 {
@@ -83,11 +84,16 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UpdateBookCopy()
+        public async Task<IActionResult> UpdateBookCopy([FromBody] UpdateBookCopyDto dto)
         {
             try
             {
-                return BadRequest();
+                var operationResult = await _mediator.Send(new UpdateBookCopyCommand(dto));
+                if (operationResult.IsSuccess)
+                {
+                    return Ok(operationResult.Data);
+                }
+                return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage });
             }
             catch (Exception ex)
             {

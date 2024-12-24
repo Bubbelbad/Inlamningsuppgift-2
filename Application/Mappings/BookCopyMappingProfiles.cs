@@ -9,6 +9,7 @@ namespace Application.Mappings
         public BookCopyMappingProfiles()
         {
             CreateMap<BookCopy, GetBookCopyDto>();
+            CreateMap<BookCopy, UpdateBookCopyDto>();
         }
     }
 }
