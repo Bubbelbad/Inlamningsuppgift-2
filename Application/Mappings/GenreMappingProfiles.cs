@@ -9,6 +9,7 @@ namespace Application.Mappings
         public GenreMappingProfiles()
         {
             CreateMap<Genre, GetGenreDto>();
+            CreateMap<Genre, AddGenreDto>();
         }
     }
 }

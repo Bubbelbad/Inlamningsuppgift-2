@@ -1,4 +1,7 @@
-﻿using Application.Queries.GenreQueries.GetAllGenres;
+﻿using Application.Commands.AuthorCommands.AddAuthor;
+using Application.Commands.GenreCommands.AddGenre;
+using Application.Dtos.GenreDtos;
+using Application.Queries.GenreQueries.GetAllGenres;
 using Application.Queries.GenreQueries.GetGenreById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -49,12 +52,23 @@ namespace API.Controllers
             }
         }
 
-        //[HttpPost]
-        //public async Task<ActionResult<GetGenreDto>> CreateGenre(CreateGenreDto createGenreDto)
-        //{
-        //    var operationResult = await _mediator.Send()
-        //    return Ok(genreToReturn);
-        //}
+        [HttpPost]
+        public async Task<IActionResult> CreateGenre(AddGenreDto dto)
+        {
+            try
+            {
+                var operationResult = await _mediator.Send(new AddGenreCommand(dto));
+                if (operationResult.IsSuccess)
+                {
+                    return Ok(operationResult.Data);
+                }
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
 
         //[HttpPut("{id}")]
         //public async Task<ActionResult<GetGenreDto>> UpdateGenre(int id, UpdateGenreDto updateGenreDto)

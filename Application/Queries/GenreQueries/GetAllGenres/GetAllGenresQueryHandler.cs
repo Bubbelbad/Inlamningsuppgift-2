@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.RepositoryInterfaces;
+﻿using Application.Dtos.GenreDtos;
+using Application.Interfaces.RepositoryInterfaces;
 using Application.Models;
 using AutoMapper;
 using Domain.Entities.Metadata;
@@ -6,19 +7,23 @@ using MediatR;
 
 namespace Application.Queries.GenreQueries.GetAllGenres
 {
-    internal class GetAllGenresQueryHandler(IGenericRepository<Genre, int> repository, IMapper mapper) : IRequestHandler<GetAllGenresQuery, OperationResult<List<Genre>>>
+    internal class GetAllGenresQueryHandler(IGenericRepository<Genre, int> repository, IMapper mapper) : IRequestHandler<GetAllGenresQuery, OperationResult<List<GetGenreDto>>>
     {
-        private readonly IGenericRepository<Genre, int> _repository;
-        private readonly IMapper _mapper;
+        private readonly IGenericRepository<Genre, int> _repository = repository;
+        private readonly IMapper _mapper = mapper;
 
-        public async Task<OperationResult<List<Genre>>> Handle(GetAllGenresQuery request, CancellationToken cancellationToken)
+        public async Task<OperationResult<List<GetGenreDto>>> Handle(GetAllGenresQuery request, CancellationToken cancellationToken)
         {
             try
             {
                 var allGenres = await _repository.GetAllAsync();
-                var mappedGenres = _mapper.Map<List<Genre>>(allGenres);
+                if (allGenres is null)
+                {
+                    return OperationResult<List<GetGenreDto>>.Failure("Operation failed");
+                }
 
-                return OperationResult<List<Genre>>.Success(mappedGenres);
+                var mappedGenres = _mapper.Map<List<GetGenreDto>>(allGenres);
+                return OperationResult<List<GetGenreDto>>.Success(mappedGenres);
             }
             catch (Exception ex)
             {
