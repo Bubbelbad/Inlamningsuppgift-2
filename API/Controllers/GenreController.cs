@@ -1,5 +1,6 @@
 ﻿using Application.Commands.AuthorCommands.AddAuthor;
 using Application.Commands.GenreCommands.AddGenre;
+using Application.Commands.GenreCommands.DeleteGenre;
 using Application.Dtos.GenreDtos;
 using Application.Queries.GenreQueries.GetAllGenres;
 using Application.Queries.GenreQueries.GetGenreById;
@@ -77,11 +78,11 @@ namespace API.Controllers
         //    return Ok(genreToReturn);
         //}
 
-        //[HttpDelete("{id}")]
-        //public async Task<ActionResult> DeleteGenre(int id)
-        //{
-        //    var operationResult = await _mediator.Send()
-        //    return NoContent();
-        //}
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteGenre(int id)
+        {
+            var operationResult = await _mediator.Send(new DeleteGenreCommand(id));
+            return NoContent();
+        }
     }
 }

@@ -23,9 +23,4 @@
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Commands\GenreCommands\DeleteGenre\" />
-    <Folder Include="Commands\GenreCommands\UpdateGenre\" />
-  </ItemGroup>
-
 </Project>
