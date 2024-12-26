@@ -10,6 +10,9 @@ namespace Application.Mappings
         {
             CreateMap<Genre, GetGenreDto>();
             CreateMap<Genre, AddGenreDto>();
+            CreateMap<GetGenreDto, Genre>();
+            CreateMap<Genre, UpdateGenreDto>();
+            CreateMap<UpdateGenreDto, Genre>();
         }
     }
 }

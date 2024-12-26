@@ -1,6 +1,7 @@
 ﻿using Application.Commands.AuthorCommands.AddAuthor;
 using Application.Commands.GenreCommands.AddGenre;
 using Application.Commands.GenreCommands.DeleteGenre;
+using Application.Commands.GenreCommands.UpdateGenre;
 using Application.Dtos.GenreDtos;
 using Application.Queries.GenreQueries.GetAllGenres;
 using Application.Queries.GenreQueries.GetGenreById;
@@ -53,7 +54,7 @@ namespace API.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("Create")]
         public async Task<IActionResult> CreateGenre(AddGenreDto dto)
         {
             try
@@ -71,18 +72,40 @@ namespace API.Controllers
             }
         }
 
-        //[HttpPut("{id}")]
-        //public async Task<ActionResult<GetGenreDto>> UpdateGenre(int id, UpdateGenreDto updateGenreDto)
-        //{
-        //    var operationResult = await _mediator.Send()
-        //    return Ok(genreToReturn);
-        //}
+        [HttpPut("Update")]
+        public async Task<ActionResult<GetGenreDto>> UpdateGenre([FromBody] UpdateGenreDto updateGenreDto)
+        {
+            try
+            {
+                var operationResult = await _mediator.Send(new UpdateGenreCommand(updateGenreDto));
+                if (operationResult.IsSuccess)
+                {
+                    return Ok(operationResult.Data);
+                }
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("Delete{id}")]
         public async Task<ActionResult> DeleteGenre(int id)
         {
-            var operationResult = await _mediator.Send(new DeleteGenreCommand(id));
-            return NoContent();
+            try
+            {
+                var operationResult = await _mediator.Send(new DeleteGenreCommand(id));
+                if (operationResult.IsSuccess)
+                {
+                    return Ok(operationResult.Data);
+                }
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

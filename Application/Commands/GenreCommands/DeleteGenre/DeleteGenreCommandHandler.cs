@@ -8,10 +8,9 @@ using MediatR;
 
 namespace Application.Commands.GenreCommands.DeleteGenre
 {
-    public class DeleteGenreCommandHandler(IGenericRepository<Genre, int> repository, IMapper mapper) : IRequestHandler<DeleteGenreCommand, OperationResult<bool>>
+    public class DeleteGenreCommandHandler(IGenericRepository<Genre, int> repository) : IRequestHandler<DeleteGenreCommand, OperationResult<bool>>
     {
         private readonly IGenericRepository<Genre, int> _repository = repository;
-        private readonly IMapper _mapper = mapper;
 
         public async Task<OperationResult<bool>> Handle(DeleteGenreCommand request, CancellationToken cancellationToken)
         {

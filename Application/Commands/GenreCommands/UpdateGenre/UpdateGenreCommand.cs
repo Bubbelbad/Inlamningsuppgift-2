@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Application.Dtos.GenreDtos;
+using Application.Models;
+using MediatR;
 
 namespace Application.Commands.GenreCommands.UpdateGenre
 {
-    internal class UpdateGenreCommand
+    public class UpdateGenreCommand(UpdateGenreDto dto) : IRequest<OperationResult<GetGenreDto>>
     {
+        public UpdateGenreDto Dto { get; set; } = dto;
     }
 }
