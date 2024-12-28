@@ -7,7 +7,7 @@ namespace Domain.Entities.Metadata
     {
         public Guid ReviewId { get; set; }
         public Guid BookId { get; set; }
-        public string Id { get; set; }
+        public int Id { get; set; }
         public int Rating { get; set; }
         public string? Comment { get; set; }
         public DateTime ReviewDate { get; set; } // Navigation properties public User User { get; set; } public Book Book { get; set; }

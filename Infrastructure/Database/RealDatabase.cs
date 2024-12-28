@@ -93,6 +93,24 @@ namespace Infrastructure.Database
             modelBuilder.Entity<Publisher>()
                 .Property(g => g.PublisherId)
                 .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<Review>()
+                .HasKey(g => g.Id);
+            modelBuilder.Entity<Review>()
+                .Property(g => g.Id)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<Borrowing>()
+                .HasKey(g => g.Id);
+            modelBuilder.Entity<Borrowing>()
+                .Property(g => g.Id)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<Reservation>()
+                .HasKey(g => g.Id);
+            modelBuilder.Entity<Reservation>()
+                .Property(g => g.Id)
+                .ValueGeneratedOnAdd();
         }
 
     }
