@@ -6,7 +6,7 @@ namespace Domain.Entities.Transactions
     public class Borrowing
     {
         public Guid BorrowingId { get; set; }
-        public string Id { get; set; }
+        public int Id { get; set; }
         public Guid CopyId { get; set; }
         public DateTime BorrowDate { get; set; }
         public DateTime? ReturnDate { get; set; }

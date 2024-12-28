@@ -6,7 +6,7 @@ namespace Domain.Entities.Transactions
     public class Reservation
     {
         public Guid ReservationId { get; set; }
-        public string Id { get; set; }
+        public int Id { get; set; }
         public Guid CopyId { get; set; }
         public DateTime ReservationDate { get; set; }
         public string Status { get; set; }
