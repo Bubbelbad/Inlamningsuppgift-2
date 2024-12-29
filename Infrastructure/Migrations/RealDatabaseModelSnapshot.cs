@@ -251,8 +251,11 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Metadata.Review", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<Guid>("BookId")
                         .HasColumnType("uniqueidentifier");
@@ -266,26 +269,29 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("ReviewDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("ReviewId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BookId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("Domain.Entities.Transactions.Borrowing", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("BorrowDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<Guid>("BorrowingId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("CopyId")
                         .HasColumnType("uniqueidentifier");
@@ -300,17 +306,26 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CopyId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Borrowings");
                 });
 
             modelBuilder.Entity("Domain.Entities.Transactions.Reservation", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<Guid?>("BookId")
                         .HasColumnType("uniqueidentifier");
@@ -321,18 +336,21 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("ReservationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("ReservationId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BookId");
 
                     b.HasIndex("CopyId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Reservations");
                 });
@@ -518,7 +536,7 @@ namespace Infrastructure.Migrations
 
                     b.HasOne("Domain.Entities.Core.User", "User")
                         .WithMany("Reviews")
-                        .HasForeignKey("Id")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -537,7 +555,7 @@ namespace Infrastructure.Migrations
 
                     b.HasOne("Domain.Entities.Core.User", "User")
                         .WithMany("Borrowings")
-                        .HasForeignKey("Id")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -560,7 +578,7 @@ namespace Infrastructure.Migrations
 
                     b.HasOne("Domain.Entities.Core.User", "User")
                         .WithMany("Reservations")
-                        .HasForeignKey("Id")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

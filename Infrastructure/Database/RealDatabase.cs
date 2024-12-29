@@ -40,8 +40,9 @@ namespace Infrastructure.Database
             modelBuilder.Entity<Review>()
                 .HasOne(r => r.User)
                 .WithMany(u => u.Reviews)
-                .HasForeignKey(r => r.Id)
+                .HasForeignKey(r => r.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+
 
             modelBuilder.Entity<Review>()
                 .HasOne(r => r.Book)
@@ -53,7 +54,7 @@ namespace Infrastructure.Database
             modelBuilder.Entity<Borrowing>()
                 .HasOne(b => b.User)
                 .WithMany(u => u.Borrowings)
-                .HasForeignKey(b => b.Id)
+                .HasForeignKey(b => b.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Borrowing>()
@@ -66,7 +67,7 @@ namespace Infrastructure.Database
             modelBuilder.Entity<Reservation>()
                 .HasOne(r => r.User)
                 .WithMany(u => u.Reservations)
-                .HasForeignKey(r => r.Id)
+                .HasForeignKey(r => r.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Reservation>()

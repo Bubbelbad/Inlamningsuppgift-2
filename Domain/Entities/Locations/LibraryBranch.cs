@@ -1,5 +1,4 @@
-﻿
-using Domain.Interfaces;
+﻿using Domain.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities.Locations
@@ -21,5 +20,4 @@ namespace Domain.Entities.Locations
             set => BranchId = value;
         }
     }
-
 }
