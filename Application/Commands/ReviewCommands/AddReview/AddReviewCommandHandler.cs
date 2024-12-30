@@ -5,7 +5,7 @@ using AutoMapper;
 using Domain.Entities.Metadata;
 using MediatR;
 
-namespace Application.Commands.ReviewCommands.AddReviewCommand
+namespace Application.Commands.ReviewCommands.AddReview
 {
     public class AddReviewCommandHandler(IGenericRepository<Review, int> repository, IMapper mapper) : IRequestHandler<AddReviewCommand, OperationResult<GetReviewDto>>
     {

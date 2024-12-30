@@ -2,7 +2,7 @@
 using Application.Models;
 using MediatR;
 
-namespace Application.Commands.ReviewCommands.AddReviewCommand
+namespace Application.Commands.ReviewCommands.AddReview
 {
     public class AddReviewCommand(AddReviewDto dto) : IRequest<OperationResult<GetReviewDto>>
     {

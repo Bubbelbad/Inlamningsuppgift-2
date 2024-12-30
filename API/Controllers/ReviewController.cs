@@ -1,8 +1,9 @@
-﻿using Application.Commands.ReviewCommands.AddReviewCommand;
+﻿using Application.Commands.ReviewCommands.AddReview;
+using Application.Commands.ReviewCommands.UpdateReview;
 using Application.Dtos.ReviewDtos;
 using Application.Queries.ReviewQueries.GetAllReviews;
+using Application.Queries.ReviewQueries.GetReviewById;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -36,12 +37,48 @@ namespace API.Controllers
             }
         }
 
-        [HttpPost("Add")]
+        [HttpGet("GetById/{id}")]
+        public async Task<IActionResult> GetReviewById(int id)
+        {
+            try
+            {
+                var operationResult = await _mediator.Send(new GetReviewByIdQuery(id));
+                if (operationResult is not null)
+                {
+                    return Ok(operationResult.Data);
+                }
+                return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.InnerException);
+            }
+        }
+
+        [HttpPost("Create")]
         public async Task<IActionResult> AddReview(AddReviewDto dto)
         {
             try
             {
                 var operationResult = await _mediator.Send(new AddReviewCommand(dto));
+                if (operationResult is not null)
+                {
+                    return Ok(operationResult.Data);
+                }
+                return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.InnerException);
+            }
+        }
+
+        [HttpPut("Update")]
+        public async Task<IActionResult> UpdateReview(UpdateReviewDto dto)
+        {
+            try
+            {
+                var operationResult = await _mediator.Send(new UpdateReviewCommand(dto));
                 if (operationResult is not null)
                 {
                     return Ok(operationResult.Data);
