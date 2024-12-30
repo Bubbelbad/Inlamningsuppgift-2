@@ -1,4 +1,5 @@
 ﻿using Application.Commands.ReviewCommands.AddReview;
+using Application.Commands.ReviewCommands.DeleteReview;
 using Application.Commands.ReviewCommands.UpdateReview;
 using Application.Dtos.ReviewDtos;
 using Application.Queries.ReviewQueries.GetAllReviews;
@@ -89,6 +90,25 @@ namespace API.Controllers
             {
                 return BadRequest(ex.InnerException);
             }
+        }
+
+        [HttpDelete("Delete/{id}")]
+        public async Task<IActionResult> DeleteReview(int id)
+        {
+            try
+            {
+                var operationResult = await _mediator.Send(new DeleteReviewCommand(id));
+                if (operationResult is not null)
+                {
+                    return Ok(operationResult.Data);
+                }
+                return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.InnerException);
+            }
+
         }
     }
 }

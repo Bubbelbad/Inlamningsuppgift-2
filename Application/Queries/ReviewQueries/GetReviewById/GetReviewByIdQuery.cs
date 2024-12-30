@@ -6,6 +6,6 @@ namespace Application.Queries.ReviewQueries.GetReviewById
 {
     public class GetReviewByIdQuery(int id) : IRequest<OperationResult<GetReviewDto>>
     {
-        public int Id { get; set; } = id; 
+        public int Id { get; set; } = id;
     }
 }
