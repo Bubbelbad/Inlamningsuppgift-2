@@ -12,5 +12,4 @@ namespace Domain.Entities.Metadata
         // Navigation property
         public ICollection<Book> Books { get; set; }
     }
-
 }
