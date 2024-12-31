@@ -1,8 +1,9 @@
 ﻿using Domain.Entities.Core;
+using Domain.Interfaces;
 
 namespace Domain.Entities.Metadata
 {
-    public class Publisher
+    public class Publisher : IEntity<int>
     {
         public int PublisherId { get; set; }
         public string Name { get; set; }
@@ -11,5 +12,11 @@ namespace Domain.Entities.Metadata
 
         // Navigation property
         public ICollection<Book> Books { get; set; }
+
+        int IEntity<int>.Id
+        {
+            get => PublisherId;
+            set => PublisherId = value;
+        }
     }
 }
