@@ -1,4 +1,5 @@
 ﻿using Application.Commands.PublisherCommands.AddPublisher;
+using Application.Commands.PublisherCommands.DeletePublisher;
 using Application.Commands.PublisherCommands.UpdatePublisher;
 using Application.Dtos.PublisherDtos;
 using Application.Queries.PublisherQueries.GetAllPublishers;
@@ -128,6 +129,33 @@ namespace API.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred while updating Publisher with ID: {id} at {time}", dto.PublisherId, DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
+                return BadRequest(ex.InnerException);
+            }
+        }
+
+        [HttpDelete]
+        [Route("Delete/{id}")]
+        [SwaggerOperation(Description = "Deletes a Publisher")]
+        [SwaggerResponse(200, "Successfully deleted Publisher.")]
+        [SwaggerResponse(400, "Invalid input data")]
+        public async Task<IActionResult> DeletePublisher([FromRoute] int id)
+        {
+            _logger.LogInformation("Deleting Publisher with ID: {id} at {time}", id, DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
+
+            try
+            {
+                var operationResult = await _mediator.Send(new DeletePublisherCommand(id));
+
+                if (operationResult.IsSuccess)
+                {
+                    return Ok(operationResult.Data);
+                }
+                return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage });
+            }
+
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while deleting Publisher with ID: {id} at {time}", id, DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
                 return BadRequest(ex.InnerException);
             }
         }
