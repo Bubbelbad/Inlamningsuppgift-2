@@ -1,4 +1,6 @@
-﻿using Application.Queries.PublisherQueries.GetAllPublishers;
+﻿using Application.Commands.PublisherCommands.AddPublisher;
+using Application.Dtos.PublisherDtos;
+using Application.Queries.PublisherQueries.GetAllPublishers;
 using Application.Queries.PublisherQueries.GetPublisherById;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -71,6 +73,33 @@ namespace API.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred while fetching Publisher with ID: {id} at {time}", id, DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
+                return BadRequest(ex.InnerException);
+            }
+        }
+
+        [HttpPost]
+        [Route("AddPublisher")]
+        [SwaggerOperation(Description = "Adds a new Publisher")]
+        [SwaggerResponse(200, "Successfully added Publisher.")]
+        [SwaggerResponse(400, "Invalid input data")]
+        public async Task<IActionResult> AddPublisher([FromBody] AddPublisherDto dto)
+        {
+            _logger.LogInformation("Adding a new Publisher at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
+
+            try
+            {
+                var operationResult = await _mediator.Send(new AddPublisherCommand(dto));
+
+                if (operationResult.IsSuccess)
+                {
+                    return Ok(operationResult.Data);
+                }
+                return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage });
+            }
+
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while adding a new Publisher at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
                 return BadRequest(ex.InnerException);
             }
         }
