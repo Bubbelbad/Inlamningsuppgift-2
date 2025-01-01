@@ -25,7 +25,6 @@
 
   <ItemGroup>
     <Folder Include="Commands\PublisherCommands\DeletePublisher\" />
-    <Folder Include="Commands\PublisherCommands\UpdatePublisher\" />
   </ItemGroup>
 
 </Project>

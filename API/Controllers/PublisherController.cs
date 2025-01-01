@@ -1,4 +1,5 @@
 ﻿using Application.Commands.PublisherCommands.AddPublisher;
+using Application.Commands.PublisherCommands.UpdatePublisher;
 using Application.Dtos.PublisherDtos;
 using Application.Queries.PublisherQueries.GetAllPublishers;
 using Application.Queries.PublisherQueries.GetPublisherById;
@@ -23,7 +24,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        [Route("GetAllPublishers")]
+        [Route("GetAll")]
         [SwaggerOperation(Description = "Gets All Publishers")]
         [SwaggerResponse(200, "Successfully retrieved Publishers.")]
         [SwaggerResponse(400, "Invalid input data")]
@@ -51,7 +52,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        [Route("GetPublisherById/{id}")]
+        [Route("GetById/{id}")]
         [SwaggerOperation(Description = "Gets Publisher by Id")]
         [SwaggerResponse(200, "Successfully retrieved Publisher.")]
         [SwaggerResponse(400, "Invalid input data")]
@@ -78,7 +79,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        [Route("AddPublisher")]
+        [Route("Create")]
         [SwaggerOperation(Description = "Adds a new Publisher")]
         [SwaggerResponse(200, "Successfully added Publisher.")]
         [SwaggerResponse(400, "Invalid input data")]
@@ -100,6 +101,33 @@ namespace API.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred while adding a new Publisher at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
+                return BadRequest(ex.InnerException);
+            }
+        }
+
+        [HttpPut]
+        [Route("Update")]
+        [SwaggerOperation(Description = "Updates a Publisher")]
+        [SwaggerResponse(200, "Successfully updated Publisher.")]
+        [SwaggerResponse(400, "Invalid input data")]
+        public async Task<IActionResult> UpdatePublisher([FromBody] UpdatePublisherDto dto)
+        {
+            _logger.LogInformation("Updating Publisher with ID: {id} at {time}", dto.PublisherId, DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
+
+            try
+            {
+                var operationResult = await _mediator.Send(new UpdatePublisherCommand(dto));
+
+                if (operationResult.IsSuccess)
+                {
+                    return Ok(operationResult.Data);
+                }
+                return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage });
+            }
+
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while updating Publisher with ID: {id} at {time}", dto.PublisherId, DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
                 return BadRequest(ex.InnerException);
             }
         }
