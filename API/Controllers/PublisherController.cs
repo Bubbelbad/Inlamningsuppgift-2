@@ -1,4 +1,5 @@
 ﻿using Application.Queries.PublisherQueries.GetAllPublishers;
+using Application.Queries.PublisherQueries.GetPublisherById;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -47,31 +48,31 @@ namespace API.Controllers
             }
         }
 
-        //[HttpGet]
-        //[Route("GetPublisherById/{id}")]
-        //[SwaggerOperation(Description = "Gets Publisher by Id")]
-        //[SwaggerResponse(200, "Successfully retrieved Publisher.")]
-        //[SwaggerResponse(400, "Invalid input data")]
-        //[SwaggerResponse(404, "Publisher not found")]
-        //public async Task<IActionResult> GetPublisher([FromRoute] Guid id)
-        //{
-        //    _logger.LogInformation("Fetching Publisher with ID: {id} at {time}", id, DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
-        //    try
-        //    {
-        //        var operationResult = await _mediator.Send(new GetPublisherByIdQuery(id));
+        [HttpGet]
+        [Route("GetPublisherById/{id}")]
+        [SwaggerOperation(Description = "Gets Publisher by Id")]
+        [SwaggerResponse(200, "Successfully retrieved Publisher.")]
+        [SwaggerResponse(400, "Invalid input data")]
+        [SwaggerResponse(404, "Publisher not found")]
+        public async Task<IActionResult> GetPublisher([FromRoute] int id)
+        {
+            _logger.LogInformation("Fetching Publisher with ID: {id} at {time}", id, DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
+            try
+            {
+                var operationResult = await _mediator.Send(new GetPublisherByIdQuery(id));
 
-        //        if (operationResult.IsSuccess)
-        //        {
-        //            return Ok(operationResult.Data);
-        //        }
-        //        return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage });
-        //    }
+                if (operationResult.IsSuccess)
+                {
+                    return Ok(operationResult.Data);
+                }
+                return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage });
+            }
 
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, "An error occurred while fetching Publisher with ID: {id} at {time}", id, DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
-        //        return BadRequest(ex.InnerException);
-        //    }
-        //}
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while fetching Publisher with ID: {id} at {time}", id, DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
+                return BadRequest(ex.InnerException);
+            }
+        }
     }
 }
