@@ -30,6 +30,7 @@ namespace Application
             services.AddAutoMapper(typeof(LibraryBranchMappingProfiles).Assembly);
             services.AddAutoMapper(typeof(GenreMappingProfiles).Assembly);
             services.AddAutoMapper(typeof(ReviewMappingProfiles).Assembly);
+            services.AddAutoMapper(typeof(PublisherMappingProfiles).Assembly);
 
             // Register validators
             services.AddValidatorsFromAssemblyContaining<AddAuthorCommandValidator>();
