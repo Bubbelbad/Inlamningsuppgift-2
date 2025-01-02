@@ -1,4 +1,6 @@
-﻿using Application.Queries.ReservationQueries.GetAllReservations;
+﻿using Application.Commands.ReservationCommands.AddReservation;
+using Application.Dtos.ReservationDtos;
+using Application.Queries.ReservationQueries.GetAllReservations;
 using Application.Queries.ReservationQueries.GetReservationById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -55,29 +57,29 @@ namespace API.Controllers
             }
         }
 
-        //[HttpPost]
-        //[Route("Add")]
-        //[SwaggerOperation(Description = "Adds a new reservation")]
-        //[SwaggerResponse(201, "Successfully added Reservation.")]
-        //[SwaggerResponse(400, "Invalid input data")]
-        //[SwaggerResponse(404, "Reservation not found")]
-        //public async Task<IActionResult> AddReservation([FromBody] AddReservationCommand command)
-        //{
-        //    try
-        //    {
-        //        var operationResult = await _mediator.Send(command);
-        //        if (operationResult.IsSuccess)
-        //        {
-        //            return CreatedAtAction(nameof(GetReservation), new { reservationId = operationResult.Data }, operationResult.Data);
-        //        }
-        //        return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage });
-        //    }
+        [HttpPost]
+        [Route("Create")]
+        [SwaggerOperation(Description = "Adds a new reservation")]
+        [SwaggerResponse(201, "Successfully added Reservation.")]
+        [SwaggerResponse(400, "Invalid input data")]
+        [SwaggerResponse(404, "Reservation not found")]
+        public async Task<IActionResult> AddReservation([FromBody] AddReservationDto dto)
+        {
+            try
+            {
+                var operationResult = await _mediator.Send(new AddReservationCommand(dto));
+                if (operationResult.IsSuccess)
+                {
+                    return CreatedAtAction(nameof(GetReservation), new { reservationId = operationResult.Data }, operationResult.Data);
+                }
+                return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage });
+            }
 
-        //    catch (Exception e)
-        //    {
-        //        _logger.LogError(e, "An error occurred while adding new Reservation at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
-        //        return StatusCode(500, "An error occurred while processing your request.");
-        //    }
-        //}
+            catch (Exception e)
+            {
+                _logger.LogError(e, "An error occurred while adding new Reservation at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
+        }
     }
 }

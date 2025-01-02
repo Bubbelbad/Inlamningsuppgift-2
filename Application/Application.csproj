@@ -23,4 +23,9 @@
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Commands\ReservationCommands\DeleteReservation\" />
+    <Folder Include="Commands\ReservationCommands\UpdateReservation\" />
+  </ItemGroup>
+
 </Project>
