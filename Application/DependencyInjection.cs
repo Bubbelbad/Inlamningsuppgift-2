@@ -31,6 +31,7 @@ namespace Application
             services.AddAutoMapper(typeof(GenreMappingProfiles).Assembly);
             services.AddAutoMapper(typeof(ReviewMappingProfiles).Assembly);
             services.AddAutoMapper(typeof(PublisherMappingProfiles).Assembly);
+            services.AddAutoMapper(typeof(ReservationMappingProfiles).Assembly);
 
             // Register validators
             services.AddValidatorsFromAssemblyContaining<AddAuthorCommandValidator>();
