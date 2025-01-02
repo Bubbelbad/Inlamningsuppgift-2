@@ -1,5 +1,6 @@
 ﻿using Application.Commands.ReservationCommands.AddReservation;
 using Application.Commands.ReservationCommands.DeleteReservation;
+using Application.Commands.ReservationCommands.UpdateReservation;
 using Application.Dtos.ReservationDtos;
 using Application.Queries.ReservationQueries.GetAllReservations;
 using Application.Queries.ReservationQueries.GetReservationById;
@@ -83,9 +84,34 @@ namespace API.Controllers
             }
         }
 
+        [HttpPut]
+        [Route("Update")]
+        [SwaggerOperation(Description = "Updates a reservation")]
+        [SwaggerResponse(201, "Successfully updated Reservation.")]
+        [SwaggerResponse(400, "Invalid input data")]
+        [SwaggerResponse(404, "Reservation not found")]
+        public async Task<IActionResult> UpdateReservation([FromBody] UpdateReservationDto dto)
+        {
+            try
+            {
+                var operationResult = await _mediator.Send(new UpdateReservationCommand(dto));
+                if (operationResult.IsSuccess)
+                {
+                    return Ok(operationResult.Data);
+                }
+                return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage });
+            }
+
+            catch (Exception e)
+            {
+                _logger.LogError(e, "An error occurred while updating Reservation at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
+        }
+
         [HttpDelete]
         [Route("Delete{id}")]
-        [SwaggerOperation(Description = "Deletes a new reservation")]
+        [SwaggerOperation(Description = "Deletes a reservation")]
         [SwaggerResponse(201, "Successfully deleted Reservation.")]
         [SwaggerResponse(400, "Invalid input data")]
         [SwaggerResponse(404, "Reservation not found")]
@@ -96,14 +122,14 @@ namespace API.Controllers
                 var operationResult = await _mediator.Send(new DeleteReservationCommand(id));
                 if (operationResult.IsSuccess)
                 {
-                    return Ok(operationResult);
+                    return Ok(operationResult.Data);
                 }
                 return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage });
             }
 
             catch (Exception e)
             {
-                _logger.LogError(e, "An error occurred while deleting new Reservation at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
+                _logger.LogError(e, "An error occurred while deleting Reservation at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
                 return StatusCode(500, "An error occurred while processing your request.");
             }
         }
