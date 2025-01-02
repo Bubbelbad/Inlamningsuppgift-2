@@ -1,9 +1,10 @@
 ﻿using Domain.Entities.Core;
 using Domain.Entities.Locations;
+using Domain.Interfaces;
 
 namespace Domain.Entities.Transactions
 {
-    public class Borrowing
+    public class Borrowing : IEntity<int>
     {
         public int Id { get; set; }
         public string Status { get; set; }
@@ -19,5 +20,11 @@ namespace Domain.Entities.Transactions
         // Navigation properties
         public User User { get; set; }
         public BookCopy BookCopy { get; set; }
+
+        int IEntity<int>.Id
+        {
+            get => Id;
+            set => Id = value;
+        }
     }
 }

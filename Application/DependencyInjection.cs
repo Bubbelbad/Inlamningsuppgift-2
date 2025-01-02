@@ -32,6 +32,7 @@ namespace Application
             services.AddAutoMapper(typeof(ReviewMappingProfiles).Assembly);
             services.AddAutoMapper(typeof(PublisherMappingProfiles).Assembly);
             services.AddAutoMapper(typeof(ReservationMappingProfiles).Assembly);
+            services.AddAutoMapper(typeof(BorrowingMappingProfiles).Assembly);
 
             // Register validators
             services.AddValidatorsFromAssemblyContaining<AddAuthorCommandValidator>();
