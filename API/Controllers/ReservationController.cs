@@ -1,4 +1,5 @@
 ﻿using Application.Commands.ReservationCommands.AddReservation;
+using Application.Commands.ReservationCommands.DeleteReservation;
 using Application.Dtos.ReservationDtos;
 using Application.Queries.ReservationQueries.GetAllReservations;
 using Application.Queries.ReservationQueries.GetReservationById;
@@ -32,17 +33,17 @@ namespace API.Controllers
             return BadRequest();
         }
 
-        [Route("GetById/{Id}")]
+        [Route("GetById/{id}")]
         [HttpGet]
-        [SwaggerOperation(Description = "Gets a reservation by Id")]
+        [SwaggerOperation(Description = "Gets a reservation by id")]
         [SwaggerResponse(200, "Successfully retrieved Reservation.")]
         [SwaggerResponse(400, "Invalid input data")]
         [SwaggerResponse(404, "Reservation not found")]
-        public async Task<IActionResult> GetReservation([FromRoute] int Id)
+        public async Task<IActionResult> GetReservation([FromRoute] int id)
         {
             try
             {
-                var operationResult = await _mediator.Send(new GetReservationByIdQuery(Id));
+                var operationResult = await _mediator.Send(new GetReservationByIdQuery(id));
                 if (operationResult.IsSuccess)
                 {
                     return Ok(operationResult.Data);
@@ -52,7 +53,7 @@ namespace API.Controllers
 
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while fetching Reservation with ID: {id} at {time}", Id, DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
+                _logger.LogError(ex, "An error occurred while fetching Reservation with ID: {id} at {time}", id, DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
                 return StatusCode(500, "An error occurred while processing your request.");
             }
         }
@@ -70,7 +71,7 @@ namespace API.Controllers
                 var operationResult = await _mediator.Send(new AddReservationCommand(dto));
                 if (operationResult.IsSuccess)
                 {
-                    return CreatedAtAction(nameof(GetReservation), new { reservationId = operationResult.Data }, operationResult.Data);
+                    return Ok(operationResult.Data);
                 }
                 return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage });
             }
@@ -78,6 +79,31 @@ namespace API.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e, "An error occurred while adding new Reservation at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
+        }
+
+        [HttpDelete]
+        [Route("Delete{id}")]
+        [SwaggerOperation(Description = "Deletes a new reservation")]
+        [SwaggerResponse(201, "Successfully deleted Reservation.")]
+        [SwaggerResponse(400, "Invalid input data")]
+        [SwaggerResponse(404, "Reservation not found")]
+        public async Task<IActionResult> DeleteReservation([FromBody] int id)
+        {
+            try
+            {
+                var operationResult = await _mediator.Send(new DeleteReservationCommand(id));
+                if (operationResult.IsSuccess)
+                {
+                    return Ok(operationResult);
+                }
+                return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage });
+            }
+
+            catch (Exception e)
+            {
+                _logger.LogError(e, "An error occurred while deleting new Reservation at {time}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
                 return StatusCode(500, "An error occurred while processing your request.");
             }
         }
