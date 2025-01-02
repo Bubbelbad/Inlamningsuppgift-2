@@ -22,7 +22,6 @@ namespace Application.Commands.ReservationCommands.UpdateReservation
                 {
                     Id = request.Dto.Id,
                     Status = request.Dto.Status,
-                    ReservationDate = request.Dto.ReservationDate,
                     CopyId = request.Dto.CopyId,
                     UserId = request.Dto.UserId,
                 };
