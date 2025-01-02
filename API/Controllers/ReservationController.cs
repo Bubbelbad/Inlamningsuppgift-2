@@ -1,6 +1,8 @@
 ﻿using Application.Queries.ReservationQueries.GetAllReservations;
+using Application.Queries.ReservationQueries.GetReservationById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace API.Controllers
 {
@@ -14,9 +16,10 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("GetAll")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [SwaggerOperation(Description = "Gets all reservations")]
+        [SwaggerResponse(200, "Successfully retrieved Reservations.")]
+        [SwaggerResponse(400, "Invalid input data")]
+        [SwaggerResponse(404, "Reservations not found")]
         public async Task<IActionResult> GetAllReservations()
         {
             var operationResult = await _mediator.Send(new GetAllReservationsQuery());
@@ -27,30 +30,30 @@ namespace API.Controllers
             return BadRequest();
         }
 
-        //[Route("GetById/{reservationId}")]
-        //[HttpGet]
-        //[SwaggerOperation(Description = "Gets a reservation by Id")]
-        //[SwaggerResponse(200, "Successfully retrieved Reservation.")]
-        //[SwaggerResponse(400, "Invalid input data")]
-        //[SwaggerResponse(404, "Reservation not found")]
-        //public async Task<IActionResult> GetReservation([FromRoute] Guid reservationId)
-        //{
-        //    try
-        //    {
-        //        var operationResult = await _mediator.Send(new GetReservationByIdQuery(reservationId));
-        //        if (operationResult.IsSuccess)
-        //        {
-        //            return Ok(operationResult.Data);
-        //        }
-        //        return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage });
-        //    }
+        [Route("GetById/{Id}")]
+        [HttpGet]
+        [SwaggerOperation(Description = "Gets a reservation by Id")]
+        [SwaggerResponse(200, "Successfully retrieved Reservation.")]
+        [SwaggerResponse(400, "Invalid input data")]
+        [SwaggerResponse(404, "Reservation not found")]
+        public async Task<IActionResult> GetReservation([FromRoute] int Id)
+        {
+            try
+            {
+                var operationResult = await _mediator.Send(new GetReservationByIdQuery(Id));
+                if (operationResult.IsSuccess)
+                {
+                    return Ok(operationResult.Data);
+                }
+                return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage });
+            }
 
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, "An error occurred while fetching Reservation with ID: {id} at {time}", reservationId, DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
-        //        return StatusCode(500, "An error occurred while processing your request.");
-        //    }
-        //}
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while fetching Reservation with ID: {id} at {time}", Id, DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
+        }
 
         //[HttpPost]
         //[Route("Add")]
