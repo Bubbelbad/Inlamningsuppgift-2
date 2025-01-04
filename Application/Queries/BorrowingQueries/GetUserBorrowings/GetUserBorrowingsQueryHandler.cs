@@ -24,6 +24,7 @@ namespace Application.Queries.BorrowingQueries.GetUserBorrowings
                     return OperationResult<List<GetBorrowingDto>>.Failure("User not found found");
                 }
 
+                var userBorrowings = user.Borrowings.ToList();
                 var mappedUserBorrowings = _mapper.Map<List<GetBorrowingDto>>(user.Borrowings);
                 return OperationResult<List<GetBorrowingDto>>.Success(mappedUserBorrowings);
             }
