@@ -2,6 +2,7 @@
 using Application.Interfaces.RepositoryInterfaces;
 using Application.Models;
 using AutoMapper;
+using Domain.Entities.Core;
 using Domain.Entities.Locations;
 using Domain.Entities.Transactions;
 using MediatR;
@@ -12,12 +13,14 @@ namespace Application.Commands.BorrowingCommands.BorrowBookCopy
     {
         private readonly IGenericRepository<Borrowing, int> _borrowingRepository;
         private readonly IGenericRepository<BookCopy, Guid> _bookRepository;
+        private readonly IGenericRepository<User, string> _userRepository;
         private readonly IMapper _mapper;
         public BorrowBookCopyCommandHandler(IGenericRepository<Borrowing, int> borrowingRepository, IMapper mapper,
-                                          IGenericRepository<BookCopy, Guid> bookRepository)
+                                          IGenericRepository<BookCopy, Guid> bookRepository, IGenericRepository<User, string> userRepository)
         {
             _borrowingRepository = borrowingRepository;
             _bookRepository = bookRepository;
+            _userRepository = userRepository;
             _mapper = mapper;
         }
 
@@ -25,10 +28,18 @@ namespace Application.Commands.BorrowingCommands.BorrowBookCopy
         {
             try
             {
+                // Retrieve the book copy
                 var bookCopy = await _bookRepository.GetByIdAsync(request.Dto.CopyId);
                 if (bookCopy == null || bookCopy.Status != "Available")
                 {
                     return OperationResult<GetBorrowingDto>.Failure("Book copy is not available");
+                }
+
+                // Retrieve the user
+                var user = await _userRepository.GetByIdAsync(request.Dto.UserId.ToString());
+                if (user == null)
+                {
+                    return OperationResult<GetBorrowingDto>.Failure("User not found");
                 }
 
                 // Update the bookCopy status
@@ -46,7 +57,8 @@ namespace Application.Commands.BorrowingCommands.BorrowBookCopy
                     BorrowDate = DateTime.Now,
                     DueDate = DateTime.Now.AddDays(14),
                     UserId = request.Dto.UserId.ToString(),
-                    CopyId = request.Dto.CopyId
+                    CopyId = request.Dto.CopyId,
+                    User = user,
                 };
 
                 var successfulUpdate = await _bookRepository.UpdateAsync(bookCopy);
