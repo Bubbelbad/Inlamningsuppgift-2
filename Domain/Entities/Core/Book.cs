@@ -8,6 +8,7 @@ namespace Domain.Entities.Core
 {
     public class Book() : IEntity<Guid>
     {
+        [Key]
         [Required(ErrorMessage = "Id is required")]
         public Guid BookId { get; set; }
 
