@@ -1,11 +1,13 @@
 ﻿using Domain.Entities.Core;
 using Domain.Entities.Locations;
 using Domain.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities.Transactions
 {
     public class Borrowing : IEntity<int>
     {
+        [Key]
         public int Id { get; set; }
         public string Status { get; set; }
         public DateTime BorrowDate { get; set; }

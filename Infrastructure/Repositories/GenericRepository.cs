@@ -2,6 +2,7 @@
 using Domain.Interfaces;
 using Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
 
 namespace Infrastructure.Repositories
@@ -31,7 +32,18 @@ namespace Infrastructure.Repositories
                 query = query.Include(includeProperty);
             }
 
-            var entity = await query.FirstOrDefaultAsync(e => EF.Property<TKey>(e, "Id").Equals(id));
+            // Get the key property name using reflection
+            var keyProperty = typeof(T).GetProperties()
+                .FirstOrDefault(p => p.GetCustomAttributes(typeof(KeyAttribute), false).Any());
+
+            if (keyProperty == null)
+            {
+                throw new InvalidOperationException("No key property found for entity type " + typeof(T).Name);
+            }
+
+            var keyPropertyName = keyProperty.Name;
+
+            var entity = await query.FirstOrDefaultAsync(e => EF.Property<TKey>(e, keyPropertyName).Equals(id));
             return entity;
         }
 

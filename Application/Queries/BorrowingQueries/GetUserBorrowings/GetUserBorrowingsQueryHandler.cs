@@ -1,10 +1,8 @@
-﻿
-using Application.Dtos.BorrowingDtos;
+﻿using Application.Dtos.BorrowingDtos;
 using Application.Interfaces.RepositoryInterfaces;
 using Application.Models;
 using AutoMapper;
 using Domain.Entities.Core;
-using Domain.Entities.Transactions;
 using MediatR;
 
 namespace Application.Queries.BorrowingQueries.GetUserBorrowings

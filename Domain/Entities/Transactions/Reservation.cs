@@ -1,11 +1,14 @@
 ﻿using Domain.Entities.Core;
 using Domain.Entities.Locations;
 using Domain.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities.Transactions
 {
+
     public class Reservation : IEntity<int>
     {
+        [Key]
         public int Id { get; set; }
         public string Status { get; set; }
         public DateTime ReservationDate { get; set; }

@@ -1,10 +1,12 @@
 ﻿using Domain.Entities.Core;
 using Domain.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities.Metadata
 {
     public class Review : IEntity<int>
     {
+        [Key]
         public int Id { get; set; }
         public int Rating { get; set; }
         public string? Comment { get; set; }

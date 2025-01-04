@@ -5,6 +5,7 @@ namespace Domain.Entities.Core
 {
     public class Author() : IEntity<Guid>
     {
+        [Key]
 
         [Required(ErrorMessage = "{0} is required")]
         public required Guid AuthorId { get; set; }
