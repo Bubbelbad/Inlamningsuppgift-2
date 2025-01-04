@@ -1,10 +1,11 @@
-﻿using Application.Commands.BorrowingCommands;
+﻿using Application.Commands.BorrowingCommands.BorrowBookCopy;
 using Application.Dtos.BorrowingDtos;
 using Application.Queries.BorrowingQueries.GetBorrowingById;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Linq.Expressions;
 
 namespace API.Controllers
 {
@@ -21,27 +22,42 @@ namespace API.Controllers
         [SwaggerResponse(404, "Borrowing not found.")]
         public async Task<IActionResult> GetBorrowingById(int id)
         {
-            var operationResult = await _mediator.Send(new GetBorrowingByIdQuery(id));
-            if (operationResult.IsSuccess)
+            try
             {
-                return Ok(operationResult.Data);
+                var operationResult = await _mediator.Send(new GetBorrowingByIdQuery(id));
+                if (operationResult.IsSuccess)
+                {
+                    return Ok(operationResult.Data);
+                }
+                return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage });
             }
-            return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage });
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpPost]
-        [Route("Create")]
-        [SwaggerOperation(Description = "Adds a new borrowing to the database")]
+        [Route("BorrowBook")]
+        [SwaggerOperation(Description = "User borrows a book from the database")]
         [SwaggerResponse(201, "Borrowing successfully created")]
         [SwaggerResponse(400, "Invalid input data")]
-        public async Task<IActionResult> AddBorrowing([FromBody] AddBorrowingDto dto)
+        public async Task<IActionResult> AddBorrowing([FromBody] BorrowBookDto dto)
         {
-            var operationResult = await _mediator.Send(new AddBorrowingCommand(dto));
-            if (operationResult.IsSuccess)
+            try
             {
-                return CreatedAtAction(nameof(GetBorrowingById), new { id = operationResult.Data.Id }, operationResult.Data);
+                var operationResult = await _mediator.Send(new BorrowBookCopyCommand(dto));
+                if (operationResult.IsSuccess)
+                {
+                    return Ok(operationResult.Data);
+                }
+                return BadRequest(operationResult);
+
             }
-            return BadRequest(operationResult);
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         //[HttpDelete]
