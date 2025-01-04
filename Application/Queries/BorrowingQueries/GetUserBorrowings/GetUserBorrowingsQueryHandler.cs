@@ -18,7 +18,7 @@ namespace Application.Queries.BorrowingQueries.GetUserBorrowings
         {
             try
             {
-                var user = await _repository.GetByIdAsync(request.UserId);
+                var user = await _repository.GetByIdAsync(request.UserId, u => u.Borrowings);
                 if (user is null)
                 {
                     return OperationResult<List<GetBorrowingDto>>.Failure("User not found found");
