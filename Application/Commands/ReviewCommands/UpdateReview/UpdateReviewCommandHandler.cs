@@ -18,7 +18,7 @@ namespace Application.Commands.ReviewCommands.UpdateReview
             {
                 Review review = new()
                 {
-                    Id = request.dto.ReviewId,
+                    Id = request.dto.Id,
                     Rating = request.dto.Rating,
                     Comment = request.dto.Comment,
                     ReviewDate = request.dto.ReviewDate,

@@ -10,6 +10,7 @@ namespace Application.Mappings
         public ReviewMappingProfiles()
         {
             CreateMap<Review, AddReviewDto>();
+            CreateMap<AddReviewDto, GetReviewDto>();
             CreateMap<Review, GetReviewDto>();
 
         }

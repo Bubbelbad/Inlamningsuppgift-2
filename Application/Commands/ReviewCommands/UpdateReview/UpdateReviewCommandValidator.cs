@@ -7,7 +7,7 @@ namespace Application.Commands.ReviewCommands.UpdateReview
     {
         public UpdateReviewCommandValidator()
         {
-            RuleFor(x => x.dto.ReviewId)
+            RuleFor(x => x.dto.Id)
                 .NotEmpty().WithMessage("ReviewId can not be empty");
 
             RuleFor(x => x.dto.Comment)
