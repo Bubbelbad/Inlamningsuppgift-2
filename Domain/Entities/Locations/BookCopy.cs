@@ -15,7 +15,6 @@ namespace Domain.Entities.Locations
 
         // Navigation properties
         public Book Book { get; set; }
-        public LibraryBranch Branch { get; set; }
         public ICollection<Borrowing> Borrowings { get; set; }
         public ICollection<Reservation> Reservations { get; set; }
 

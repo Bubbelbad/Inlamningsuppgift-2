@@ -13,10 +13,6 @@ namespace Application.Commands.BookCopyCommands.AddBookCopy
             RuleFor(x => x.Dto.BookId)
                 .NotEmpty()
                 .WithMessage("BookId is required.");
-
-            RuleFor(x => x.Dto.BranchId)
-                .NotEmpty()
-                .WithMessage("BranchId is required.");
         }
     }
 }

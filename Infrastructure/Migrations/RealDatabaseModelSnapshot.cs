@@ -176,33 +176,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("BookId");
 
-                    b.HasIndex("BranchId");
-
                     b.ToTable("BookCopies");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Locations.LibraryBranch", b =>
-                {
-                    b.Property<int>("BranchId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BranchId"));
-
-                    b.Property<string>("ContactInfo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Location")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("BranchId");
-
-                    b.ToTable("LibraryBranches");
                 });
 
             modelBuilder.Entity("Domain.Entities.Metadata.Genre", b =>
@@ -515,15 +489,7 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.Locations.LibraryBranch", "Branch")
-                        .WithMany("BookCopies")
-                        .HasForeignKey("BranchId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Book");
-
-                    b.Navigation("Branch");
                 });
 
             modelBuilder.Entity("Domain.Entities.Metadata.Review", b =>
@@ -666,11 +632,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("Borrowings");
 
                     b.Navigation("Reservations");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Locations.LibraryBranch", b =>
-                {
-                    b.Navigation("BookCopies");
                 });
 
             modelBuilder.Entity("Domain.Entities.Metadata.Genre", b =>

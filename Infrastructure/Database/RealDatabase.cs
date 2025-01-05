@@ -15,22 +15,20 @@ namespace Infrastructure.Database
         public DbSet<Author> Authors { get; set; }
         public DbSet<Book> Books { get; set; }
         public DbSet<User> Users { get; set; }
-
         public DbSet<Borrowing> Borrowings { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Publisher> Publishers { get; set; }
         public DbSet<Review> Reviews { get; set; }
-        public DbSet<LibraryBranch> LibraryBranches { get; set; }
         public DbSet<BookCopy> BookCopies { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer("Server=VULLE\\SQLEXPRESS; Database=CleanArchitecture; Trusted_Connection=true; TrustServerCertificate=true;");
-            }
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    if (!optionsBuilder.IsConfigured)
+        //    {
+        //        optionsBuilder.UseSqlServer("Server=VULLE\\SQLEXPRESS; Database=Library-Management-System; Trusted_Connection=true; TrustServerCertificate=true;");
+        //    }
+        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -77,12 +75,6 @@ namespace Infrastructure.Database
                 .OnDelete(DeleteBehavior.Cascade);
 
             // Configure automatic Id for branches with Id : int
-            modelBuilder.Entity<LibraryBranch>()
-                .HasKey(lb => lb.BranchId);
-            modelBuilder.Entity<LibraryBranch>()
-                .Property(lb => lb.BranchId)
-                .ValueGeneratedOnAdd();
-
             modelBuilder.Entity<Genre>()
                 .HasKey(g => g.Id);
             modelBuilder.Entity<Genre>()

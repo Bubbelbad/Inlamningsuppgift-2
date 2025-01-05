@@ -20,7 +20,6 @@ namespace Application.Commands.BookCopyCommands.UpdateBookCopy
                 {
                     CopyId = request.Dto.CopyId,
                     BookId = request.Dto.BookId,
-                    BranchId = request.Dto.BranchId,
                     Status = request.Dto.Status,
                 };
 
