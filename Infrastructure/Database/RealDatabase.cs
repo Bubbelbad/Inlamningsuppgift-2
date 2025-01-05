@@ -90,9 +90,9 @@ namespace Infrastructure.Database
                 .ValueGeneratedOnAdd();
 
             modelBuilder.Entity<Publisher>()
-                .HasKey(g => g.PublisherId);
+                .HasKey(p => p.PublisherId);
             modelBuilder.Entity<Publisher>()
-                .Property(g => g.PublisherId)
+                .Property(p => p.PublisherId)
                 .ValueGeneratedOnAdd();
 
             modelBuilder.Entity<Review>()
@@ -102,15 +102,21 @@ namespace Infrastructure.Database
                 .ValueGeneratedOnAdd();
 
             modelBuilder.Entity<Borrowing>()
-                .HasKey(g => g.Id);
+                .HasKey(b => b.Id);
             modelBuilder.Entity<Borrowing>()
-                .Property(g => g.Id)
+                .Property(b => b.Id)
                 .ValueGeneratedOnAdd();
 
             modelBuilder.Entity<Reservation>()
-                .HasKey(g => g.Id);
+                .HasKey(r => r.Id);
             modelBuilder.Entity<Reservation>()
-                .Property(g => g.Id)
+                .Property(r => r.Id)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<Review>()
+                .HasKey(r => r.Id);
+            modelBuilder.Entity<Review>()
+                .Property(r => r.Id)
                 .ValueGeneratedOnAdd();
         }
 
