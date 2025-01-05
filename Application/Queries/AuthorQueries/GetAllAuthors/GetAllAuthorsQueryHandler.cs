@@ -24,7 +24,7 @@ namespace Application.Queries.AuthorQueries.GetAllAuthors
 
                     mappedAuthorsFromDatabase = _mapper.Map<List<Author>>(allAuthorsFromDatabase);
 
-                    _memoryCache.Set(cacheKey, allAuthorsFromDatabase, TimeSpan.FromMinutes(5));
+                    //_memoryCache.Set(cacheKey, allAuthorsFromDatabase, TimeSpan.FromMinutes(0));
                 }
 
                 return OperationResult<List<Author>>.Success(mappedAuthorsFromDatabase);

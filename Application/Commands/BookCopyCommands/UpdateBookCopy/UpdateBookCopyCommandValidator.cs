@@ -15,10 +15,6 @@ namespace Application.Commands.BookCopyCommands.UpdateBookCopy
                 .NotEmpty()
                 .WithMessage("BookId is required.");
 
-            RuleFor(x => x.Dto.BranchId)
-                .NotEmpty()
-                .WithMessage("BranchId is required.");
-
             RuleFor(x => x.Dto.Status)
                 .NotEmpty()
                 .WithMessage("Status is required.");

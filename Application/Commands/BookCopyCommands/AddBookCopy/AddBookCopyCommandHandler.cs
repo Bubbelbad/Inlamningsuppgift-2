@@ -21,7 +21,6 @@ namespace Application.Commands.BookCopyCommands.AddBookCopy
                 {
                     CopyId = Guid.NewGuid(),
                     BookId = request.Dto.BookId,
-                    BranchId = request.Dto.BranchId,
                     Status = request.Dto.Status
                 };
 
