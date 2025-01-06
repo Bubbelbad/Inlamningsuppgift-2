@@ -22,7 +22,9 @@ namespace Application.Commands.BookCommands.AddBook
                     Title = request.NewBook.Title,
                     Genre = request.NewBook.Genre,
                     Description = request.NewBook.Description,
-                    AuthorId = request.NewBook.AuthorId
+                    AuthorId = request.NewBook.AuthorId,
+                    PublisherId = request.NewBook.PublisherId,
+                    ImageUrl = request.NewBook.ImageUrl
                 };
 
                 var createdBook = await _repository.AddAsync(bookToCreate);
