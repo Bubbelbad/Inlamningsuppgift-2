@@ -21,6 +21,9 @@ namespace Application.Commands.BookCopyCommands.UpdateBookCopy
                     CopyId = request.Dto.CopyId,
                     BookId = request.Dto.BookId,
                     Status = request.Dto.Status,
+                    FileFormat = request.Dto.FileFormat,
+                    FileSize = request.Dto.FileSize,
+                    FilePath = request.Dto.FilePath,
                 };
 
                 var updatedBookCopy = await _repository.UpdateAsync(bookToUpdate);

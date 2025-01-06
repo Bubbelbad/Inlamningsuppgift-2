@@ -21,7 +21,10 @@ namespace Application.Commands.BookCopyCommands.AddBookCopy
                 {
                     CopyId = Guid.NewGuid(),
                     BookId = request.Dto.BookId,
-                    Status = request.Dto.Status
+                    Status = request.Dto.Status,
+                    FileSize = request.Dto.FileSize,
+                    FileFormat = request.Dto.FileFormat,
+                    FilePath = request.Dto.FilePath
                 };
 
                 var createdBookCopy = await _repository.AddAsync(bookCopyToCreate);

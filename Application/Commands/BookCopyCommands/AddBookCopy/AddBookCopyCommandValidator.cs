@@ -13,6 +13,9 @@ namespace Application.Commands.BookCopyCommands.AddBookCopy
             RuleFor(x => x.Dto.BookId)
                 .NotEmpty()
                 .WithMessage("BookId is required.");
+
+            RuleFor(x => x.Dto.FilePath)
+                .MaximumLength(250).WithMessage("FilePath must be shorter than 250 characters.");
         }
     }
 }

@@ -25,7 +25,7 @@ namespace Application.Queries.BookQueries.GetAllBooks
 
                     mappedBooksFromDatabase = _mapper.Map<List<GetBookDto>>(allBooksFromDatabase);
 
-                    _memoryCache.Set(cacheKey, mappedBooksFromDatabase, TimeSpan.FromMinutes(5));
+                    // _memoryCache.Set(cacheKey, mappedBooksFromDatabase, TimeSpan.FromMinutes(0));
                 }
 
                 return OperationResult<List<GetBookDto>>.Success(mappedBooksFromDatabase);
