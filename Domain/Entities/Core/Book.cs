@@ -15,7 +15,7 @@ namespace Domain.Entities.Core
         [Required(ErrorMessage = "Title is required")]
         [StringLength(100, ErrorMessage = "Title cant be longer than 150 characters")]
         public string Title { get; set; }
-
+        public string ImageUrl { get; set; }
         public DateTime? PublicationDate { get; set; }
         public Guid? AuthorId { get; set; }
         public string? Genre { get; set; }
@@ -28,7 +28,6 @@ namespace Domain.Entities.Core
         public Publisher Publisher { get; set; }
         public ICollection<BookCopy> Copies { get; set; }
         public ICollection<Review> Reviews { get; set; }
-        public ICollection<Reservation> Reservations { get; set; }
 
 
         // Explicit implementation of IEntity<Guid>

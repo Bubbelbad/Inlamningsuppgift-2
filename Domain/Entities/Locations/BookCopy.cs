@@ -12,6 +12,10 @@ namespace Domain.Entities.Locations
         public Guid BookId { get; set; }
         public int BranchId { get; set; }
         public string? Status { get; set; }
+        public string FileFormat { get; set; }
+        public long? FileSize { get; set; }
+        public string FilePath { get; set; }
+
 
         // Navigation properties
         public Book Book { get; set; }

@@ -20,6 +20,12 @@ namespace Application.Commands.BookCommands.AddBook
             RuleFor(x => x.NewBook.Genre)
                 .Length(2, 50).WithMessage("Genre must be between 2 and 20 characters.");
 
+            RuleFor(x => x.NewBook.PublisherId)
+                .NotNull().WithMessage("PublisherId is required, cannot be null.");
+
+            RuleFor(x => x.NewBook.ImageUrl)
+                .MaximumLength(250).WithMessage("ImageUrl must be shorter than 250 characters.");
+
         }
     }
 }

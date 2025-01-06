@@ -10,12 +10,7 @@ namespace Application.Mappings
         {
             CreateMap<Book, GetBookDto>();
             CreateMap<Book, AddBookDto>();
-            CreateMap<AddBookDto, Book>();
-            CreateMap<BookDto, Book>();
-            CreateMap<GetBookDto, Book>();
-            CreateMap<Book, GetBookDto>();
             CreateMap<Book, UpdateBookDto>();
-
 
             // For Testing:
             CreateMap<AddBookDto, Book>()

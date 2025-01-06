@@ -18,11 +18,13 @@ namespace Application.Commands.BookCommands.UpdateBook
             {
                 Book bookToUpdate = new()
                 {
-                    BookId = request.NewBook.Id,
+                    BookId = request.NewBook.BookId,
                     Title = request.NewBook.Title,
                     Genre = request.NewBook.Genre,
                     Description = request.NewBook.Description,
                     AuthorId = request.NewBook.AuthorId,
+                    PublisherId = request.NewBook.PublisherId,
+                    ImageUrl = request.NewBook.ImageUrl
                 };
 
                 var updatedBook = await _repository.UpdateAsync(bookToUpdate);

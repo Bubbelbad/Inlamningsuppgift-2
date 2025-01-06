@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class NewMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -207,6 +207,7 @@ namespace Infrastructure.Migrations
                 {
                     BookId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PublicationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     AuthorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Genre = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -241,7 +242,10 @@ namespace Infrastructure.Migrations
                     CopyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     BookId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     BranchId = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FileFormat = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FileSize = table.Column<long>(type: "bigint", nullable: true),
+                    FilePath = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -322,8 +326,7 @@ namespace Infrastructure.Migrations
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ReservationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CopyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    BookId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -340,11 +343,6 @@ namespace Infrastructure.Migrations
                         principalTable: "BookCopies",
                         principalColumn: "CopyId",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Reservations_Books_BookId",
-                        column: x => x.BookId,
-                        principalTable: "Books",
-                        principalColumn: "BookId");
                 });
 
             migrationBuilder.CreateIndex(
@@ -415,11 +413,6 @@ namespace Infrastructure.Migrations
                 name: "IX_Borrowings_UserId",
                 table: "Borrowings",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Reservations_BookId",
-                table: "Reservations",
-                column: "BookId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reservations_CopyId",

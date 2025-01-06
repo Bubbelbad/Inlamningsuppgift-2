@@ -40,7 +40,7 @@ namespace TestProject.BookUnitTests
             _mockMapper.Setup(mapper => mapper.Map<Book>(It.IsAny<UpdateBookDto>()))
                        .Returns((UpdateBookDto dto) => new Book
                        {
-                           BookId = dto.Id,
+                           BookId = dto.BookId,
                            Title = dto.Title,
                            Genre = dto.Genre,
                            Description = dto.Description,
@@ -66,7 +66,7 @@ namespace TestProject.BookUnitTests
             // Arrange
             UpdateBookDto bookToTest = new UpdateBookDto
             {
-                Id = ExampleBookId,
+                BookId = ExampleBookId,
                 Title = "Test",
                 Genre = "Fantasy",
                 Description = "Test",
@@ -107,7 +107,7 @@ namespace TestProject.BookUnitTests
             // Arrange
             UpdateBookDto bookToTest = new UpdateBookDto
             {
-                Id = new Guid("12345678-1234-5678-1234-567812345678"),
+                BookId = new Guid("12345678-1234-5678-1234-567812345678"),
                 Title = null!,
                 AuthorId = Guid.NewGuid(),
                 Description = "BookService for Testing"

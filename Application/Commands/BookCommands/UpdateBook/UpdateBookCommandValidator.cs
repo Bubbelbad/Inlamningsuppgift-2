@@ -6,7 +6,7 @@ namespace Application.Commands.BookCommands.UpdateBook
     {
         public UpdateBookCommandValidator()
         {
-            RuleFor(x => x.NewBook.Id)
+            RuleFor(x => x.NewBook.BookId)
                 .NotNull().WithMessage("BookId is required, cannot be null.");
 
             RuleFor(x => x.NewBook.Description)

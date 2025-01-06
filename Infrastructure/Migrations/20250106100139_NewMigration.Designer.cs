@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(RealDatabase))]
-    [Migration("20250105230508_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20250106100139_NewMigration")]
+    partial class NewMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -69,6 +69,10 @@ namespace Infrastructure.Migrations
 
                     b.Property<int?>("GenreId")
                         .HasColumnType("int");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("PublicationDate")
                         .HasColumnType("datetime2");
@@ -171,6 +175,17 @@ namespace Infrastructure.Migrations
 
                     b.Property<int>("BranchId")
                         .HasColumnType("int");
+
+                    b.Property<string>("FileFormat")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("FileSize")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
@@ -304,9 +319,6 @@ namespace Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<Guid?>("BookId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("CopyId")
                         .HasColumnType("uniqueidentifier");
 
@@ -322,8 +334,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BookId");
 
                     b.HasIndex("CopyId");
 
@@ -535,10 +545,6 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Transactions.Reservation", b =>
                 {
-                    b.HasOne("Domain.Entities.Core.Book", null)
-                        .WithMany("Reservations")
-                        .HasForeignKey("BookId");
-
                     b.HasOne("Domain.Entities.Locations.BookCopy", "BookCopy")
                         .WithMany("Reservations")
                         .HasForeignKey("CopyId")
@@ -615,8 +621,6 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Core.Book", b =>
                 {
                     b.Navigation("Copies");
-
-                    b.Navigation("Reservations");
 
                     b.Navigation("Reviews");
                 });

@@ -72,7 +72,7 @@ namespace TestProject.BookIntegrationTests
             // Arrange
             UpdateBookDto bookToTest = new UpdateBookDto
             {
-                Id = ExampleBookId,
+                BookId = ExampleBookId,
                 Title = "Test",
                 Description = "New Description",
                 Genre = "Fantasy",
@@ -110,7 +110,7 @@ namespace TestProject.BookIntegrationTests
             // Arrange
             UpdateBookDto bookToTest = new UpdateBookDto
             {
-                Id = new Guid("12345678-1234-5678-1234-567812345678"),
+                BookId = new Guid("12345678-1234-5678-1234-567812345678"),
                 Title = null!,
                 Genre = "Fantasy",
                 Description = "BookService for Testing",
