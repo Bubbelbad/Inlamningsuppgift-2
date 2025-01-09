@@ -20,9 +20,9 @@ namespace API
             {
                 options.AddPolicy(
                     name: "LocalHostReactApp",
-                    builder =>
+                    policyBuilder =>
                     {
-                        builder.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod();
+                        policyBuilder.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod();
                     });
             });
 
@@ -33,7 +33,6 @@ namespace API
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-
             }).AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters
@@ -83,7 +82,6 @@ namespace API
 
                 c.EnableAnnotations();
             });
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
             builder.Services.AddControllers(options =>
             {
@@ -93,12 +91,10 @@ namespace API
                         Duration = 60,
                         Location = ResponseCacheLocation.Any,
                     });
-
             });
+
             builder.Services.AddMemoryCache();
-
             builder.Services.AddEndpointsApiExplorer();
-
             builder.Services.AddApplication(); // Adds MediatR from Application to API
             builder.Services.AddInfrastructure(builder.Configuration.GetConnectionString("DefaultConnection")!);
 
@@ -113,7 +109,10 @@ namespace API
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
                     c.RoutePrefix = "swagger";  // Set Swagger UI at the app's root
                 });
+                app.UseDeveloperExceptionPage();
+                builder.Configuration.AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true);
             }
+
             app.UseCors("LocalHostReactApp");
             app.UseHttpsRedirection();
 
