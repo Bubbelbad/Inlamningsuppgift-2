@@ -2,15 +2,15 @@
 
 namespace Application.Commands.AuthorCommands.UpdateAuthor
 {
-    public class UpdateAuthorCommandValitator : AbstractValidator<UpdateAuthorCommand>
+    public class UpdateAuthorCommandValidator : AbstractValidator<UpdateAuthorCommand>
     {
-        public UpdateAuthorCommandValitator()
+        public UpdateAuthorCommandValidator()
         {
             RuleFor(x => x.NewAuthor.AuthorId)
                 .Must(id => id != System.Guid.Empty).WithMessage("Id is required, cannot be empty.");
 
             RuleFor(x => x.NewAuthor.FirstName)
-                .NotEmpty().WithMessage("Name is required.")
+                .NotNull().NotEmpty().WithMessage("Name is required.")
                 .Length(2, 50).WithMessage("Name must be between 2 and 50 characters.");
 
             RuleFor(x => x.NewAuthor.LastName)

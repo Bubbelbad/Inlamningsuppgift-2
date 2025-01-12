@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace TestProject.AuthorIntegrationTests
 {
     [TestFixture]
-    [Category("AuthorId/Integration/DeleteAuthor")]
+    [Category("Author/Integration/DeleteAuthor")]
     public class DeleteAuthorIntegrationTests
     {
         private DeleteAuthorCommandHandler _handler;

@@ -7,7 +7,7 @@ using Moq;
 namespace TestProject.AuthorUnitTests
 {
     [TestFixture]
-    [Category("AuthorId/UnitTests/GetAuthorById")]
+    [Category("Author/UnitTests/GetAuthorById")]
     public class GetAuthorUnitTest
     {
         private Mock<IGenericRepository<Author, Guid>> _mockRepository;
