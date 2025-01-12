@@ -16,7 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace TestProject.AuthorIntegrationTests
 {
     [TestFixture]
-    [Category("AuthorId/Integration/UpdateAuthor")]
+    [Category("Author/Integration/UpdateAuthor")]
     public class UpdateAuthorIntegrationTests
     {
         private RealDatabase _database;

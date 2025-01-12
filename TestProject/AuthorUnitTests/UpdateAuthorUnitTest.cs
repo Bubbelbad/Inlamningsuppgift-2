@@ -9,7 +9,7 @@ using Moq;
 namespace TestProject.AuthorUnitTests
 {
     [TestFixture]
-    [Category("AuthorId/UnitTests/UpdateAuthor")]
+    [Category("Author/UnitTests/UpdateAuthor")]
     public class UpdateAuthorUnitTest
     {
         private UpdateAuthorCommandHandler _handler;
@@ -30,15 +30,27 @@ namespace TestProject.AuthorUnitTests
             _mockRepository = new Mock<IGenericRepository<Author, Guid>>();
             _mockMapper = new Mock<IMapper>();
 
+            _mockRepository.Setup(repo => repo.GetByIdAsync(ExampleAuthorId))
+               .ReturnsAsync(new Author
+               {
+                   AuthorId = ExampleAuthorId,
+                   FirstName = "Existing",
+                   LastName = "Author"
+               });
+
             // Set up the mock repository to handle any AuthorId object with the same Id
             _mockRepository.Setup(repo => repo.UpdateAsync(It.Is<Author>(obj => obj.AuthorId == ExampleAuthorId)))
                            .ReturnsAsync((Author updatedAuthor) => updatedAuthor);
 
-            _mockMapper.Setup(mapper => mapper.Map<Author>(It.IsAny<Author>()));
-            _mockMapper.Setup(mapper => mapper.Map<Author>(It.IsAny<Author>()))
-                       .Returns((Author author) => new Author
+            // Set up the mock repository to handle any AuthorId object with the same Id
+            _mockRepository.Setup(repo => repo.UpdateAsync(It.Is<Author>(obj => obj.AuthorId == ExampleAuthorId)))
+                           .ReturnsAsync((Author updatedAuthor) => updatedAuthor);
+
+            // Correct the Map setup for GetAuthorDto
+            _mockMapper.Setup(mapper => mapper.Map<GetAuthorDto>(It.IsAny<Author>()))
+                       .Returns((Author author) => new GetAuthorDto
                        {
-                           AuthorId = ExampleAuthorId,
+                           AuthorId = author.AuthorId,
                            FirstName = author.FirstName,
                            LastName = author.LastName
                        });
@@ -66,11 +78,16 @@ namespace TestProject.AuthorUnitTests
         }
 
         [Test]
-        public async Task Handle_NullInput_ReturnsNull()
+        public async Task Handle_EmptyGuid_ReturnsNull()
         {
             // Arrange
-            UpdateAuthorDto authorToTest = null!;
-            var command = new UpdateAuthorCommand(authorToTest);
+            UpdateAuthorDto authorToUpdate = new()
+            {
+                AuthorId = Guid.Empty,
+                FirstName = "Test",
+                LastName = "Testsson"
+            };
+            var command = new UpdateAuthorCommand(authorToUpdate);
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);

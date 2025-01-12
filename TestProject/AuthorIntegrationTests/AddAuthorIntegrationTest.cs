@@ -13,7 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace TestProject.AuthorIntegrationTests
 {
     [TestFixture]
-    [Category("AuthorId/Integration/AddAuthor")]
+    [Category("Author/Integration/AddAuthor")]
     public class AddAuthorIntegrationTest
     {
         private AddAuthorCommandHandler _handler;

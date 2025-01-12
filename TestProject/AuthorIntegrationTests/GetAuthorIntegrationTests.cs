@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace TestProject.AuthorIntegrationTests
 {
     [TestFixture]
-    [Category("AuthorId/Integration/GetAuthor")]
+    [Category("Author/Integration/GetAuthor")]
     public class GetAuthorIntegrationTests
     {
         private GetAuthorByIdQueryHandler _handler;

@@ -3,6 +3,7 @@ using Application.Interfaces.RepositoryInterfaces;
 using AutoMapper;
 using Domain.Entities.Core;
 using Application.Models;
+using Application.Dtos.AuthorDtos;
 
 namespace Application.Queries.AuthorQueries.GetAuthorById
 {
