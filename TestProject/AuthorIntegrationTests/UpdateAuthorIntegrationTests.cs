@@ -1,12 +1,17 @@
-﻿using Application.Commands.AuthorCommands.UpdateAuthor;
+﻿using Application.Commands.AuthorCommands.AddAuthor;
+using Application.Commands.AuthorCommands.UpdateAuthor;
 using Application.Dtos;
 using Application.Dtos.AuthorDtos;
 using Application.Interfaces.RepositoryInterfaces;
+using Application.Mappings;
 using AutoMapper;
 using Domain.Entities.Core;
+using FluentValidation;
 using Infrastructure.Database;
 using Infrastructure.Repositories;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace TestProject.AuthorIntegrationTests
 {
@@ -14,22 +19,26 @@ namespace TestProject.AuthorIntegrationTests
     [Category("AuthorId/Integration/UpdateAuthor")]
     public class UpdateAuthorIntegrationTests
     {
-        private UpdateAuthorCommandHandler _handler;
         private RealDatabase _database;
         private IGenericRepository<Author, Guid> _repository;
         private IMapper _mapper;
+        private IMediator _mediator;
 
         private static readonly Guid ExampleAuthorId = new("12345678-1234-1234-1234-1234567890ab");
-        private static readonly Author ExampleAuthorDto = new()
+        private readonly Author ExampleAuthorDto = new()
         {
             AuthorId = ExampleAuthorId,
             FirstName = "Test",
-            LastName = "Testsson"
+            LastName = "Testsson",
+            DateOfBirth = DateTime.Now,
+            Biography = "Biography"
         };
 
         [SetUp]
         public void Setup()
         {
+            var services = new ServiceCollection();
+
             // Set up in-memory database
             var options = new DbContextOptionsBuilder<RealDatabase>()
                 .UseInMemoryDatabase(databaseName: "TestDatabase")
@@ -37,22 +46,34 @@ namespace TestProject.AuthorIntegrationTests
             _database = new RealDatabase(options);
 
             // Initialize the repository with the in-memory database
-            _repository = new AuthorRepository(_database);
+            _repository = new GenericRepository<Author, Guid>(_database);
 
             // Set up AutoMapper with actual configuration
-            var config = new MapperConfiguration(cfg =>
+            //var config = new MapperConfiguration(cfg =>
+            //{
+            //    cfg.CreateMap<AddAuthorDto, Author>()
+            //       .ForMember(dest => dest.AuthorId, opt => opt.MapFrom(src => ExampleAuthorId));
+            //});
+            _mapper = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<AuthorDto, Author>()
-                   .ForMember(dest => dest.AuthorId, opt => opt.MapFrom(src => ExampleAuthorId));
-            });
-            _mapper = config.CreateMapper();
+                cfg.AddProfile<AuthorMappingProfiles>();
+            }).CreateMapper();
 
-            Author author = new() { AuthorId = ExampleAuthorId, FirstName = "Test", LastName = "Testsson" };
-            _database.Authors.Add(author);
+            // Register services
+            services.AddSingleton(_repository);
+            services.AddSingleton(_mapper);
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(UpdateAuthorCommandHandler).Assembly));
+            services.AddTransient<IValidator<UpdateAuthorCommand>, UpdateAuthorCommandValidator>();
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+
+            // Register logging services
+            services.AddLogging();
+
+            var provider = services.BuildServiceProvider();
+            _mediator = provider.GetRequiredService<IMediator>();
+
+            _database.Authors.Add(ExampleAuthorDto);
             _database.SaveChanges();
-
-            // Initialize the handler with the actual repository and mapper
-            _handler = new UpdateAuthorCommandHandler(_repository, _mapper);
         }
 
         [TearDown]
@@ -64,48 +85,12 @@ namespace TestProject.AuthorIntegrationTests
         }
 
         [Test]
-        public async Task Handle_ValidInput_ResurnsTrue()
-        {
-            // Arrange
-            var updatedAuthor = new UpdateAuthorDto
-            {
-                AuthorId = ExampleAuthorId,
-                FirstName = "Test",
-                LastName = "Testsson",
-                DateOfBirth = DateTime.Now,
-                Biography = "Biography"
-            };
-
-            // Act
-            var result = await _handler.Handle(new UpdateAuthorCommand(updatedAuthor), CancellationToken.None);
-
-            // Assert
-            Assert.That(result, Is.Not.Null);
-            Assert.That(result.Data.FirstName, Is.EqualTo(ExampleAuthorDto.FirstName));
-            Assert.That(result.Data.LastName, Is.EqualTo(ExampleAuthorDto.LastName));
-        }
-
-        [Test]
-        public async Task Handle_NullInput_ReturnsNull()
-        {
-            // Arrange
-            UpdateAuthorDto authorToTest = null!;
-            var command = new UpdateAuthorCommand(authorToTest);
-
-            // Act
-            var result = await _handler.Handle(command, CancellationToken.None);
-
-            // Assert
-            Assert.That(result.IsSuccess, Is.EqualTo(false));
-        }
-
-        [Test]
         public async Task Handle_MissingFirstName_ReturnsNull()
         {
             // Arrange
             var invalidAuthorDto = new UpdateAuthorDto
             {
-                AuthorId = Guid.NewGuid(),
+                AuthorId = ExampleAuthorId,
                 FirstName = null!,
                 LastName = "Updatedsson",
                 DateOfBirth = DateTime.Now,
@@ -115,10 +100,55 @@ namespace TestProject.AuthorIntegrationTests
             var command = new UpdateAuthorCommand(invalidAuthorDto);
 
             // Act
-            var result = await _handler.Handle(command, CancellationToken.None);
+            var result = await _mediator.Send(command, CancellationToken.None);
 
             // Assert
             Assert.That(result.IsSuccess, Is.EqualTo(false));
+        }
+
+        [Test]
+        public async Task Handle_ValidInput_ResurnsTrue()
+        {
+            // Arrange
+            var updatedAuthor = new UpdateAuthorDto
+            {
+                AuthorId = ExampleAuthorId,
+                FirstName = "Test",
+                LastName = "Updatesson",
+                DateOfBirth = DateTime.Now,
+                Biography = "Biography"
+            };
+
+            // Act
+            var result = await _mediator.Send(new UpdateAuthorCommand(updatedAuthor), CancellationToken.None);
+
+            // Assert
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Data.FirstName, Is.EqualTo(ExampleAuthorDto.FirstName));
+            Assert.That(result.Data.LastName, Is.EqualTo(ExampleAuthorDto.LastName));
+        }
+
+        [Test]
+        public async Task Handle_EmptyGuid_ReturnsIsFailure()
+        {
+            // Arrange
+            var authorToTest = new UpdateAuthorDto
+            {
+                AuthorId = Guid.Empty,
+                FirstName = "Test",
+                LastName = "Updatesson",
+                DateOfBirth = DateTime.Now,
+                Biography = "Biography"
+            };
+            var command = new UpdateAuthorCommand(authorToTest);
+
+            // Act
+            var result = await _mediator.Send(command, CancellationToken.None);
+
+            // Assert
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.IsSuccess, Is.False);
+            Assert.That(result.ErrorMessage, Is.EqualTo("Id is required, cannot be empty."));
         }
     }
 }
