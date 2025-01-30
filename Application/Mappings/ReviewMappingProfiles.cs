@@ -11,8 +11,8 @@ namespace Application.Mappings
         {
             CreateMap<Review, AddReviewDto>();
             CreateMap<AddReviewDto, GetReviewDto>();
-            CreateMap<Review, GetReviewDto>();
-
+            CreateMap<Review, GetBookReviewsDto>()
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName));
         }
     }
 }
