@@ -4,6 +4,7 @@ using Application.Commands.ReviewCommands.UpdateReview;
 using Application.Dtos.ReviewDtos;
 using Application.Queries.ReviewQueries.GetAllReviews;
 using Application.Queries.ReviewQueries.GetReviewById;
+using Application.Queries.ReviewQueries.GetReviewsByBookId;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -44,6 +45,24 @@ namespace API.Controllers
             try
             {
                 var operationResult = await _mediator.Send(new GetReviewByIdQuery(id));
+                if (operationResult is not null)
+                {
+                    return Ok(operationResult.Data);
+                }
+                return BadRequest(new { message = operationResult.Message, errors = operationResult.ErrorMessage });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.InnerException);
+            }
+        }
+
+        [HttpGet("GetReviewsByBookId/{bookId}")]
+        public async Task<IActionResult> GetReviewsByBookId(Guid bookId)
+        {
+            try
+            {
+                var operationResult = await _mediator.Send(new GetReviewsByBookIdQuery(bookId));
                 if (operationResult is not null)
                 {
                     return Ok(operationResult.Data);
